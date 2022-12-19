@@ -18,7 +18,8 @@ import {
   Stack,
   Box,
 } from "native-base";
-import { AntDesign, Entypo } from "@expo/vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Entypo from "react-native-vector-icons/Entypo";
 // import IconGoogle from "./components/IconGoogle";
 // import IconFacebook from "./components/IconFacebook";
 // import FloatingLabelInput from "./components/FloatingLabelInput";
