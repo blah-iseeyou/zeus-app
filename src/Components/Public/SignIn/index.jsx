@@ -79,6 +79,7 @@ export function SignInForm({ props }) {
               >
                 <Input
                   isRequired
+                  size="xl"
                   label="Email"
                   placeholder="Correo Electrónico"
                   labelColor="#9ca3af"
@@ -98,6 +99,7 @@ export function SignInForm({ props }) {
                   }}
                 />
                 <Input
+                  size="xl"
                   isRequired
                   type={showPass ? "" : "password"}
                   placeholder="Contraseña"

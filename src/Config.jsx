@@ -16,7 +16,7 @@ export const Config = {
 export const Theme = extendTheme({
     colors: {
         primary: {
-            50:  primary.lighten(0.055).hex(),
+            50: primary.lighten(0.055).hex(),
             100: primary.lighten(0.111).hex(),
             200: primary.lighten(0.222).hex(),
             300: primary.lighten(0.333).hex(),
@@ -28,7 +28,7 @@ export const Theme = extendTheme({
             900: primary.hex()
         },
         lilac: {
-            50:  lilac.lighten(0.055).hex(),
+            50: lilac.lighten(0.055).hex(),
             100: lilac.lighten(0.111).hex(),
             200: lilac.lighten(0.222).hex(),
             300: lilac.hex(),
@@ -40,7 +40,7 @@ export const Theme = extendTheme({
             900: lilac.darken(0.800).hex()
         },
         salmon: {
-            50:  salmon.lighten(0.055).hex(),
+            50: salmon.lighten(0.055).hex(),
             100: salmon.lighten(0.111).hex(),
             200: salmon.lighten(0.222).hex(),
             300: salmon.lighten(0.333).hex(),
@@ -52,6 +52,53 @@ export const Theme = extendTheme({
             900: salmon.darken(0.666).hex()
         },
     },
+
+    fontConfig: {
+        Poppins: {
+            100: {
+                normal: "Poppins-Thin",
+                italic: "Poppins-ThinItalic",
+            },
+            200: {
+                normal: "Poppins-ExtraLight",
+                italic: "Poppins-ExtraLightItalic",
+            },
+            300: {
+                normal: "Poppins-Light",
+                italic: "Poppins-LightItalic",
+            },
+            400: {
+                normal: "Poppins-Regular",
+                italic: "Poppins-Italic",
+            },
+            500: {
+                normal: "Poppins-Medium",
+                italic: "Poppins-MediumItalic",
+            },
+            600: {
+                normal: 'Poppins-SemiBold',
+                italic: "Poppins-SemiBoldItalic",
+            },
+            700: {
+                normal: 'Poppins-Bold',
+                italic: "Poppins-BoldItalic",
+            },
+            800: {
+                normal: 'Poppins-ExtraBold',
+                italic: 'Poppins-ExtraBoldItalic',
+            },
+            900: {
+                normal: 'Poppins-Black',
+                italic: 'Poppins-BlackItalic',
+            },
+        },
+    },
+    fonts: {
+        heading: "Poppins",
+        body: "Poppins",
+        mono: "Poppins",
+      },
+
     components: {
         Button: {
             _light: {
@@ -68,29 +115,15 @@ export const Theme = extendTheme({
                     colorScheme,
                     colorMode,
                     ...args
-                }) => {
-                    // console.log("args",args)
-                    return {
-                        // ,
-                        bg: {
-                            linearGradient: {
-                                colors: ['primary.900',  'lilac.300', 'salmon.800'],
-                                start:{x: 0.5, y: 0.5 },
-                                //end: {x: 1, y: 0.5},
-                            },
-                        }
-                    };
-                    // linear-gradient(
-                    // 180.15deg,
-                    // #12225C 
-
-                    // -0.61%,
-                    // #A080C2
-
-                    // 49.63%,
-                    // #E798A9
-                    // 99.87%);
-                }
+                }) => ({
+                    bg: {
+                        linearGradient: {
+                            colors: ['primary.900', 'lilac.300', 'salmon.800'],
+                            start: { x: 0.5, y: 0.5 },
+                            //end: {x: 1, y: 0.5},
+                        },
+                    }
+                })
             }
         }
     }
