@@ -6,21 +6,17 @@ import { NativeBaseProvider, extendTheme, theme as nbTheme } from "native-base";
 // import StarterIntro from "./screens/StarterIntro";
 // import SignUp from "./screens/SignUp"
 import index from "./Components/Public/SignIn/index"
+
+import { Config, Theme } from "./Config"
 // import OTP from "./screens/OTP"
 // import ProductScreen from "./screens/ProductScreen"
-
-
-const theme = extendTheme({
-  // colors: {
-  //   primary: nbTheme.colors.violet,
-  // },
-});
-
+import {  } from './Config'
+console.log("Config", Config)
 const NativeStack = createNativeStackNavigator();
 
 export default function App() {
 	return (
-		<NativeBaseProvider theme={theme}>
+		<NativeBaseProvider theme={Theme} config={Config}>
 			<NavigationContainer>
 				<NativeStack.Navigator screenOptions={{ headerShown: false }}>
 					{/* <NativeStack.Screen name={"SignUp"} component={SignUp} /> */}

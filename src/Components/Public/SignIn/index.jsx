@@ -16,7 +16,7 @@ import {
   Hidden,
   StatusBar,
   Stack,
-  Box,
+  Box, Input
 } from "native-base";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -77,9 +77,10 @@ export function SignInForm({ props }) {
                   md: "4",
                 }}
               >
-                {/* <FloatingLabelInput
+                <Input
                   isRequired
                   label="Email"
+                  placeholder="Correo Electrónico"
                   labelColor="#9ca3af"
                   labelBGColor={useColorModeValue("#fff", "#1f2937")}
                   borderRadius="4"
@@ -95,10 +96,11 @@ export function SignInForm({ props }) {
                   _light={{
                     borderColor: "coolGray.300",
                   }}
-                /> */}
-                {/* <FloatingLabelInput
+                />
+                <Input
                   isRequired
                   type={showPass ? "" : "password"}
+                  placeholder="Contraseña"
                   label="Password"
                   borderRadius="4"
                   labelColor="#9ca3af"
@@ -131,7 +133,7 @@ export function SignInForm({ props }) {
                   _light={{
                     borderColor: "coolGray.300",
                   }}
-                /> */}
+                />
               </VStack>
               <Link
                 ml="auto"
@@ -181,12 +183,12 @@ export function SignInForm({ props }) {
                 _text={{
                   fontWeight: "medium",
                 }}
-                _light={{
-                  bg: "primary.900",
-                }}
-                _dark={{
-                  bg: "primary.700",
-                }}
+                // _light={{
+                //   bg: "primary.900",
+                // }}
+                // _dark={{
+                //   bg: "primary.700",
+                // }}
                 onPress={() => {
                   props.navigation.navigate("OTP");
                 }}
@@ -313,13 +315,9 @@ export default function SignIn(props) {
         }}
       />
       <Center
+        colorScheme="primary"
         my="auto"
-        _dark={{
-          bg: "coolGray.900",
-        }}
-        _light={{
-          bg: "primary.900",
-        }}
+        variant="linear-gradient"
         flex="1"
       >
         <Stack
@@ -342,7 +340,7 @@ export default function SignIn(props) {
                 <IconButton
                   variant="unstyled"
                   pl="0"
-                  onPress={() => {}}
+                  onPress={() => { }}
                   icon={
                     <Icon
                       size="6"
