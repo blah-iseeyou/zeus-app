@@ -82,20 +82,12 @@ export function SignInForm({ props }) {
                   size="xl"
                   label="Email"
                   placeholder="Correo Electrónico"
-                  labelColor="#9ca3af"
-                  labelBGColor={useColorModeValue("#fff", "#1f2937")}
-                  borderRadius="4"
+
                   defaultValue={text}
                   onChangeText={(txt) => setText(txt)}
                   _text={{
                     fontSize: "sm",
                     fontWeight: "medium",
-                  }}
-                  _dark={{
-                    borderColor: "coolGray.700",
-                  }}
-                  _light={{
-                    borderColor: "coolGray.300",
                   }}
                 />
                 <Input
@@ -104,9 +96,7 @@ export function SignInForm({ props }) {
                   type={showPass ? "" : "password"}
                   placeholder="Contraseña"
                   label="Password"
-                  borderRadius="4"
-                  labelColor="#9ca3af"
-                  labelBGColor={useColorModeValue("#fff", "#1f2937")}
+
                   defaultValue={pass}
                   onChangeText={(txt) => setPass(txt)}
                   InputRightElement={
@@ -129,12 +119,6 @@ export function SignInForm({ props }) {
                     fontSize: "sm",
                     fontWeight: "medium",
                   }}
-                  _dark={{
-                    borderColor: "coolGray.700",
-                  }}
-                  _light={{
-                    borderColor: "coolGray.300",
-                  }}
                 />
               </VStack>
               <Link
@@ -155,7 +139,7 @@ export function SignInForm({ props }) {
                   },
                 }}
               >
-                Forgot password?
+                ¿Olvidó su contraseña?
               </Link>
               <Checkbox
                 alignItems="flex-start"
@@ -175,13 +159,13 @@ export function SignInForm({ props }) {
                     color: "coolGray.400",
                   }}
                 >
-                  Remember me and keep me logged in
+                  Mantener mi sesión activa
                 </Text>
               </Checkbox>
               <Button
                 mt="5"
                 size="md"
-                borderRadius="4"
+
                 _text={{
                   fontWeight: "medium",
                 }}
@@ -195,106 +179,11 @@ export function SignInForm({ props }) {
                   props.navigation.navigate("OTP");
                 }}
               >
-                SIGN IN
+                INICIAR SESIÓN
               </Button>
-              <HStack
-                mt="5"
-                space="2"
-                mb={{
-                  base: 6,
-                  md: 7,
-                }}
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Divider
-                  w="30%"
-                  _light={{
-                    bg: "coolGray.200",
-                  }}
-                  _dark={{
-                    bg: "coolGray.700",
-                  }}
-                ></Divider>
-                <Text
-                  fontWeight="medium"
-                  _light={{
-                    color: "coolGray.300",
-                  }}
-                  _dark={{
-                    color: "coolGray.500",
-                  }}
-                >
-                  or
-                </Text>
-                <Divider
-                  w="30%"
-                  _light={{
-                    bg: "coolGray.200",
-                  }}
-                  _dark={{
-                    bg: "coolGray.700",
-                  }}
-                ></Divider>
-              </HStack>
             </VStack>
-            <Center>
-              {/* <HStack space="4">
-                <Pressable>
-                  <IconFacebook />
-                </Pressable>
-                <Pressable>
-                  <IconGoogle />
-                </Pressable>
-              </HStack> */}
-            </Center>
           </VStack>
         </VStack>
-        <HStack
-          mb="4"
-          space="1"
-          safeAreaBottom
-          alignItems="center"
-          justifyContent="center"
-          mt={{
-            base: "auto",
-            md: "8",
-          }}
-        >
-          <Text
-            _light={{
-              color: "coolGray.800",
-            }}
-            _dark={{
-              color: "coolGray.400",
-            }}
-          >
-            Don't have an account?
-          </Text>
-          {/* Opening Link Tag navigateTo:"SignUp" */}
-          <Link
-            _text={{
-              fontWeight: "bold",
-              textDecoration: "none",
-            }}
-            _light={{
-              _text: {
-                color: "primary.900",
-              },
-            }}
-            _dark={{
-              _text: {
-                color: "primary.500",
-              },
-            }}
-            onPress={() => {
-              props.navigation.navigate("SignUp");
-            }}
-          >
-            Sign up
-          </Link>
-          {/* Closing Link Tag */}
-        </HStack>
       </VStack>
     </KeyboardAwareScrollView>
   );
@@ -339,7 +228,7 @@ export default function SignIn(props) {
           <Hidden from="md">
             <VStack px="4" mt="4" mb="5" space="9">
               <HStack space="2" alignItems="center">
-                <IconButton
+                {/* <IconButton
                   variant="unstyled"
                   pl="0"
                   onPress={() => { }}
@@ -351,26 +240,26 @@ export default function SignIn(props) {
                       color="coolGray.50"
                     />
                   }
-                />
-                <Text color="coolGray.50" fontSize="lg">
+                /> */}
+                {/* <Text color="coolGray.50" fontSize="lg">
                   Sign In
-                </Text>
+                </Text> */}
               </HStack>
               <VStack space="2">
                 <Text fontSize="3xl" fontWeight="bold" color="coolGray.50">
-                  Welcome back,
+                  Bienvenido
                 </Text>
                 <Text
                   fontSize="md"
                   fontWeight="normal"
                   _dark={{
-                    color: "coolGray.400",
+                    color: "white.300",
                   }}
                   _light={{
-                    color: "primary.300",
+                    color: "coolGray.50",
                   }}
                 >
-                  Sign in to continue
+                  Inicie sesión para coninutar
                 </Text>
               </VStack>
             </VStack>

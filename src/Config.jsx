@@ -7,6 +7,8 @@ let primary = Color('#AB339F')
 let lilac = Color('#A080C2')
 let salmon = Color('#E798A9')
 
+let warm = Color('#f4f6f6')
+
 export const Config = {
     dependencies: {
         'linear-gradient': require('react-native-linear-gradient').default,
@@ -97,17 +99,40 @@ export const Theme = extendTheme({
         heading: "Poppins",
         body: "Poppins",
         mono: "Poppins",
-      },
-
+    },
     components: {
         Button: {
-            _light: {
-                bg: "primary.900",
-            },
-            _dark: {
-                bg: "primary.700",
+            baseStyle: {
+                borderRadius: 10,
+                _light: {
+                    bg: "primary.900",
+                    borderRadius: 12,
+                    // borderColor: "transparent"
+                },
+                _dark: {
+                    bg: "primary.900",
+                    borderRadius: 12,
+                    // borderColor: "transparent"
+                },
+                size: "xl"
             }
-
+        },
+        Input: {
+            baseStyle: {
+                borderRadius: "10",
+                _light: {
+                    border: "none",
+                    bg: "trueGray.200",
+                    borderRadius: 8,
+                    borderColor: "transparent"
+                },
+                _dark: {
+                    bg: "trueGray.200",
+                    borderRadius: 8,
+                    borderColor: "transparent"
+                },
+                size: "xl"
+            } 
         },
         Center: {
             variants: {
