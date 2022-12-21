@@ -5,11 +5,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { NativeBaseProvider, extendTheme, theme as nbTheme } from "native-base";
 // import StarterIntro from "./screens/StarterIntro";
 // import SignUp from "./screens/SignUp"
-import index from "./Components/Public/SignIn/index"
+import SignUp from "./Components/Public/SignIn"
 
 import { Config, Theme } from "./Config"
-// import OTP from "./screens/OTP"
-// import ProductScreen from "./screens/ProductScreen"
+
 import {  } from './Config'
 console.log("Config", Config)
 const NativeStack = createNativeStackNavigator();
@@ -20,9 +19,7 @@ export default function App() {
 			<NavigationContainer>
 				<NativeStack.Navigator screenOptions={{ headerShown: false }}>
 					{/* <NativeStack.Screen name={"SignUp"} component={SignUp} /> */}
-					<NativeStack.Screen name={"SignIn"} component={index} />
-					{/* <NativeStack.Screen name={"OTP"} component={OTP} />
-					<NativeStack.Screen name={"ProductScreen"} component={ProductScreen} /> */}
+					<NativeStack.Screen name={"SignIn"} component={SignUp} />
 				</NativeStack.Navigator>
 			</NavigationContainer>
 		</NativeBaseProvider>
