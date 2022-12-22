@@ -34,7 +34,7 @@ let linearGradientVariant = ({
     }
 })
 
-export const Theme = extendTheme({
+export const Theme = () => extendTheme({
     colors: {
         primary: {
             50: primary.lighten(0.055).hex(),
@@ -205,17 +205,25 @@ export const Theme = extendTheme({
                             end: {x: 1, y: 0.5},
                         },
                     },
-                    marginBottom: 84,       
+                    _android: {
+                        marginBottom: 84,
+                    }
                 }
             }
         },
         ScrollView: {
             defaultProps: {
-                _contentContainerStyle: {
-                    paddingBottom: 50 
+                _android: {
+                    _contentContainerStyle: {
+                        paddingBottom: 50 
+                    }
+                },
+                _ios: {
+                    _contentContainerStyle: {
+                        paddingBottom: 180 
+                    }
                 }
             }
-
         }
     }
 })
