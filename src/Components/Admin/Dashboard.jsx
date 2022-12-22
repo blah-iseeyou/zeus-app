@@ -29,8 +29,8 @@ export default function SignIn(props) {
   const height = Dimensions.get('window').height;
 
   return (
-    <Box colorScheme="primary" my="auto" variant="layout" flex="1">
-      <Header mt={insets.top} />
+    <Box colorScheme="primary" my="auto" variant="layout" flex="1" pt={insets.top}>
+      <Header  />
       <ScrollView flex={1}>
         <Stack
           flexDirection={{

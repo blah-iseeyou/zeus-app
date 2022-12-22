@@ -1,9 +1,9 @@
 
 import React from "react";
 
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 
-import { Box, Icon, IconButton, HStack, VStack } from "native-base";
+import { Box, Icon, IconButton, HStack, VStack,  } from "native-base";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -21,20 +21,13 @@ export default function () {
     const insets = useSafeAreaInsets();
 
     const width = Dimensions.get("window").width
-    const height = Dimensions.get("window").height
 
     return <BottomStack.Navigator
         screenOptions={{ headerShown: false }}
         initialRouteName="Dashboard"
         tabBar={() => {
             return <Box bg={"transparent"} w="100%" height="120" m={0} p={0} style={{ position: "absolute", bottom: 0 }}>
-                 {/* width="375" 100
-                        93        24.8
-
-                        375 100
-                        93 = 24.8
-                 */}
-                <TabbarBackground width={width} height={width * 0.34} style={{ flex: 1, position: "absolute",bottom: -insets.bottom-10, }}  />
+                <TabbarBackground width={width} height={width * ((Platform.OS == "ios") ? 0.54 : 0.34)} style={{ flex: 1, position: "absolute",bottom: -insets.bottom-10, }}  />
                 <VStack
                     alignItems="center"
                     bg={{
@@ -48,7 +41,7 @@ export default function () {
                     w={70}
                     h={70}
                     borderRadius={100}
-                    bottom={insets.bottom / 2}
+                    bottom={insets.bottom / 2 + ((Platform.OS == "ios") ? 10 : 0 )}
                     >
                     <Icon as={AntDesign} m="auto" name="plus" size="xl" color="white" />
                 </VStack>
