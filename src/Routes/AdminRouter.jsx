@@ -16,44 +16,40 @@ export default function App() {
         screenOptions={{ headerShown: false }}
         initialRouteName="Dashboard"
         tabBar={() => {
-            return <Box bg={"transparent"} w="100%" m={0} p={0} style={{ position: "absolute", bottom: 0 }}>
-                <TabbarBackground st width="100%" height="120" style={{ flex: 1, position: "absolute", bottom: 0 }} />
-                <VStack flex="1" alignItems="center" bg={{
+            return <Box bg={"transparent"} w="100%" height="120" m={0} p={0} style={{ position: "absolute", bottom: 0 }}>
+                <TabbarBackground width="100%" height="120" style={{ flex: 1, position: "absolute", bottom: 0 }} />
+                {/* <VStack
+                    alignItems="center"
+                    bg={{
                         linearGradient: {
                             colors: ['#A62E99', '#681FB0'],
                             start: { x: 0.5, y: 0.5 },
                             end: { x: 1, y: 0.5 },
                         },
                     }}
-                    // position="absolute"
                     mx="auto"
                     w={70} h={70} borderRadius={100} >
-                        <Icon as={Octicons} m="auto" name="plus" size="xl" color="white" />
-                    </VStack>
+                    <Icon as={Octicons} m="auto" name="plus" size="xl" color="white" />
+                </VStack>
 
                 <HStack flex="1">
-
                     <VStack flex="1" alignItems="center">
                         <Icon as={Octicons} name="bell-fill" size="xl" color="marine.900" />
                         <Box>Home</Box>
-                        {/* <IconButton icon={} /> */}
                     </VStack>
                     <VStack flex="1" alignItems="center">
                         <Icon as={Octicons} name="bell-fill" size="xl" color="marine.900" />
                         <Box>Home</Box>
-                        {/* <IconButton icon={} /> */}
                     </VStack>
                     <VStack flex="1" alignItems="center">
                         <Icon as={Octicons} name="bell-fill" size="xl" color="marine.900" />
                         <Box>Home</Box>
-                        {/* <IconButton icon={} /> */}
                     </VStack>
                     <VStack flex="1" alignItems="center">
                         <Icon as={Octicons} name="bell-fill" size="xl" color="marine.900" />
                         <Box>Home</Box>
-                        {/* <IconButton icon={} /> */}
                     </VStack>
-                </HStack>
+                </HStack> */}
             </Box>
         }}>
         <BottomStack.Screen name={"Dashboard"} component={Dashboard} />

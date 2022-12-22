@@ -205,10 +205,18 @@ export const Theme = extendTheme({
                             end: {x: 1, y: 0.5},
                         },
                     },
-                    marginBottom: 20
+                    marginBottom: 84,       
                 }
             }
         },
+        ScrollView: {
+            defaultProps: {
+                _contentContainerStyle: {
+                    paddingBottom: 50 
+                }
+            }
+
+        }
     }
 })
 
