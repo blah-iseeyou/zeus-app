@@ -27,7 +27,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import AppIntroSlider from 'react-native-app-intro-slider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import axios from '../../../Axios'
+import axios from '../../../Axios.js'
 import { SetUser } from "../../../Contexts/User";
 import { SafeAreaView } from "react-native-safe-area-context";
 

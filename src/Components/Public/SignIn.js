@@ -24,7 +24,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import AppIntroSlider from 'react-native-app-intro-slider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import axios from '../../Axios'
+import axios from '../../Axios.js'
 // // import axios from 'axios'
 import { SetUser } from "../../Contexts/User";
 
@@ -77,10 +77,8 @@ export default function SignInForm({ navigation }) {
   const toast = useToast();
   const setUser = useContext(SetUser)
 
-
-
-  const [text, setText] = useState("alberto.virrey@outlook.com")
-  const [pass, setPass] = useState("Juan.697")
+  const [text, setText] = useState("")
+  const [pass, setPass] = useState("")
   const [showPass, setShowPass] = useState(false)
 
   const [intro, setIntro] = useState(false)
