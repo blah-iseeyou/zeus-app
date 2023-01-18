@@ -1,185 +1,35 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
+  HStack,
   VStack,
   Text,
   Link,
+  Checkbox,
+  Divider,
   Image,
+  useColorModeValue,
   IconButton,
   Icon,
+  Pressable,
   Center,
   Hidden,
   StatusBar,
   Stack,
-  Input,
-  Heading,
-  Spinner,
-  Tooltip,
-  useToast,
-  Box
+  Box, Input, Layout, Heading,
+
 } from "native-base";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
 import AppIntroSlider from 'react-native-app-intro-slider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import axios from '../../Axios'
-// // import axios from 'axios'
-import { SetUser } from "../../Contexts/User";
-
-
 export default function SignInForm({ navigation }) {
-  const slides = [
-    {
-      key: 's1',
-      title: '¡Invierte en Agave!',
-      subtitle: 'Desde cualquier parte del mundo como nunca antes',
-      description: "Somos la nueva generación de AgroTech",
-      image: require("../../../assets/img/LogoZeusOADLA.png"),
-      content: <>
-        <Button borderRadius={100} width={200} mt={5} onPress={(e) => {
-          onDone()
-          navigation.navigate('Register')
-        }}>Crear una Cuenta</Button>
-        <Button variant="link" borderRadius={100} width={200} mt={5} onPress={() => {
-          console.log("onDone")
-          onDone()
-        }}>Iniciar Sesión</Button>
-      </>
-    },
-    {
-      key: 's2',
-      title: 'Selección de Haciendas',
-      subtitle: 'Buscamos los mejores predios para plantar y cultivar agave.',
-      image: require("../../../assets/img/card1-farm.png"),
-    },
-    {
-      key: 's3',
-      title: 'Selección de Plantas',
-      subtitle: 'Elegimos plantas de primera calidad para ofrecerte el mejor rendimiento posible',
-      image: require("../../../assets/img/card2-plant.png"),
-    },
-    {
-      key: 's4',
-      title: 'Venta de plantas',
-      subtitle: 'Despues de plantar el agave en las haciendas elegidas, ponemos en venta las plantas en nuestra plataforma y app móvil.',
-      image: require("../../../assets/img/card3-sell.png"),
-    },
-    {
-      key: 's5',
-      title: 'Retorno de Capital',
-      subtitle: 'Una vez el agave llega a su maduración en alguna de nuestras haciendas, lo vendemos a las tequileras y hacemos retornos de capital.',
-      image: require("../../../assets/img/card4-return.png"),
-    },
-  ]
+    const [text, setText] = useState("");
+    const [pass, setPass] = useState("");
+    const [showPass, setShowPass] = React.useState(false);
 
-  const toast = useToast();
-  const setUser = useContext(SetUser)
-
-
-  const [text, setText] = useState("alberto.virrey@outlook.com")
-  const [pass, setPass] = useState("Juan.697")
-  const [showPass, setShowPass] = useState(false)
-
-  const [intro, setIntro] = useState(false)
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    getIntroStatus()
-    getUserLogged()
-  }, [])
-
-
-  const getIntroStatus = () => {
-    AsyncStorage.getItem('@intro_status')
-      .then(status => {
-        setIntro((status == null))
-      })
-      .catch(error => {
-        console.log("e", error)
-      })
-  }
-
-  const getUserLogged = () => {
-    setLoading(true)
-    axios.get('/user/logged', {
-      params: {
-        cliente: true
-      },
-      withCredentials: true
-    })
-      .then(({ data }) => {
-        console.log("A", data)
-        setUser(data.data)
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Admin' }],
-        });
-        // navigation.navigate("Admin")
-      })
-      .catch((error) => {
-        setLoading(false)
-        console.log("error", error)
-        // navigationRef.navigate("SignIn")
-      })
-  }
-
-
-  const onDone = () => {
-    console.log("A")
-    AsyncStorage.setItem('@intro_status', String(true))
-      .then(status => {
-        setIntro(false)
-      })
-      .catch(error => {
-        console.log("e", error)
-      })
-  }
-
-
-  const onFinish = () => {
-    axios.post('/login', { email: text, password: pass, keep_session: true }, { withCredentials: true })
-      .then(async ({ data, headers }) => {
-        await AsyncStorage.setItem('@token', headers.authorization)
-        axios.defaults.headers.common['Authorization'] = headers.authorization
-        setUser(data)
-        navigation.navigate("Admin")
-      })
-      .catch(error => {
-        toast.show({
-          render: () => {
-            return <Box bg="red.500" px="2" mx="4" py="1" rounded="sm" mb={5}>
-              <Heading size="xs" color={"white"}>{error?.response?.data?.message ?? "El usuario o la contraseña no son correctos"}</Heading>
-            </Box>
-          }
-        })
-      })
-
-  }
-
-
-  if (loading)
-    return <Spinner flex={1} color="primary.900" size="lg" />
-
-
-  if (intro)
-    return <AppIntroSlider
-      renderDoneButton={(e) => <Button variant={"link"} onPress={onDone}>Finalizar</Button>}
-      activeDotStyle={{ backgroundColor: "green" }}
-      data={slides}
-      renderItem={({ item }) => (<Center flex={1} px="5" _light={{ bg: "white", }}>
-        <Image alt={item.subtitle} source={item.image} resizeMethod="scale" resizeMode="contain" maxH={250} />
-        <Heading mt={20}>{item.title}</Heading>
-        <Text mt="5" fontWeight="bold" textAlign="center">{item.subtitle}</Text>
-        <Text mt="5">{item.description}</Text>
-        {item.content}
-      </Center>)}
-      onDone={onDone}
-      showSkipButton={false}
-      onSkip={onDone}
-    />
 
 
   return <>
@@ -212,7 +62,7 @@ export default function SignInForm({ navigation }) {
         >
           <Hidden from="md">
             <VStack px="4" mt="4" mb="5" space="9">
-              <Image alt={"Zeus Oro Azul de los Altos"} source={require("../../../assets/img/LogoZeuesOADLAH.png")} resizeMode="contain" h={"20"} />
+              <Image alt="Zeus Oro Azu de los Altos" source={require("../../../assets/img/LogoZeuesOADLAH.png")} resizeMode="contain" h={"20"} />
               <VStack space="2">
                 <Text fontSize="3xl" fontWeight="bold" >
                   Bienvenido
@@ -227,7 +77,7 @@ export default function SignInForm({ navigation }) {
                 //   color: "coolGray.50",
                 // }}
                 >
-                  Inicie sesión para continuar
+                  Inicie sesión para coninutar
                 </Text>
               </VStack>
             </VStack>
@@ -306,6 +156,7 @@ export default function SignInForm({ navigation }) {
                   >
                     ¿Olvidó su contraseña?
                   </Link>
+               
                   <Button
                     mt="5"
                     size="md"
@@ -313,7 +164,9 @@ export default function SignInForm({ navigation }) {
                     _text={{
                       fontWeight: "medium",
                     }}
-                    onPress={onFinish}
+                    onPress={() => {
+                      navigation.navigate("Admin");
+                    }}
                     borderRadius={300}
                   >
                     Iniciar Sesión
@@ -324,8 +177,6 @@ export default function SignInForm({ navigation }) {
               </VStack>
             </VStack>
           </VStack>
-
-
 
         </Stack>
       </Center>

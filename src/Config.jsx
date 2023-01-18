@@ -2,13 +2,7 @@ import { extendTheme, theme as nbTheme } from "native-base";
 import Color from 'color'
 
 //Marine
-let primary = Color('#AB339F')
-
-
-
-let marine = Color('#12225C')
-let lilac = Color('#A080C2')
-let salmon = Color('#E798A9')
+let primary = Color('#2DDA93')
 
 let white = Color('#FFF')
 let dark = Color('#000')
@@ -31,59 +25,24 @@ let linearGradientVariant = ({
             start: { x: 0.5, y: 0.5 },
             end: {x: 1, y: 0.5},
         },
-    }
+    } 
 })
 
 export const Theme = () => extendTheme({
     colors: {
         primary: {
-            50: primary.lighten(0.055).hex(),
-            100: primary.lighten(0.111).hex(),
-            200: primary.lighten(0.222).hex(),
-            300: primary.lighten(0.333).hex(),
+            50: primary.lighten(0.888).hex(),
+            100: primary.lighten(0.777).hex(),
+            200: primary.lighten(0.666).hex(),
+            300: primary.lighten(0.555).hex(),
             400: primary.lighten(0.444).hex(),
-            500: primary.lighten(0.555).hex(),
-            600: primary.lighten(0.666).hex(),
-            700: primary.lighten(0.777).hex(),
-            800: primary.lighten(0.888).hex(),
+            500: primary.lighten(0.333).hex(),
+            600: primary.lighten(0.222).hex(),
+            700: primary.lighten(0.111).hex(),
+            800: primary.lighten(0.055).hex(),
             900: primary.hex()
         },
-        lilac: {
-            50: lilac.lighten(0.055).hex(),
-            100: lilac.lighten(0.111).hex(),
-            200: lilac.lighten(0.222).hex(),
-            300: lilac.hex(),
-            400: lilac.darken(0.333).hex(),
-            500: lilac.darken(0.555).hex(),
-            600: lilac.darken(0.666).hex(),
-            700: lilac.darken(0.700).hex(),
-            800: lilac.darken(0.750).hex(),
-            900: lilac.darken(0.800).hex()
-        },
-        marine: {
-            50: marine.lighten(0.055).hex(),
-            100: marine.lighten(0.111).hex(),
-            200: marine.lighten(0.222).hex(),
-            300: marine.lighten(0.333).hex(),
-            400: marine.lighten(0.444).hex(),
-            500: marine.lighten(0.555).hex(),
-            600: marine.lighten(0.666).hex(),
-            700: marine.lighten(0.777).hex(),
-            800: marine.lighten(0.888).hex(),
-            900: marine.hex(),
-        },
-        salmon: {
-            50: salmon.lighten(0.055).hex(),
-            100: salmon.lighten(0.111).hex(),
-            200: salmon.lighten(0.222).hex(),
-            300: salmon.lighten(0.333).hex(),
-            400: salmon.lighten(0.555).hex(),
-            500: salmon.lighten(0.444).hex(),
-            600: salmon.hex(),
-            700: salmon.darken(0.444).hex(),
-            800: salmon.darken(0.555).hex(),
-            900: salmon.darken(0.666).hex()
-        },
+      
         whiteOpacity: {
             50: white.fade(0.05).hexa(),
             100: white.fade(0.1).hexa(),
@@ -162,12 +121,17 @@ export const Theme = () => extendTheme({
                 _light: {
                     bg: "primary.900",
                     borderRadius: 12,
+                    _pressed: {
+                        bg: "primary.700",
+                    }
                     // borderColor: "transparent"
                 },
                 _dark: {
                     bg: "primary.900",
                     borderRadius: 12,
-                    // borderColor: "transparent"
+                    _pressed: {
+                        bg: "primary.700",
+                    }
                 },
                 size: "xl"
             }
@@ -176,38 +140,32 @@ export const Theme = () => extendTheme({
             baseStyle: {
                 borderRadius: '10',
                 _light: {
-                    border: "none",
-                    bg: "trueGray.200",
+
+                    borderColor: "primary.900",
+                    borderWidth: 1,
                     borderRadius: 8,
-                    borderColor: "transparent"
                 },
                 _dark: {
                     bg: "trueGray.200",
                     borderRadius: 8,
                     borderColor: "transparent"
                 },
-                size: "xl"
+                _focus: {
+                    borderColor: "primary.900",
+                    borderWidth: 1,
+                },
+                size: "xl",
             } 
         },
         Center: {
-            variants: {
-                'linear-gradient': linearGradientVariant
-            }
+            // variants: {
+            //     'linear-gradient': linearGradientVariant
+            // }
         },
         Box: {
             variants: {
-                'linear-gradient': linearGradientVariant,
                 'layout': {
-                    bg: {
-                        linearGradient: {
-                            colors: ['marine.900', 'lilac.300', 'salmon.800'],
-                            start: { x: 0.5, y: 0.5 },
-                            end: {x: 1, y: 0.5},
-                        },
-                    },
-                    _android: {
-                        marginBottom: 84,
-                    }
+                    bg: "#F0F0F0",
                 }
             }
         },
