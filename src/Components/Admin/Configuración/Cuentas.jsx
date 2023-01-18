@@ -20,6 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "../../../Axios"
 import Header from "../../Header"
 import { SetUser, User } from "../../../Contexts/User"
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SignIn({ route, navigation }) {
 
@@ -63,29 +64,31 @@ export default function SignIn({ route, navigation }) {
 
     return (
         <Box variant={"layout"} flex="1"  >
-            <Header />
-            <Heading fontSize="xl" p="4" pb="3">
-                Configuración
-            </Heading>
-            <FlatList
-                data={cuentas.data}
-                _contentContainerStyle={{
-                    marginX: 5
-                }}
-                renderItem={({ item }) => <Box borderBottomWidth="1" _dark={{ borderColor: "coolGray.500" }} borderColor="coolGray.300" pl={["0", "4"]} pr={["0", "5"]} mt="3">
-                    <HStack space={[2, 3]} justifyContent="space-between" mb={1}>
-                        <VStack flex={1}>
-                            <Text _dark={{ color: "warmGray.50" }} color="coolGray.800" bold>{item.nombre}</Text>
-                            <Text color="coolGray.600" _dark={{ color: "warmGray.200" }}>{item.cuenta} {item.banco} </Text>
-                        </VStack>
-                        <HStack>
-                            <Button size="sm" leftIcon={<Icon as={AntDesign} name="edit" />} mr={1} />
-                            <Button size="sm" bg="danger.500" leftIcon={<Icon as={AntDesign} name="delete" />} />
+            <SafeAreaView flex={1}>
+                <Header />
+                <Heading fontSize="xl" p="4" pb="3">
+                    Configuración
+                </Heading>
+                <FlatList
+                    data={cuentas.data}
+                    _contentContainerStyle={{
+                        marginX: 5
+                    }}
+                    renderItem={({ item }) => <Box borderBottomWidth="1" _dark={{ borderColor: "coolGray.500" }} borderColor="coolGray.300" pl={["0", "4"]} pr={["0", "5"]} mt="3">
+                        <HStack space={[2, 3]} justifyContent="space-between" mb={1}>
+                            <VStack flex={1}>
+                                <Text _dark={{ color: "warmGray.50" }} color="coolGray.800" bold>{item.nombre}</Text>
+                                <Text color="coolGray.600" _dark={{ color: "warmGray.200" }}>{item.cuenta} {item.banco} </Text>
+                            </VStack>
+                            <HStack>
+                                <Button size="sm" leftIcon={<Icon as={AntDesign} name="edit" />} mr={1} />
+                                <Button size="sm" bg="danger.500" leftIcon={<Icon as={AntDesign} name="delete" />} />
+                            </HStack>
                         </HStack>
-                    </HStack>
-                </Box>}
-                keyExtractor={item => item.id}
-            />
+                    </Box>}
+                    keyExtractor={item => item.id}
+                />
+            </SafeAreaView>
         </Box>
     );
 }

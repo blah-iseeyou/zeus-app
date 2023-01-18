@@ -22,6 +22,8 @@ import Header from "../Header"
 import User from "../../Contexts/User"
 import Color from "color";
 
+import Inversion from "../Admin/Inversiones/Inversion";
+
 
 
 export default function SignIn({ navigation }) {
@@ -29,6 +31,8 @@ export default function SignIn({ navigation }) {
   const user = useContext(User)
 
   const [montos, setMontos] = useState({})
+
+  const [inversionId, setInversionId] = useState()
 
   const [inversiones, setInversiones] = useState({
     data: [],
@@ -224,21 +228,30 @@ export default function SignIn({ navigation }) {
           <Box mx={5} mt={4}>
             <Heading fontSize="lg">Ultimas Inversiones</Heading>
           </Box>
-          {inversiones.data.map(({ _id, cantidad, monto_pagado, monto, estatus, hacienda_id, createdAt }) => <VStack key={_id} mx={5} my={4}>
-            <HStack justifyContent={"space-between"}>
-              <Text>Comprada {cantidad} planta{(cantidad > 1) ? "s" : ""}</Text>
-              <Text >{monto_pagado?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} / {monto?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} </Text>
-            </HStack>
-            <HStack justifyContent={"space-between"} mt={1}>
-              <Text fontSize={12}>{hacienda_id?.nombre}</Text>
-              <HStack>
-                <Text fontSize={10} top={1}>{moment(createdAt).format("YYYY-MM-DD")}</Text>
-                {renderEstatusInversion(estatus)}
+          {inversiones.data.map(({ _id, cantidad, monto_pagado, monto, estatus, hacienda_id, createdAt }) => <Pressable flex={1} onPress={()=>setInversionId(_id)}>
+
+            <VStack key={_id} mx={5} my={4}>
+              <HStack justifyContent={"space-between"}>
+                <Text>Comprada {cantidad} planta{(cantidad > 1) ? "s" : ""}</Text>
+                <Text >{monto_pagado?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} / {monto?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} </Text>
               </HStack>
-            </HStack>
-          </VStack>)}
+              <HStack justifyContent={"space-between"} mt={1}>
+                <Text fontSize={12}>{hacienda_id?.nombre}</Text>
+                <HStack>
+                  <Text fontSize={10} top={1}>{moment(createdAt).format("YYYY-MM-DD")}</Text>
+                  {renderEstatusInversion(estatus)}
+                </HStack>
+              </HStack>
+            </VStack>
+          </Pressable>)}
         </ScrollView>
+
       </SafeAreaView>
+      <Inversion
+        inversion_id={inversionId}
+        onClose={() => setInversionId(null)}
+      />
+
     </Box>
   );
 }

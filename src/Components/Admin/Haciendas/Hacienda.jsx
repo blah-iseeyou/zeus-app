@@ -69,71 +69,74 @@ export default function SignIn({ route }) {
 
     return (
         <Box variant={"layout"} flex="1"  >
-            <Header />
-            <ScrollView flex={1} mx={4}>
-                {hacienda ? <>
+            <SafeAreaView flex={1}>
+                <Header />
+                <ScrollView flex={1} mx={4}>
+                    {hacienda ? <>
 
-                    <Box px="1" flex="1" borderRadius={16}>
-                        <Box bg={{
-                            linearGradient: {
-                                colors: [Color(hacienda?.color ?? "green").darken(0.2).hex(), hacienda?.color ?? "green"],
-                                start: [0, 0],
-                                end: [1, 0]
-                            }
-                        }} borderRadius={10} width={"100%"} height={100} position="relative">
-                            <VStack p={2}>
-                                <Heading size={"sm"} color="white">{hacienda?.nombre}</Heading>
-                                <Text color="white">{hacienda?.descripcion}</Text>
-                            </VStack>
-                            <Image alt={"Zeus Oro azul de los altos"} source={require("../../../../assets/img/ZeusAgave.png")} resizeMode="contain" h={"20"} opacity={0.2} right={-135} bottom={10} />
+                        <Box px="1" flex="1" borderRadius={16}>
+                            <Box bg={{
+                                linearGradient: {
+                                    colors: [Color(hacienda?.color ?? "green").darken(0.2).hex(), hacienda?.color ?? "green"],
+                                    start: [0, 0],
+                                    end: [1, 0]
+                                }
+                            }} borderRadius={10} width={"100%"} height={100} position="relative">
+                                <VStack p={2}>
+                                    <Heading size={"sm"} color="white">{hacienda?.nombre}</Heading>
+                                    <Text color="white">{hacienda?.descripcion}</Text>
+                                </VStack>
+                                <Image alt={"Zeus Oro azul de los altos"} source={require("../../../../assets/img/ZeusAgave.png")} resizeMode="contain" h={"20"} opacity={0.2} right={-135} bottom={10} />
+                            </Box>
                         </Box>
-                    </Box>
-                    <Box bg={"white"} mt={5} borderRadius={10} px={2} py={2}>
+                        <Box bg={"white"} mt={5} borderRadius={10} px={2} py={2}>
 
 
 
-                        <VStack borderBottomWidth="1" borderBottomColor="gray.200" pb={2}>
-                            <Text flex={1} textAlign="center">Hacienda</Text>
-                            <Heading flex={1} size="md" textAlign="center">{hacienda.nombre}</Heading>
-                        </VStack>
+                            <VStack borderBottomWidth="1" borderBottomColor="gray.200" pb={2}>
+                                <Text flex={1} textAlign="center">Hacienda</Text>
+                                <Heading flex={1} size="md" textAlign="center">{hacienda.nombre}</Heading>
+                            </VStack>
 
-                        <VStack justifyContent="center">
-                            <Box mt={5}>
-                                <Text textAlign={"center"}>Edad</Text>
-                                <Text textAlign={"center"} fontWeight="bold">{momentPreciseRangePlugin(hacienda.fecha_creacion, moment(), {
-                                    year: true,
-                                    month: true,
-                                    day: true,
-                                })}</Text>
-                            </Box>
-                            <Box mt={5}>
-                                <Text textAlign={"center"}>Hectareas</Text>
-                                <Text textAlign={"center"} fontWeight="bold">{hacienda.hectareas}</Text>
-                            </Box>
-                            <Box mt={5}>
-                                <Text textAlign={"center"}>Precio por Planta</Text>
-                                <HStack justifyContent={"space-between"}>
-                                    <Text flex={1} textAlign="center" fontWeight={"bold"}>{hacienda.precio?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} <Text fontSize={"xs"}>MXN</Text></Text>
-                                    <Text flex={1} textAlign="center" fontWeight={"bold"}>{Decimal(hacienda.precio_dolar ?? 0).toDecimalPlaces(2)?.toNumber()?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} <Text fontSize={"xs"}>USD</Text></Text>
-                                </HStack>
-                            </Box>
-                            <Box mt={5}>
-                                <Button onPress={() => setVisibleHacienda(hacienda?._id)}>INVERTIR AHORA</Button>
-                            </Box>
+                            <VStack justifyContent="center">
+                                <Box mt={5}>
+                                    <Text textAlign={"center"}>Edad</Text>
+                                    <Text textAlign={"center"} fontWeight="bold">{momentPreciseRangePlugin(hacienda.fecha_creacion, moment(), {
+                                        year: true,
+                                        month: true,
+                                        day: true,
+                                    })}</Text>
+                                </Box>
+                                <Box mt={5}>
+                                    <Text textAlign={"center"}>Hectareas</Text>
+                                    <Text textAlign={"center"} fontWeight="bold">{hacienda.hectareas}</Text>
+                                </Box>
+                                <Box mt={5}>
+                                    <Text textAlign={"center"}>Precio por Planta</Text>
+                                    <HStack justifyContent={"space-between"}>
+                                        <Text flex={1} textAlign="center" fontWeight={"bold"}>{hacienda.precio?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} <Text fontSize={"xs"}>MXN</Text></Text>
+                                        <Text flex={1} textAlign="center" fontWeight={"bold"}>{Decimal(hacienda.precio_dolar ?? 0).toDecimalPlaces(2)?.toNumber()?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} <Text fontSize={"xs"}>USD</Text></Text>
+                                    </HStack>
+                                </Box>
+                                <Box mt={5}>
+                                    <Button onPress={() => setVisibleHacienda(hacienda?._id)}>INVERTIR AHORA</Button>
+                                </Box>
 
-                        </VStack>
-                    </Box>
-                </>
-                    : null}
-            </ScrollView>
-            <BottomSheet
-                hacienda_id={visibleHacienda}
+                            </VStack>
+                        </Box>
+                    </>
+                        : null}
+                </ScrollView>
+                <BottomSheet
+                    hacienda_id={visibleHacienda}
 
-                onClose={() => {
-                    console.log("nukmk")
-                    setVisibleHacienda(undefined)
-                }}
-            />
+                    onClose={() => {
+                        console.log("nukmk")
+                        setVisibleHacienda(undefined)
+                    }}
+                />
+            </SafeAreaView>
+
         </Box>
     );
 }

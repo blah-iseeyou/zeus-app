@@ -1,7 +1,7 @@
 
 import React from "react";
 
-import { Dimensions, Platform } from "react-native";
+import { Dimensions, Platform, SafeAreaView } from "react-native";
 
 import { Box, Icon, IconButton, HStack, VStack, Pressable, Text, } from "native-base";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -37,7 +37,7 @@ export default function () {
         screenOptions={{ headerShown: false }}
         initialRouteName="Dashboard"
         tabBar={({ navigation }) => {
-            return <Box w="100%" m={0} px={0} py={2} h={60} shadow={1} background="white">
+            return <Box w="100%" m={0} px={0} py={2} h={insets.bottom + 60} shadow={1} background="white">
                 <HStack flex="1" w="100%">
                     <Pressable flex={1} onPress={() => navigation.navigate("Dashboard")}>
                         {({

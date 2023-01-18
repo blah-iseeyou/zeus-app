@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { View, StyleSheet, Modal, Keyboard} from 'react-native';
+import { View, StyleSheet, Modal, Keyboard } from 'react-native';
 import BottomSheet, { useBottomSheet } from '@gorhom/bottom-sheet';
 import { Box, Heading, HStack, Icon, Button, Image, Text, VStack, Input, FormControl, WarningOutlineIcon, Checkbox, ScrollView, Pressable, useToast } from 'native-base';
 import moment from 'moment/moment';
@@ -13,10 +13,13 @@ import axios from '../../../Axios';
 
 
 import InputFormatNumber from '../../Widgets/InputFormatNumber';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 
 export default function (props) {
+
+    const insets = useSafeAreaInsets();
 
     const user = useContext(User)
     const { hacienda_id, onClose } = props
@@ -142,7 +145,7 @@ export default function (props) {
                 setMetodoPago(false)
                 toast.show({
                     duration: 5000,
-                    placement:"top",
+                    placement: "top",
                     render: () => {
                         return <Box bg="green.500" px="2" py="1" rounded="sm" mb={5}>Hemos procesado su compra correctamente, revise su correo electronico o ingrese a inversiones</Box>;
                     },
@@ -296,7 +299,7 @@ export default function (props) {
                 index={index}
                 snapPoints={snapPoints}
                 onChange={e => {
-                    
+
                     if (e == -1) {
                         onClose()
                         setHaciendaId(null)
@@ -304,7 +307,7 @@ export default function (props) {
                 }}
                 enablePanDownToClose={true}
             >
-                <Box flex={1} mx={5}>
+                <Box flex={1} mx={5} safeArea>
                     <Box bg={hacienda ? {
                         linearGradient: {
                             colors: [Color(hacienda?.color ?? "#FFF").darken(0.2).hex(), hacienda?.color ?? "#FFF"],
@@ -420,7 +423,7 @@ export default function (props) {
                             </Box>
                             <Box my={3}>
                                 <Button onPress={() => {
-                                    
+
                                     // console.log("bottomSheetRef.current", bottomSheetRef.current)
 
                                     // return 
@@ -551,21 +554,23 @@ export default function (props) {
             <Modal
                 visible={indexContract}
                 animationType='slide'
-            >
-                <HStack mt={5} mb={1} mx={5}>
-                    <Heading flex={1} fontSize="md" my={5} align="center">CONTRATO DE INVERSIÓN EN PLANTAS DE AGAVE AZUL TEQUILANA WEBER.</Heading>
-                    <Pressable onPress={() => setIndexContract(false)}><Text color="red.400">X</Text></Pressable>
-                </HStack>
-                <ScrollView my={2}>
 
-                    {renderContrato()}
-                </ScrollView>
-                <Box mx={5} my={2}>
-                    <Button onPress={() => {
-                        console.log("U2FsdGVkX19RWswjPmj7I5JqR+h5tMce+cV5Pwc=")
-                        setIndexContract(false)
-                        setAceptarContrato(true)
-                    }}>Acepto los Terminos y Condiciones</Button>
+            >
+                <Box flex={1} safeArea>
+                    <HStack mt={5} mb={1} mx={5}>
+                        <Heading flex={1} fontSize="md" my={5} align="center">CONTRATO DE INVERSIÓN EN PLANTAS DE AGAVE AZUL TEQUILANA WEBER.</Heading>
+                        <Pressable onPress={() => setIndexContract(false)}><Text color="red.400">X</Text></Pressable>
+                    </HStack>
+                    <ScrollView my={2}>
+                        {renderContrato()}
+                    </ScrollView>
+                    <Box mx={5} my={2}>
+                        <Button onPress={() => {
+                            console.log("U2FsdGVkX19RWswjPmj7I5JqR+h5tMce+cV5Pwc=")
+                            setIndexContract(false)
+                            setAceptarContrato(true)
+                        }}>Acepto los Terminos y Condiciones</Button>
+                    </Box>
                 </Box>
             </Modal>
         </>

@@ -14,7 +14,6 @@ import {
   Input,
   Heading,
   Spinner,
-  Tooltip,
   useToast,
   Box
 } from "native-base";
@@ -43,7 +42,7 @@ export default function SignInForm({ navigation }) {
           onDone()
           navigation.navigate('Register')
         }}>Crear una Cuenta</Button>
-        <Button variant="link" borderRadius={100} width={200} mt={5} onPress={() => {
+        <Button borderRadius={100} width={200} mt={5} onPress={() => {
           console.log("onDone")
           onDone()
         }}>Iniciar Sesión</Button>
@@ -79,8 +78,9 @@ export default function SignInForm({ navigation }) {
   const setUser = useContext(SetUser)
 
 
+
   const [text, setText] = useState("alberto.virrey@outlook.com")
-  const [pass, setPass] = useState("Juan.697")
+  const [pass, setPass] = useState("Juan.1234")
   const [showPass, setShowPass] = useState(false)
 
   const [intro, setIntro] = useState(false)
@@ -140,6 +140,7 @@ export default function SignInForm({ navigation }) {
 
 
   const onFinish = () => {
+    setLoading(true)
     axios.post('/login', { email: text, password: pass, keep_session: true }, { withCredentials: true })
       .then(async ({ data, headers }) => {
         await AsyncStorage.setItem('@token', headers.authorization)
@@ -156,6 +157,7 @@ export default function SignInForm({ navigation }) {
           }
         })
       })
+      .finally(() =>     setLoading(false))
 
   }
 
@@ -315,6 +317,7 @@ export default function SignInForm({ navigation }) {
                     }}
                     onPress={onFinish}
                     borderRadius={300}
+                    isLoading={loading}
                   >
                     Iniciar Sesión
                   </Button>
