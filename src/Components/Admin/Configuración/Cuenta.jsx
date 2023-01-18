@@ -197,12 +197,6 @@ export default function SignIn({ route, navigation }) {
                             {'codigo_postal' in errors ? <FormControl.ErrorMessage>{errors['codigo_postal']}</FormControl.ErrorMessage> : null}
                         </FormControl>
 
-                        {/* <FormControl isRequired isInvalid={'apellido_materno' in errors} my={2}>
-                        <FormControl.Label _text={{ bold: true }}>Fecha de Nacimiento</FormControl.Label>
-                        <Input placeholder="John" value={formData.apellido_materno} onChangeText={value => setData({ ...formData, nombre: value })} />
-                        {'apellido_materno' in errors ? <FormControl.ErrorMessage>{errors['apellido_materno']}</FormControl.ErrorMessage> : null}
-                    </FormControl> */}
-
                         <FormControl isRequired isInvalid={'pais_id' in errors} my={2}>
                             <FormControl.Label _text={{ bold: true }}>Pais</FormControl.Label>
                             <Select

@@ -5,7 +5,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { NativeBaseProvider, extendTheme, theme as nbTheme, View } from "native-base";
 
 import SignIn from "./Components/Public/SignIn"
-import Register from "./Components/Public/Register"
+import RecoveryPassword from "./Components/Public/RecoveryPassword"
+
+import Credentials from "./Components/Public/Register/Credentials"
+import UserInformation from "./Components/Public/Register/UserInformation"
+
+
+import Address from "./Components/Public/Register/Address"
 
 import { SetUser, User } from "./Contexts/User"
 import { Config, Theme } from "./Config"
@@ -31,7 +37,10 @@ export default function App() {
 							initialRouteName="SignIn"
 						>
 							<NativeStack.Screen name={"SignIn"} component={SignIn} />
-							<NativeStack.Screen name={"Register"} component={Register} />
+							<NativeStack.Screen name={"RecoveryPassword"} component={RecoveryPassword} />
+							<NativeStack.Screen name={"Credentials"} component={Credentials} />
+							<NativeStack.Screen name={"UserInformation"} component={UserInformation} />
+							<NativeStack.Screen name={"Address"} component={Address} />
 							<NativeStack.Screen name={"Admin"} component={AdminRouter} />
 						</NativeStack.Navigator>
 					</NavigationContainer>

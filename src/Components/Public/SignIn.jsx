@@ -80,7 +80,7 @@ export default function SignInForm({ navigation }) {
 
 
   const [text, setText] = useState("alberto.virrey@outlook.com")
-  const [pass, setPass] = useState("Juan.1234")
+  const [pass, setPass] = useState("Juan.697")
   const [showPass, setShowPass] = useState(false)
 
   const [intro, setIntro] = useState(false)
@@ -113,17 +113,29 @@ export default function SignInForm({ navigation }) {
       .then(({ data }) => {
         console.log("A", data)
         setUser(data.data)
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Admin' }],
-        });
-        // navigation.navigate("Admin")
+        switch (data.data.status) {
+          case 0:
+            // message.error("No es posible iniciar sesión")
+            break;
+          case 1:
+            navigation.navigate("Admin")
+            break;
+          case 2:
+            navigation.navigate("UserInformation")
+            break;
+          case 3:
+            navigation.navigate("Address")
+            break;
+          default:
+            navigation.navigate("Admin") 
+        }
       })
       .catch((error) => {
-        setLoading(false)
+
         console.log("error", error)
         // navigationRef.navigate("SignIn")
       })
+      .finally(() => setLoading(false))
   }
 
 
@@ -146,7 +158,24 @@ export default function SignInForm({ navigation }) {
         await AsyncStorage.setItem('@token', headers.authorization)
         axios.defaults.headers.common['Authorization'] = headers.authorization
         setUser(data)
-        navigation.navigate("Admin")
+
+        console.log("data.user.status",)
+        switch (data.user.status) {
+          case 0:
+            // message.error("No es posible iniciar sesión")
+            break;
+          case 1:
+            navigation.navigate("Admin")
+            break;
+          case 2:
+            navigation.navigate("UserInformation")
+            break;
+          case 3:
+            navigation.navigate("Address")
+            break;
+          default:
+            navigation.navigate("Admin") 
+        }
       })
       .catch(error => {
         toast.show({
@@ -157,7 +186,7 @@ export default function SignInForm({ navigation }) {
           }
         })
       })
-      .finally(() =>     setLoading(false))
+      .finally(() => setLoading(false))
 
   }
 
@@ -305,6 +334,7 @@ export default function SignInForm({ navigation }) {
                         color: "primary.500",
                       },
                     }}
+                    onPress={() => navigation.navigate("RecoveryPassword")}
                   >
                     ¿Olvidó su contraseña?
                   </Link>
@@ -322,7 +352,7 @@ export default function SignInForm({ navigation }) {
                     Iniciar Sesión
                   </Button>
 
-                  <Text textAlign={"center"}>¿No tienes cuenta? <Text color={"primary.900"} onPress={() => console.log("sdfas")}>Registrate</Text></Text>
+                  <Text textAlign={"center"}>¿No tienes cuenta? <Text color={"primary.900"} onPress={() => navigation.navigate("Credentials")}>Registrate</Text></Text>
                 </VStack>
               </VStack>
             </VStack>

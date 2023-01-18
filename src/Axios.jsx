@@ -9,21 +9,15 @@ import { navigationRef } from './Contexts/RootNavigation';
 
 
 let setCookie = require('set-cookie-parser');
-
-// axios.defaults.baseURL = "http://192.168.56.1:4025"
-axios.defaults.baseURL = "https://zeusagave.com:4002"
+// 192.168.56.1
+axios.defaults.baseURL = "http://192.168.56.1:4025"
+// axios.defaults.baseURL = "https://zeusagave.com:4002"
 axios.defaults.withCredentials = true
 axios.defaults.headers.common["Content-Type"] = "application/json";
 
 axios.interceptors.request.use(async function (config) {
     config.headers.Authorization = await AsyncStorage.getItem('@token')
     config.headers.Cookie = await AsyncStorage.getItem('@refresh')
-    // console.log({
-    //     token: await AsyncStorage.getItem('@token'),
-    //     refresh: await AsyncStorage.getItem('@refresh'),
-    // })
-
-    // console.log("config.headers", config)
     return config;
 })
 
@@ -32,16 +26,14 @@ axios.interceptors.response.use(async function (response) {
         await AsyncStorage.setItem('@token', response?.headers?.authorization)
 
     if (response.headers["set-cookie"] && response.headers["set-cookie"][0]) {
-        // console.log("A A A", response.headers["set-cookie"][0])
         let cookies = setCookie.parse(response.headers["set-cookie"][0], { map: true })
         if (cookies["refresh"].value !== (await AsyncStorage.getItem('@refresh')))
             await AsyncStorage.setItem('@refresh', response.headers["set-cookie"][0])
     }
     return response;
 }, function (error) {
-    if (error?.response?.status == 401) {
+    if (error?.response?.status == 401) 
         navigationRef.navigate("SignIn")
-    }
     return Promise.reject(error)
 })
 
