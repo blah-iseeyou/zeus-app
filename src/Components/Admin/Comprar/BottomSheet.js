@@ -546,17 +546,17 @@ export default function (props) {
                                     </HStack>
 
                                     <FormControl mt={3}>
-                                        <Input autoComplete='cc-number' value={card_number} onChangeText={set_card_number} size="xs" fontSize="xs" py={0} placeholder="Número de Tarjeta de credito" />
+                                        <Input autoComplete='cc-number' keyboardType='number-pad' value={card_number} onChangeText={set_card_number} size="xs" fontSize="xs" py={0} placeholder="Número de Tarjeta de credito" />
                                     </FormControl>
                                     <HStack mt={3}>
                                         <Box w={"33%"}>
                                             <FormControl>
-                                                <Input autoComplete='cc-exp-month' value={expiration_date_month} onChangeText={set_expiration_date_month} size="xs" fontSize="xs" py={0} placeholder="Mes (MM)" />
+                                                <Input autoComplete='cc-exp-month' keyboardType='number-pad' value={expiration_date_month} onChangeText={set_expiration_date_month} size="xs" fontSize="xs" py={0} placeholder="Mes (MM)" />
                                             </FormControl>
                                         </Box>
                                         <Box w={"33%"} px={2}>
                                             <FormControl>
-                                                <Input autoComplete='cc-exp-year' value={expiration_date_year} onChangeText={set_expiration_date_year} size="xs" fontSize="xs" py={0} placeholder="Año (YYYY)" />
+                                                <Input autoComplete='cc-exp-year' keyboardType='number-pad' value={expiration_date_year} onChangeText={set_expiration_date_year} size="xs" fontSize="xs" py={0} placeholder="Año (YYYY)" />
                                             </FormControl>
                                         </Box>
                                         <Box w={"33%"}>

@@ -162,7 +162,7 @@ export default function SignIn({ navigation }) {
           <Stack
             flexDirection={{
               base: "column",
-              md: "row",
+              // md: "row",
             }}
             w="100%"
             maxW={{
@@ -170,7 +170,6 @@ export default function SignIn({ navigation }) {
             }}
             flex={{
               base: "1",
-              md: "none",
             }}
           >
             <VStack px="4" mt="4" mb="5" space="9">

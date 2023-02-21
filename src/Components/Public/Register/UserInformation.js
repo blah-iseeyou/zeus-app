@@ -106,7 +106,6 @@ export default function SignInForm({ navigation }) {
                     <Stack
                         flexDirection={{
                             base: "column",
-                            md: "row",
                         }}
                         w="100%"
                         maxW={{
@@ -114,7 +113,6 @@ export default function SignInForm({ navigation }) {
                         }}
                         flex={{
                             base: "1",
-                            md: "none",
                         }}
                     >
                         <Hidden from="md">

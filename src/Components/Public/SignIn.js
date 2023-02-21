@@ -235,10 +235,10 @@ export default function SignInForm({ navigation }) {
           maxW={{
             md: "1016px",
           }}
-          flex={{
-            base: "1",
-            md: "none",
-          }}
+        // flex={{
+        //   base: "1",
+        //   md: "none",
+        // }}
         >
           <Hidden from="md">
             <VStack px="4" mt="4" mb="5" space="9">
@@ -268,14 +268,14 @@ export default function SignInForm({ navigation }) {
             <VStack space="7">
               <Hidden till="md">
                 <Text fontSize="lg" fontWeight="normal">
-                  Sign in to continue!
+                  !Inicie sesión para continuar!
                 </Text>
               </Hidden>
               <VStack>
                 <VStack space="3">
                   <VStack space={{ base: "7", md: "4", }}>
                     <Input
-                      
+
                       value={text}
                       onChangeText={txt => setText(txt.toLocaleLowerCase().trim())}
 

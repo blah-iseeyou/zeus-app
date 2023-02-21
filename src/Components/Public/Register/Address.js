@@ -188,7 +188,6 @@ export default function SignInForm({ navigation }) {
                         }}
                         flex={{
                             base: "1",
-                            md: "none",
                         }}
                     >
                         <Hidden from="md">

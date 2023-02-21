@@ -131,7 +131,7 @@ export default function SignIn(props) {
               </Box>}
           </Pressable>))}
           {(inversiones.pages > 0) ? <>
-            <Button.Group isAttached mx={{ base: "auto", md: 0 }} size="sm">
+            <Button.Group isAttached mx={{ base: "auto" }} size="sm">
               <Button style={{ opacity: inversiones.hasPrevPage ? undefined : 0.5 }} onPress={() => getInversiones({ page: inversiones.prevPage })} startIcon={<Icon as={AntDesign} name="left"></Icon>}>Anterior</Button>
               <Button style={{ opacity: inversiones.hasNextPage ? undefined : 0.5 }} onPress={() => getInversiones({ page: inversiones.nextPage })} endIcon={<Icon as={AntDesign} name="right"></Icon>}>Siguiente</Button>
             </Button.Group>
