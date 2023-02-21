@@ -230,7 +230,21 @@ export default function SignInForm({ navigation }) {
                                         <VStack space={{ base: "4", md: "2", }}>
                                             <FormControl isRequired isInvalid={isError('email')}>
                                                 <FormControl.Label _text={{ bold: true }}>Correo Electrónico</FormControl.Label>
-                                                <Input fontSize={"lg"} placeholder="yo@domino.com" value={formData.email} onChangeText={value => setData({ ...formData, email: value })} />
+                                                <Input
+                                                    fontSize={"lg"}
+                                                    placeholder="yo@dominio.com"
+                                                    value={formData.email}
+                                                    
+
+                                                    onChangeText={value => setData({ ...formData, email: value })}
+
+                                                    autoCapitalize="none"
+                                                    autoCorrect={false}
+                                                    spellCheck={false}
+
+                                                    keyboardType="email-address"
+                                                    
+                                                    />
                                                 {renderErrors('email')}
                                             </FormControl>
 
@@ -276,7 +290,6 @@ export default function SignInForm({ navigation }) {
                                                 <Link
                                                     ml="auto"
                                                     _text={{
-                                                        fontSize: "xs",
                                                         fontWeight: "bold",
                                                         textDecoration: "none",
                                                     }}

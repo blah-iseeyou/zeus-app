@@ -63,8 +63,8 @@ export default function SignIn({ route, navigation }) {
                                 },
                                 {
                                     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-                                    nombre: "Beneficiarios del Sistema",
-                                    description: "Agregar personas que en caso de cualquier inconveniente puedan recibir los beneficios",
+                                    nombre: "Cuentas Beneficiarios del Sistema",
+                                    description: "Agregar las cuentas de retorno de inversión",
                                     icon: "team",
                                     event: () => navigation.navigate("Cuentas")
                                 },

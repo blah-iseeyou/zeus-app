@@ -110,7 +110,7 @@ export default function SignInForm({ navigation }) {
       withCredentials: true
     })
       .then(({ data }) => {
-        console.log("A", data)
+        console.log("A", data.data)
         setUser(data.data)
         switch (data.data.status) {
           case 0:
@@ -156,7 +156,7 @@ export default function SignInForm({ navigation }) {
       .then(async ({ data, headers }) => {
         await AsyncStorage.setItem('@token', headers.authorization)
         axios.defaults.headers.common['Authorization'] = headers.authorization
-        setUser(data)
+        setUser(data.user)
 
         console.log("data.user.status",)
         switch (data.user.status) {
@@ -253,9 +253,6 @@ export default function SignInForm({ navigation }) {
                   _dark={{
                     color: "white.300",
                   }}
-                // _light={{
-                //   color: "coolGray.50",
-                // }}
                 >
                   Inicie sesión para continuar
                 </Text>
@@ -278,24 +275,31 @@ export default function SignInForm({ navigation }) {
                 <VStack space="3">
                   <VStack space={{ base: "7", md: "4", }}>
                     <Input
+                      
+                      value={text}
+                      onChangeText={txt => setText(txt.toLocaleLowerCase().trim())}
+
+
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      spellCheck={false}
+
                       isRequired
                       size="xl"
                       label="Email"
                       placeholder="Correo Electrónico"
 
-                      defaultValue={text}
-                      onChangeText={(txt) => setText(txt)}
                       _text={{ fontSize: "sm", fontWeight: "medium", }}
                     />
                     <Input
+                      value={pass}
+                      onChangeText={setPass}
+
                       size="xl"
                       isRequired
                       type={showPass ? "text" : "password"}
                       placeholder="Contraseña"
                       label="Password"
-
-                      defaultValue={pass}
-                      onChangeText={(txt) => setPass(txt)}
                       InputRightElement={
                         <IconButton
                           variant="unstyled"
@@ -350,19 +354,13 @@ export default function SignInForm({ navigation }) {
                   >
                     Iniciar Sesión
                   </Button>
-
                   <Text textAlign={"center"}>¿No tienes cuenta? <Text color={"primary.900"} onPress={() => navigation.navigate("Credentials")}>Registrate</Text></Text>
                 </VStack>
               </VStack>
             </VStack>
           </VStack>
-
-
-
         </Stack>
       </Center>
     </KeyboardAwareScrollView>
   </>
-
-
 }

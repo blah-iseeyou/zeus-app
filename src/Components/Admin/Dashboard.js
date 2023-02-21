@@ -176,6 +176,7 @@ export default function SignIn({ navigation }) {
             <VStack px="4" mt="4" mb="5" space="9">
               <VStack space="2">
                 <Text fontSize="lg" fontWeight="bold">
+                  {console.log("user", user)}
                   Bienvenido, {user?.nombre} {user?.apellido_paterno}
                 </Text>
               </VStack>
