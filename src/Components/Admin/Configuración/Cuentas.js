@@ -1,5 +1,12 @@
-import React, { useContext, useEffect, useState, } from "react";
-import { Dimensions, } from "react-native"
+import React, {
+    useContext,
+    useEffect,
+    useState,
+    useCallback,
+    useMemo,
+    useRef
+} from "react";
+import { Dimensions, View, StyleSheet} from "react-native"
 import {
     HStack,
     VStack,
@@ -15,7 +22,11 @@ import {
 import AntDesign from "react-native-vector-icons/AntDesign";
 import moment from "moment"
 
+import BottomSheet from '@gorhom/bottom-sheet';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import BottomSheetCuenta from './BottomSheetCuenta';
 
 import axios from "../../../Axios"
 import Header from "../../Header"
@@ -33,6 +44,10 @@ export default function SignIn({ route, navigation }) {
         pages: 0,
         total: 0
     })
+
+
+    const [cuenta_id, setCuentaId] = useState(null)
+
 
     useEffect(() => {
         getCuentas()
@@ -66,9 +81,12 @@ export default function SignIn({ route, navigation }) {
         <Box variant={"layout"} flex="1"  >
             <SafeAreaView flex={1}>
                 <Header />
-                <Heading fontSize="xl" p="4" pb="3">
-                    Configuración
-                </Heading>
+                <HStack justifyContent="space-between" p="4" pb="3">
+                    <Heading fontSize="xl">
+                        Configuración
+                    </Heading>
+                    <Button w={10} h={10} borderRadius={100} onPress={() => setCuentaId(true)}>+</Button>
+                </HStack>
                 <FlatList
                     data={cuentas.data}
                     _contentContainerStyle={{
@@ -81,7 +99,7 @@ export default function SignIn({ route, navigation }) {
                                 <Text color="coolGray.600" _dark={{ color: "warmGray.200" }}>{item.cuenta} {item.banco} </Text>
                             </VStack>
                             <HStack>
-                                <Button size="sm" leftIcon={<Icon as={AntDesign} name="edit" />} mr={1} />
+                                <Button size="sm" leftIcon={<Icon as={AntDesign} name="edit" />} mr={1} onPress={() => setCuentaId(item?._id)} />
                                 <Button size="sm" bg="danger.500" leftIcon={<Icon as={AntDesign} name="delete" />} />
                             </HStack>
                         </HStack>
@@ -89,6 +107,26 @@ export default function SignIn({ route, navigation }) {
                     keyExtractor={item => item.id}
                 />
             </SafeAreaView>
+
+            <BottomSheetCuenta 
+                cuenta_id={cuenta_id}
+                onClose={() => {
+                    setCuentaId(null)
+                    getCuentas({page: 1})
+                }}
+            />
         </Box>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: 24,
+      backgroundColor: 'grey',
+    },
+    contentContainer: {
+      flex: 1,
+      alignItems: 'center',
+    },
+  })

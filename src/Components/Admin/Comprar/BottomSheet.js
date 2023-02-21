@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { View, StyleSheet, Modal, Keyboard } from 'react-native';
 import BottomSheet, { useBottomSheet } from '@gorhom/bottom-sheet';
-import { Box, Heading, HStack, Icon, Button, Image, Text, VStack, Input, FormControl, WarningOutlineIcon, Checkbox, ScrollView, Pressable, useToast } from 'native-base';
+import { Box, Heading, HStack, Icon, Button, Image, Text, VStack, Input, FormControl, WarningOutlineIcon, Checkbox, ScrollView, Pressable, useToast, KeyboardAvoidingView } from 'native-base';
 import moment from 'moment/moment';
 import Color from 'color';
 import { Path } from 'react-native-svg';
@@ -42,7 +42,7 @@ export default function (props) {
 
     /* Información de la Inversión */
     const [plantas, setPlantas] = useState(0)
-    const [moneda, setMoneda] = useState((user.cliente?.pais_id?.nombre == "Mexico") ? "MXN" : "USD")
+    const [moneda, setMoneda] = useState((user?.cliente?.pais_id?.nombre == "Mexico") ? "MXN" : "USD")
 
 
     /* Información del Pago con Tarjeta */
@@ -307,6 +307,7 @@ export default function (props) {
                 }}
                 enablePanDownToClose={true}
             >
+                <KeyboardAvoidingView flex={1} behavior='heighta'>
                 <Box flex={1} mx={5} safeArea>
                     <Box bg={hacienda ? {
                         linearGradient: {
@@ -408,11 +409,8 @@ export default function (props) {
                             <Box mt={3}>
                                 <HStack justifyContent={"space-between"}>
                                     <Pressable onPress={() => {
-
-                                        if (!contratoAceptado) {
+                                        if (!contratoAceptado) 
                                             setIndexContract(true)
-                                        }
-
                                     }}>
                                         <HStack>
                                             <Icon as={AntDesign} name={contratoAceptado ? "checkcircle" : "minuscircleo"} mr={2} top={0.5} />
@@ -549,7 +547,7 @@ export default function (props) {
                             </>}
                         </>
                     }
-                </Box>
+                </Box></KeyboardAvoidingView>
             </BottomSheet>
             <Modal
                 visible={indexContract}

@@ -196,7 +196,6 @@ export default function SignInForm({ navigation }) {
                                                 <Link
                                                     ml="auto"
                                                     _text={{
-                                                        fontSize: "xs",
                                                         fontWeight: "bold",
                                                         textDecoration: "none",
                                                     }}
