@@ -15,7 +15,8 @@ import {
   Heading,
   Spinner,
   useToast,
-  Box
+  Box,
+  ScrollView
 } from "native-base";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -125,7 +126,7 @@ export default function SignInForm({ navigation }) {
             navigation.navigate("Address")
             break;
           default:
-            navigation.navigate("Admin") 
+            navigation.navigate("Admin")
         }
       })
       .catch((error) => {
@@ -172,7 +173,7 @@ export default function SignInForm({ navigation }) {
             navigation.navigate("Address")
             break;
           default:
-            navigation.navigate("Admin") 
+            navigation.navigate("Admin")
         }
       })
       .catch(error => {
@@ -200,7 +201,7 @@ export default function SignInForm({ navigation }) {
       data={slides}
       renderItem={({ item }) => (<Center flex={1} px="5" _light={{ bg: "white", }}>
         <Image alt={item.subtitle} source={item.image} resizeMethod="scale" resizeMode="contain" maxH={250} />
-        <Heading mt={20}>{item.title}</Heading>
+        <Heading mt={"5"}>{item.title}</Heading>
         <Text mt="5" fontWeight="bold" textAlign="center">{item.subtitle}</Text>
         <Text mt="5">{item.description}</Text>
         {item.content}

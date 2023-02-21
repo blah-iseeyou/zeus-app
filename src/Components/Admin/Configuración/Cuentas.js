@@ -74,7 +74,7 @@ export default function SignIn({ route, navigation }) {
                     _contentContainerStyle={{
                         marginX: 5
                     }}
-                    renderItem={({ item }) => <Box borderBottomWidth="1" _dark={{ borderColor: "coolGray.500" }} borderColor="coolGray.300" pl={["0", "4"]} pr={["0", "5"]} mt="3">
+                    renderItem={({ item }) => <Box  key={item?._id} borderBottomWidth="1" _dark={{ borderColor: "coolGray.500" }} borderColor="coolGray.300" pl={["0", "4"]} pr={["0", "5"]} mt="3">
                         <HStack space={[2, 3]} justifyContent="space-between" mb={1}>
                             <VStack flex={1}>
                                 <Text _dark={{ color: "warmGray.50" }} color="coolGray.800" bold>{item.nombre}</Text>

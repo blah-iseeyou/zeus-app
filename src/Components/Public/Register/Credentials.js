@@ -40,7 +40,7 @@ export default function SignInForm({ navigation }) {
 
     let [formData, setFormData] = React.useState({});
     let [errors, setErrors] = React.useState({});
-    const [isValid, setIsValid] = React.useState(false);
+
 
 
     const checkEmail = (email) => {

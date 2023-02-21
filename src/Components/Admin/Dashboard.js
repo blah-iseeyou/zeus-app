@@ -10,7 +10,8 @@ import {
   Heading,
   Button,
   Image,
-  Pressable
+  Pressable,
+  Spinner
 } from "native-base";
 import Carousel from 'react-native-reanimated-carousel/src/index'
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -23,6 +24,7 @@ import User from "../../Contexts/User"
 import Color from "color";
 
 import Inversion from "../Admin/Inversiones/Inversion";
+import { RefreshControl } from "react-native";
 
 
 
@@ -30,7 +32,7 @@ export default function SignIn({ navigation }) {
   const { width, height } = Dimensions.get('window')
   const user = useContext(User)
 
-  const [montos, setMontos] = useState({})
+  const [montos, setMontos] = useState({ loading: false })
 
   const [inversionId, setInversionId] = useState()
 
@@ -40,7 +42,8 @@ export default function SignIn({ navigation }) {
     limit: 20,
 
     pages: 0,
-    total: 0
+    total: 0,
+    loading: false
   })
 
   const [haciendas, setHaciendas] = useState({
@@ -49,7 +52,8 @@ export default function SignIn({ navigation }) {
     limit: 20,
 
     pages: 0,
-    total: 0
+    total: 0,
+    loading: false
   })
 
   useEffect(() => {
@@ -61,6 +65,7 @@ export default function SignIn({ navigation }) {
 
 
   let getClienteDetalles = () => {
+
     axios.get('/customer/detalles')
       .then((response) => {
         setMontos({
@@ -81,7 +86,7 @@ export default function SignIn({ navigation }) {
   }
 
   let getHaciendas = ({ page, limit } = haciendas) => {
-
+    setHaciendas({ ...haciendas, loading: true })
     axios.get('/haciendas', {
       params: {
         page,
@@ -89,16 +94,16 @@ export default function SignIn({ navigation }) {
       }
     })
       .then(({ data }) => {
-        setHaciendas(data.data)
+        setHaciendas({ ...data.data, loading: false })
       })
       .catch(error => {
-        console.log("E", error)
+        setHaciendas({ ...haciendas, loading: false })
       })
   }
 
 
   let getInversiones = ({ page, limit, } = inversiones) => {
-
+    setInversiones({ ...inversiones, page, limit, loading: true })
     axios.get('/customer/inversiones', {
       params: {
         page,
@@ -106,25 +111,11 @@ export default function SignIn({ navigation }) {
       }
     })
       .then(response => {
-        // console.log("response", response.data.data);
-        setInversiones(response.data.data)
-        // this.setState({
-        //   inversiones: {
-        //     ...this.state.inversiones,
-        //     data: response.data.data.data,
-        //     page: response.data.data.page,
-        //     limit: response.data.data.limit,
-        //     total: response.data.data.total
-        //   },
-        // })
+        setInversiones({ ...response.data.data, loading: false })
       })
       .catch(error => {
-        // if (error.response.status === 403)
-        //   message.error(error.response.data.message)
-        // else
-        //   message.error('Error al cargar las transacciones')
+        setInversiones({ ...inversiones, loading: false })
       })
-    // .finally(() => this.setState({ loading: false }))
   }
 
   let renderMontoVendido = () => {
@@ -143,11 +134,10 @@ export default function SignIn({ navigation }) {
   }
 
   /**
- * @param {*} estatus
- * @description Renderiza el Tag con el estatus de la inversion
- */
+   * @param {*} estatus
+   * @description Renderiza el Tag con el estatus de la inversion
+   */
   const renderEstatusInversion = (estatus = 0) => {
-
     let steps = {
       0: <Text borderRadius={100} bg={"red.400"} color="white" px={3} right={-8}>Cancelada</Text>,
       1: <Text borderRadius={100} bg={"yellow.400"} color="white" px={3} right={-8}>Pendiente</Text>,
@@ -155,16 +145,20 @@ export default function SignIn({ navigation }) {
       3: <Text borderRadius={100} bg={"gray.400"} px={3} right={-8}>Ejecutada</Text>,
       4: <Text borderRadius={100} bg={"red.400"} color="white" px={3} right={-8}>Revendida</Text>,
     }
-
     return estatus != undefined ? steps[estatus] : 'N/A'
-
   }
 
   return (
     <Box variant={"layout"} flex="1"  >
       <SafeAreaView flex={1}>
         <Header />
-        <ScrollView flex={1}>
+        <ScrollView
+          flex={1}
+          refreshControl={<RefreshControl refreshing={inversiones.loading || haciendas.loading} onRefresh={() => {
+            getClienteDetalles()
+            getHaciendas()
+            getInversiones()
+          }} />}>
           <Stack
             flexDirection={{
               base: "column",
@@ -190,17 +184,15 @@ export default function SignIn({ navigation }) {
               <VStack space="3" bg={"primary.900"} px={5} py={5} shadow={2} borderRadius={16}>
                 <HStack justifyContent="space-between">
                   <Heading size="sm" color="white" fontWeight="light">Tu Actual Invertido</Heading>
-                  <Button variant="subtle" background="white">Invertir Ahora</Button>
+                  <Button variant="subtle" background="white" size="sm" px={2} py={1}>Invertir Ahora</Button>
                 </HStack>
                 <Heading textAlign="center" color="white">{renderMontoVendido()}</Heading>
               </VStack>
             </VStack>
             <Carousel
-              // panGestureHandlerProps={{ activeOffsetXStart: 20 }}
               loop
               width={width / 1.5}
               height={height * 0.20}
-              // defaultScrollOffsetValue={250}
               data={haciendas.data}
               style={{ width, marginLeft: 12 }}
               defaultIndex={0}
@@ -228,7 +220,7 @@ export default function SignIn({ navigation }) {
           <Box mx={5} mt={4}>
             <Heading fontSize="lg">Ultimas Inversiones</Heading>
           </Box>
-          {inversiones.data.map(({ _id, cantidad, monto_pagado, monto, estatus, hacienda_id, createdAt }) => <Pressable flex={1} onPress={()=>setInversionId(_id)}>
+          {inversiones.data.map(({ _id, cantidad, monto_pagado, monto, estatus, hacienda_id, createdAt }) => <Pressable key={_id} flex={1} onPress={() => setInversionId(_id)}>
 
             <VStack key={_id} mx={5} my={4}>
               <HStack justifyContent={"space-between"}>

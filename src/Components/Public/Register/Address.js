@@ -117,6 +117,7 @@ export default function SignInForm({ navigation }) {
                     }
                 })
             })
+            .finally(e => setLoading(false))
 
     }
 
@@ -333,7 +334,7 @@ export default function SignInForm({ navigation }) {
                                                 }}
                                                 onPress={onFinish}
                                                 borderRadius={300}
-                                            // isLoading={loading}
+                                                isLoading={loading}
                                             >
                                                 Continuar
                                             </Button>

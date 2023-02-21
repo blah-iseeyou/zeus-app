@@ -11,7 +11,8 @@ import {
   Button,
   Image,
   Icon,
-  Pressable
+  Pressable,
+  Spinner
 } from "native-base";
 import Carousel from 'react-native-reanimated-carousel/src/index'
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -35,7 +36,8 @@ export default function SignIn({ navigation }) {
     limit: 20,
 
     pages: 0,
-    total: 0
+    total: 0,
+    loading: false
   })
 
 
@@ -46,6 +48,8 @@ export default function SignIn({ navigation }) {
   }, [])
 
   let getHaciendas = ({ page, limit, } = haciendas) => {
+
+    setHaciendas({...haciendas, page, limit, loading: true})
     axios.get('/haciendas', {
       params: {
         page,
@@ -54,9 +58,11 @@ export default function SignIn({ navigation }) {
     })
       .then(response => {
         console.log("response.data.data.data",)
-        setHaciendas(response.data.data)
+        // setHaciendas(response.data.data)
+        setHaciendas({...response.data.data, loading: false})
       })
       .catch(error => {
+        setHaciendas({...haciendas, page, limit, loading: false})
 
       })
   }
@@ -71,7 +77,8 @@ export default function SignIn({ navigation }) {
             <Heading fontSize="sm">Lista de Haciendas</Heading>
           </Box>
           <Box flexDir={"row"} flexWrap="wrap">
-            {haciendas.data.map((item) => (<Pressable onPress={() => navigation.navigate("Hacienda", {hacienda_id: item._id })} w="50%" minH={"200"}>
+            {haciendas.loading ? <Spinner mx="auto" size="lg" /> : null}
+            {haciendas.data.map((item) => (<Pressable key={item._id} onPress={() => navigation.navigate("Hacienda", {hacienda_id: item._id })} w="50%" minH={"200"}>
               {({
                 isPressed
               }) => <Box borderRadius={16} flex={1} p={2}>

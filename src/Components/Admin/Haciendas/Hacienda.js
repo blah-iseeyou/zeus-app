@@ -32,7 +32,7 @@ const momentPreciseRangePlugin = require('moment-precise-range')(moment);
 
 export default function SignIn({ route }) {
 
-    console.log("route", route.params)
+    // // console.log("route", route.params)
 
     const user = useContext(User)
 
@@ -129,10 +129,8 @@ export default function SignIn({ route }) {
                 </ScrollView>
                 <BottomSheet
                     hacienda_id={visibleHacienda}
-
                     onClose={() => {
-                        console.log("nukmk")
-                        setVisibleHacienda(undefined)
+                        setVisibleHacienda()
                     }}
                 />
             </SafeAreaView>

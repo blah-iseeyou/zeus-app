@@ -39,9 +39,6 @@ export default function SignInForm({ navigation }) {
     const [formData, setFormData] = React.useState({});
     const [errors, setErrors] = React.useState({});
 
-
-    const [showPass, setShowPass] = useState(false)
-
     const [loading, setLoading] = useState(false);
 
     const setData = (valuesForm) => {
@@ -71,19 +68,20 @@ export default function SignInForm({ navigation }) {
     useEffect(() => {
 
     }, [])
-    
+
     const onFinish = () => {
-        
-        console.log("YEE 2I")
+
+        setLoading(true)
         axios.put('/usuarios/update-registro', {
             status: 3,
             ...formData
         })
-        .then(({data, headers}) => {  
-            // console.log("YEI")
-            navigation.navigate("Address")
-        })
-        .catch(e => console.log("e",e))
+            .then(({ data, headers }) => {
+                // console.log("YEI")
+                navigation.navigate("Address")
+            })
+            .catch(e => console.log("e", e))
+            .finally(e => setLoading(false))
     }
 
     const isError = (name) => errors && errors[name]

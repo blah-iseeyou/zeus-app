@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, } from "react";
-import { Dimensions, } from "react-native"
+import { Dimensions, RefreshControl, } from "react-native"
 import {
   HStack,
   VStack,
@@ -11,7 +11,8 @@ import {
   Button,
   Image,
   Icon,
-  Pressable
+  Pressable,
+  Spinner
 } from "native-base";
 import Carousel from 'react-native-reanimated-carousel/src/index'
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -40,6 +41,7 @@ export default function SignIn(props) {
   })
 
   const [inversionId, setInversionId] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     getInversiones()
@@ -50,6 +52,7 @@ export default function SignIn(props) {
 
 
   let getInversiones = ({ page, limit, } = inversiones) => {
+    setLoading(true)
     axios.get('/customer/inversiones', {
       params: {
         page,
@@ -57,11 +60,25 @@ export default function SignIn(props) {
       }
     })
       .then(response => {
-        setInversiones(response.data.data)
+
+        /*
+        "hasNextPage": true,
+        "hasPrevPage": false,
+        "limit": 20, "nextPage": 2, 
+        "page": 1, "pagingCounter": 1, "prevPage": null, 
+        "total": 39, 
+        "totalPages": 2} */
+
+        console.log("response",)
+        setInversiones({
+          ...response.data.data,
+          pages: response.data.data.totalPages
+        })
       })
       .catch(error => {
 
       })
+      .finally(() => setLoading(false))
   }
 
   /**
@@ -86,12 +103,15 @@ export default function SignIn(props) {
     <Box variant={"layout"} flex="1"  >
       <SafeAreaView flex={1}>
         <Header />
-        <ScrollView flex={1}>
+        <ScrollView
+          flex={1}
+          refreshControl={<RefreshControl refreshing={loading} onRefresh={() => getInversiones({ page: 1 })} />}>
           <Box mx={5} mt={4}>
             <Heading fontSize="lg">Inversiones</Heading>
             <Heading fontSize="sm">Lista de Inversiones Realizadas</Heading>
           </Box>
-          {inversiones.data.map(({ _id, cantidad, folio, monto_pagado, monto, estatus, hacienda_id, createdAt }) => (<Pressable flex={1} onPress={() => setInversionId(_id)}>
+          {/* {loading ? <Spinner mt={20} size="lg" /> : null} */}
+          {inversiones.data.map(({ _id, cantidad, folio, monto_pagado, monto, estatus, hacienda_id, createdAt }) => (<Pressable key={_id} flex={1} onPress={() => setInversionId(_id)}>
             {({
               isPressed
             }) => <Box flex={1} bg={isPressed ? "rgba(0,0,0,0.05)" : undefined}>
@@ -110,12 +130,17 @@ export default function SignIn(props) {
                 </VStack>
               </Box>}
           </Pressable>))}
+          {(inversiones.pages > 0) ? <>
+            <Button.Group isAttached mx={{ base: "auto", md: 0 }} size="sm">
+              <Button style={{ opacity: inversiones.hasPrevPage ? undefined : 0.5 }} onPress={() => getInversiones({ page: inversiones.prevPage })} startIcon={<Icon as={AntDesign} name="left"></Icon>}>Anterior</Button>
+              <Button style={{ opacity: inversiones.hasNextPage ? undefined : 0.5 }} onPress={() => getInversiones({ page: inversiones.nextPage })} endIcon={<Icon as={AntDesign} name="right"></Icon>}>Siguiente</Button>
+            </Button.Group>
+            <Text textAlign={"center"} mt={3}>Página {inversiones.page} de {inversiones.pages}</Text>
+          </> : null}
+
         </ScrollView>
       </SafeAreaView>
-      {(inversiones.pages > 0) ? <Button.Group isAttached mx={{ base: "auto", md: 0 }} size="sm">
-        <Button startIcon={<Icon as={AntDesign} name="left"></Icon>}>Anterior</Button>
-        <Button endIcon={<Icon as={AntDesign} name="right"></Icon>}>Siguiente</Button>
-      </Button.Group> : null}
+
       <Inversion
         inversion_id={inversionId}
         onClose={() => setInversionId(null)}
