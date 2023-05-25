@@ -20,7 +20,8 @@ import Hacienda from "../Components/Admin/Haciendas/Hacienda"
 
 
 import Cuenta from "../Components/Admin/Configuración/Cuenta"
-import Cuentas from "../Components/Admin/Configuración/Cuentas"
+import Cuentas from "../Components/Admin/Configuración/Cuentas/ListaCuentas"
+import ListaBeneficiarios from "../Components/Admin/Configuración/Beneficiarios/ListaBeneficiarios"
 
 import Menu from "../Components/Admin/Configuración/Menu"
 
@@ -102,6 +103,9 @@ export default function () {
         <BottomStack.Screen name={"Settings"} component={Menu} />
         <BottomStack.Screen name={"Cuentas"} component={Cuentas} />
         <BottomStack.Screen name={"Cuenta"} component={Cuenta} />
+
+
+        <BottomStack.Screen name={"Beneficiarios"} component={ListaBeneficiarios} />
     </BottomStack.Navigator>
             {/* import Cuenta from "../Components/Admin/Configuración/Cuenta"
 import Beneficiarios from "../Components/Admin/Configuración/Beneficiarios" */}

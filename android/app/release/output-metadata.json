@@ -4,15 +4,15 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.humanisticsapp",
+  "applicationId": "com.zeus.agave",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 1,
-      "versionName": "1.0",
+      "versionCode": 11,
+      "versionName": "1.10",
       "outputFile": "app-release.apk"
     }
   ],

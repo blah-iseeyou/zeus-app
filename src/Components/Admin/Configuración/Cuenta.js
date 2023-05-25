@@ -19,11 +19,13 @@ import {
 import AntDesign from "react-native-vector-icons/AntDesign";
 import moment from "moment"
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from "react-native-safe-area-context";
+
+
 import axios from "../../../Axios"
 import Header from "../../Header"
 import { SetUser, User } from "../../../Contexts/User"
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function SignIn({ route, navigation }) {
