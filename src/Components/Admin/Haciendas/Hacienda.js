@@ -26,6 +26,7 @@ import User from "../../../Contexts/User"
 import Header from "../../Header"
 import BottomSheet from "../Comprar/BottomSheet"
 import Decimal from "decimal.js";
+import Reventas from "./Reventas";
 // import moment from "moment"
 
 const momentPreciseRangePlugin = require('moment-precise-range')(moment);
@@ -123,6 +124,9 @@ export default function SignIn({ route }) {
                                 </Box>
 
                             </VStack>
+                        </Box>
+                        <Box mt={5} px={2}>
+                            <Reventas hacienda_id={hacienda?._id}/>
                         </Box>
                     </>
                         : null}
