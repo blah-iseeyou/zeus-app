@@ -5,12 +5,13 @@ import { Input } from 'native-base';
 
 export default  function InputFormatNumber (props) {
 
-    let { formatter, parser, onChangeText, value } = props
+    let { formatter, parser, onChangeText, value, ...others } = props
 
     let [currentValue, setCurrentValue ] = useState(value)
     let [format, setFormatValue ] = useState(formatter(currentValue ?? 0))
 
     if (value && value !== null && currentValue != value) {
+        setFormatValue(formatter(value))
         setCurrentValue(value)
     }
 
@@ -27,5 +28,5 @@ export default  function InputFormatNumber (props) {
         setCurrentValue(valueFormat)
     }
 
-    return <Input {...props}  onChangeText={onChangeTextFP}  value={format} />
+    return <Input {...others}  onChangeText={onChangeTextFP}  value={format} />
 }
