@@ -15,6 +15,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import Dashboard from "../Components/Admin/Dashboard"
 import Inversiones from "../Components/Admin/Inversiones/Inversiones"
+import Reventas from "../Components/Admin/Reventas/Reventas"
 import Haciendas from "../Components/Admin/Haciendas/Haciendas"
 import Hacienda from "../Components/Admin/Haciendas/Hacienda"
 
@@ -67,6 +68,21 @@ export default function () {
                                 <Text fontSize={"xs"}>Inversiones</Text>
                             </VStack>}
                     </Pressable>
+                    <Pressable flex={1} onPress={() => navigation.navigate("Reventas")}>
+                        {({
+                            isPressed
+                        }) => <VStack flex="1" alignItems="center" style={{
+                            transform: [{
+                                scale: isPressed ? 0.9 : 1
+                            }]
+                        }}>
+                                <Icon size="xl" color="primary.900" viewBox="0 0 88 88">
+                                    <Path d="M63.0105 42.2414C66.082 37.3703 68.8813 32.9319 71.861 28.1756L80.787 42.2382H77.5812C75.4079 42.2382 74.9817 42.6577 74.9588 44.7852C74.8244 60.1491 62.8007 73.6839 47.4892 75.7064C27.6114 78.3288 10.5659 63.0534 11.0084 43.015C11.4182 24.2649 28.7325 9.53036 47.204 12.3462C50.187 12.7985 53.1044 13.7983 55.9825 14.7817C58.0115 15.4766 58.7294 17.2566 58.0279 18.9316C57.2937 20.6788 55.5826 21.2262 53.5109 20.3936C42.7525 16.0273 31.6991 18.1744 24.1433 26.4809C17.3808 33.8989 15.4436 42.6545 18.6167 52.1836C21.7668 61.6439 28.4932 67.5115 38.2846 69.393C52.888 72.1957 66.5999 62.2011 68.6388 47.5157C68.7608 46.3749 68.8123 45.2276 68.7928 44.0804C68.8125 42.8741 68.1569 42.2742 66.9703 42.2578C65.7837 42.2414 64.6921 42.2414 63.0105 42.2414Z" fill="#C8CBDC" />
+                                    <Path d="M40.825 58.8412C38.8975 58.32 37.1962 57.9299 35.5441 57.3923C33.5413 56.7367 33.4397 56.3598 34.3149 54.0652C34.941 52.4262 35.3638 52.4032 37.2126 52.9015C39.277 53.5012 41.4027 53.8652 43.549 53.9865C45.224 54.0455 46.4992 52.9408 46.9843 51.2067C47.3678 49.7874 46.6565 48.2565 45.0175 47.2305C43.962 46.5749 42.7819 46.116 41.6608 45.5621C40.3497 44.9065 38.9762 44.3426 37.7273 43.5756C35.1442 41.989 33.7937 39.642 34.0952 36.5738C34.3968 33.3187 36.1964 31.0405 39.2155 29.9949C40.8217 29.4409 41.2773 28.6837 41.1823 27.084C41.0577 25.0254 41.6477 24.5731 43.6309 24.6419C44.9028 24.6878 45.4961 25.2418 45.5256 26.5563C45.5813 29.1459 45.6207 29.1426 48.1185 29.7195C48.4463 29.7949 48.7544 29.8637 49.0691 29.949C51.7407 30.6963 51.8849 31.0766 50.7933 33.5843C50.2459 34.8463 49.4821 34.8496 48.2889 34.5677C46.51 34.1175 44.6924 33.8365 42.8606 33.7285C41.2478 33.6564 40.0284 34.5644 39.6482 36.223C39.2876 37.8161 40.2251 38.8717 41.4806 39.5502C43.1196 40.4254 44.8438 41.0941 46.509 41.9005C49.1314 43.1658 51.4653 44.7589 52.3176 47.7517C53.5632 52.1311 51.4883 56.3729 47.1482 57.9135C45.5453 58.4741 45.07 59.1788 45.1814 60.7981C45.3355 63.0927 44.634 63.6041 42.382 63.3484C41.3462 63.2304 40.7922 62.7387 40.8151 61.657C40.8381 60.7195 40.825 59.7983 40.825 58.8412Z" fill="#C8CBDC" />
+                                </Icon>
+                                <Text fontSize={"xs"}>Reventas</Text>
+                            </VStack>}
+                    </Pressable>
                     <Pressable flex={1} onPress={() => navigation.navigate("Haciendas")}>
                         {({
                             isPressed
@@ -98,6 +114,7 @@ export default function () {
         }}>
         <BottomStack.Screen name={"Dashboard"} component={Dashboard} />
         <BottomStack.Screen name={"Inversiones"} component={Inversiones} />
+        <BottomStack.Screen name={"Reventas"} component={Reventas} />
         <BottomStack.Screen name={"Haciendas"} component={Haciendas} />
         <BottomStack.Screen name={"Hacienda"} component={Hacienda} initialParams={{ hacienda_id: null }} />
         <BottomStack.Screen name={"Settings"} component={Menu} />
