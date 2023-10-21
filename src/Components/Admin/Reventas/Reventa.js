@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { createRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import axios from '../../../Axios';
@@ -20,7 +20,7 @@ export default function (props) {
     })
 
     const snapPoints = useMemo(() => [400], []);
-
+    const bottomSheetRef = useRef(null)
 
 
     const getReventa = () => {
@@ -30,7 +30,6 @@ export default function (props) {
             }
         })
             .then(({data}) => {
-                console.log(data)
                 setReventa(data)
                 setValues({
                     cantidad: data.cantidad_restante,
@@ -43,10 +42,22 @@ export default function (props) {
     }
 
 
+
     if (reventa_id && reventa_id != null && reventaId !== reventa_id) {
         getReventa()
         setReventaId(reventa_id)
         setIndex(0)
+    }
+
+    if (!reventa_id && reventaId !== reventa_id){
+        setReventaId(null)
+        setReventa(null)
+        setValues({
+            cantidad: 0,
+            precio: 0
+        })
+        setIndex(-1)
+        bottomSheetRef?.current?.close()
     }
 
     const update = ({
@@ -56,8 +67,12 @@ export default function (props) {
         setLoading(true)
         axios.put('/customer/reventa', {
             cantidad,
-            precio_reventa: precio,
-            reventa_id: this.props.reventa,
+            precio,
+            id: reventa?.inversion_original_id,
+            reventa_id: reventa?._id,
+            hacienda_id: reventa?.hacienda_id?._id,
+            tipo: reventa?.tipo,
+            estatus: 1
         }).then(() => {
             onClose()
         }).catch(error => {
@@ -69,7 +84,7 @@ export default function (props) {
 
     const remove = () => {
         setLoading(true)
-        axios.delete('/customer/reventa')
+        axios.delete('/reventa', { params: { id: reventa?._id } })
             .then(() => {
                 onClose()
             }).catch(error => {
@@ -84,6 +99,7 @@ export default function (props) {
             <BottomSheet
                 index={index}
                 snapPoints={snapPoints}
+                ref={bottomSheetRef}
                 onChange={e => {
                     setIndex(e)
 
@@ -148,10 +164,10 @@ export default function (props) {
                         </HStack>
                         <HStack space={2} mt={4}>
                             <Box flex={1}>
-                                <Button isDisabled={reventa?.estatus !== 3} isLoading={loading} bg={"red.400"} onPress={() => remove()}>Eliminar</Button>
+                                <Button isDisabled={reventa?.estatus !== 1} isLoading={loading} bg={"red.400"} onPress={() => remove()}>Eliminar</Button>
                             </Box>
                             <Box flex={2}>
-                                <Button isDisabled={reventa?.cantidad_restante < 1 || reventa?.estatus !== 3} isLoading={loading} onPress={() => update()}>Guardar Cambios</Button>
+                                <Button isDisabled={reventa?.cantidad_restante < 1 || reventa?.estatus !== 1} isLoading={loading} onPress={() => update()}>Guardar Cambios</Button>
                             </Box>
                         </HStack>
                     </Box>

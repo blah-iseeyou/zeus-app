@@ -141,7 +141,10 @@ export default function Reventas(props) {
 
       <Reventa
         reventa_id={reventaId}
-        onClose={() => setReventaId(null)}
+        onClose={() => {
+          setReventaId(null)
+          getReventas()
+        }}
       />
     </Box>
   );

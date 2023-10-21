@@ -86,7 +86,7 @@ export default function Reventas(props) {
       0: <Text borderRadius={100} bg={"red.400"} color="white" px={3} right={-8}>Cancelada</Text>,
       1: <Text borderRadius={100} bg={"yellow.400"} color="white" px={3} right={-8}>En proceso</Text>,
       2: <Text borderRadius={100} bg={"green.500"} color="white" px={3} right={-8}>Vendida</Text>,
-      4: <Text borderRadius={100} bg={"blue.400"} color="white" px={3} right={-8}>Requiere Modificación</Text>,
+      3: <Text borderRadius={100} bg={"blue.400"} color="white" px={3} right={-8}>Requiere Modificación</Text>,
     }
 
     return estatus != undefined ? steps[estatus] : 'N/A'
@@ -96,11 +96,11 @@ export default function Reventas(props) {
   return (
     <>
       {reventas?.data?.map(({ _id, cantidad, folio, precio_reventa, moneda, estatus, hacienda_id, createdAt }) => (<Pressable key={_id} flex={1} onPress={() => {
-        if(estatus !== 3) {
+        if(estatus !== 1) {
           return toast.show({
               duration: 2500,
               render: () => {
-                  return <Box bg="blue.500" px="2" py="1" rounded="sm" mb={5}>No es posible acceder a esta reventa</Box>;
+                  return <Box bg="blue.500" px="2" py="1" rounded="sm" mb={5}>No es posible invertir en esta reventa</Box>;
               },
               top: 10
           })
