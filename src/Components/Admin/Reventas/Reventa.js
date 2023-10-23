@@ -4,6 +4,7 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import axios from '../../../Axios';
 import { Box, Button, Divider, FormControl, Heading, HStack, KeyboardAvoidingView, Text, VStack } from 'native-base';
 import moment from 'moment/moment';
+import Decimal from 'decimal.js';
 import InputFormatNumber from '../../Widgets/InputFormatNumber';
 
 export default function (props) {
@@ -14,14 +15,34 @@ export default function (props) {
     const [loading, setLoading] = useState(false)
     const [reventaId, setReventaId] = useState(null)
     const [reventa, setReventa] = useState(null)
+    const [inversion, setInversion] = useState(null)
     const [values, setValues] = useState({
         cantidad: 0,
-        precio: 0
+        precio: 0,
+        max_precio: 0,
+        max_cantidad: 0,
+        minimo_reventa: 0,
+        maximo_reventa: 0,
+        tipo_cambio: 0,
+        moneda: "MXN",
+        tipo: 2
     })
 
     const snapPoints = useMemo(() => [400], []);
     const bottomSheetRef = useRef(null)
 
+    const getTipoCambio = () => {
+        axios.get('/plantas')
+            .then(res => {
+                console.log("data", res.data.data)
+                setValues(values => ({
+                    ...values,
+                    tipo_cambio: res.data.data.tipo_cambio,
+                    minimo_reventa: 1 ,
+                    maximo_reventa: res.data.data.maximo / 100 + 1
+                }))
+            })
+    }
 
     const getReventa = () => {
         axios.get('/customer/reventa', {
@@ -31,19 +52,55 @@ export default function (props) {
         })
             .then(({data}) => {
                 setReventa(data)
-                setValues({
+                setValues(values => ({
+                    ...values,
                     cantidad: data.cantidad_restante,
-                    precio: data.precio_reventa
-                })
+                    precio: data.precio_reventa,
+                    tipo: data.tipo
+                }))
+                getInversion(data.inversion_original_id)
             })
             .catch(error => {
                 console.log(error)
             })
     }
 
+    const getInversion = (inversion_id) => {
+        axios.get('/inversion', {
+            params: {
+                id: inversion_id,
+                movimiento: true
+            }
+        }).then(({data}) => { 
+            const {
+                cantidad, 
+                cantidad_revendidas, 
+                moneda, 
+                hacienda_id,
+                minimo_reventa = 0,
+                tipo_cambio = 0
+            } = data?.data
+            console.log("data", hacienda_id?.precio, minimo_reventa, tipo_cambio)
+            setInversion(data?.data)
+            setValues(values => ({
+                ...values,
+                moneda,
+                cantidad: cantidad - cantidad_revendidas,
+                max_cantidad: cantidad - cantidad_revendidas,
+                precio: moneda === "USD" ? 
+                    Decimal(hacienda_id?.precio).mul(minimo_reventa).div(tipo_cambio).toDecimalPlaces(2).toNumber()
+                    : Decimal(hacienda_id?.precio).mul(minimo_reventa).toDecimalPlaces(2).toNumber(),
+                max_precio: moneda === "USD" ?
+                    Decimal(hacienda_id?.precio).div(tipo_cambio).toDecimalPlaces(2).toNumber()
+                    : Decimal(hacienda_id?.precio).toDecimalPlaces(2).toNumber()
+            }))
+        }).catch((error) => {
 
+        })
+    }
 
     if (reventa_id && reventa_id != null && reventaId !== reventa_id) {
+        getTipoCambio()
         getReventa()
         setReventaId(reventa_id)
         setIndex(0)
@@ -62,16 +119,17 @@ export default function (props) {
 
     const update = ({
         cantidad = values.cantidad,
-        precio = values.precio
+        precio = values.precio,
+        tipo = values.tipo
     } = values) => {
         setLoading(true)
         axios.put('/customer/reventa', {
             cantidad,
             precio,
-            id: reventa?.inversion_original_id,
+            tipo,
+            id: inversion?._id,
             reventa_id: reventa?._id,
-            hacienda_id: reventa?.hacienda_id?._id,
-            tipo: reventa?.tipo,
+            hacienda_id: inversion?.hacienda_id?._id,
             estatus: 1
         }).then(() => {
             onClose()
@@ -92,6 +150,14 @@ export default function (props) {
             }).finally(() => {
                 setLoading(false)
             })
+    }
+
+    // Objeto de validaciones
+    const vals = {
+        precio: {
+            min: precio => precio >= values?.max_precio * 1,
+            max: precio => precio <= values?.max_precio * values?.maximo_reventa
+        }
     }
 
     return (
@@ -116,27 +182,30 @@ export default function (props) {
             >
                 <KeyboardAvoidingView height={"100%"} behavior='height'>
                     <Box flex={1} px={3} py={3}>
-                        <Heading size={"md"}>Revender</Heading>
+                        <Heading size={"md"}>Editar Reventa</Heading>
                         <Divider my={3} orientation={"horizontal"}/>
                         <Heading size={"sm"}>Mi inversión</Heading>
                         <Box mt={2}>
                             <Heading size={"xs"} opacity={0.6}>Hacienda</Heading>
-                            <Text>{reventa?.hacienda_id?.nombre}</Text>
+                            <Text>{inversion?.hacienda_id?.nombre}</Text>
                         </Box>
                         <HStack mt={2} space={4}>
                             <Box flex={1}>
                                 <Heading size={"xs"} opacity={0.6}>Cantidad Disponible</Heading>
-                                <Text>{reventa?.cantidad_restante}</Text>
+                                <Text>{values?.max_cantidad}</Text>
                             </Box>
                             <Box flex={1}>
                                 <Heading size={"xs"} opacity={0.6}>Precio Hacienda</Heading>
-                                <Text>{reventa?.hacienda_id?.precio?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</Text>
+                                <Text>$ {values.max_precio} {values?.moneda}</Text>
                             </Box>
                         </HStack>
                         <Divider my={3} orientation={"horizontal"}/>
                         <HStack space={4}>
                             <Box flex={1}>
-                                <FormControl isRequired isDisabled={reventa?.cantidad_restante < 1}>
+                                <FormControl 
+                                    isRequired 
+                                    isDisabled={true}
+                                >
                                     <FormControl.Label>Cantidad de Plantas</FormControl.Label>
                                     <InputFormatNumber
                                         value={values.cantidad}
@@ -149,7 +218,13 @@ export default function (props) {
                                 </FormControl>
                             </Box>
                             <Box flex={1}>
-                                <FormControl isRequired>
+                                <FormControl 
+                                    isRequired
+                                    isInvalid={(
+                                        !(vals.precio?.min(values?.precio)) ||
+                                        !(vals.precio?.max(values?.precio))
+                                    )}
+                                >
                                     <FormControl.Label>Precio de Venta</FormControl.Label>
                                     <InputFormatNumber
                                         value={values.precio}
@@ -159,6 +234,14 @@ export default function (props) {
                                         parser={(value) => value?.replace(/\$\s?|(,*)/g, '')}
                                         onChangeText={value => setValues(state => ({...state, precio: Number(value)}))}
                                     />
+                                    <FormControl.ErrorMessage>
+                                        {
+                                            !(vals.precio?.min(values?.precio)) && `El precio de venta no puede ser menor a $ ${(values?.max_precio * values?.minimo_reventa)} ${values.moneda}`
+                                        }
+                                        {
+                                            !(vals.precio?.max(values?.precio)) && `El precio de venta no puede ser mayor a $ ${(values?.max_precio * values?.maximo_reventa)} ${values.moneda}`
+                                        }
+                                    </FormControl.ErrorMessage>
                                 </FormControl>
                             </Box>
                         </HStack>
