@@ -38,7 +38,7 @@ export default function (props) {
                 setValues(values => ({
                     ...values,
                     tipo_cambio: res.data.data.tipo_cambio,
-                    minimo_reventa: 1 ,
+                    minimo_reventa: res.data.data.minimo / 100 + 1 ,
                     maximo_reventa: res.data.data.maximo / 100 + 1
                 }))
             })
@@ -155,7 +155,7 @@ export default function (props) {
     // Objeto de validaciones
     const vals = {
         precio: {
-            min: precio => precio >= values?.max_precio * 1,
+            min: precio => precio >= values?.max_precio * values?.minimo_reventa,
             max: precio => precio <= values?.max_precio * values?.maximo_reventa
         }
     }
