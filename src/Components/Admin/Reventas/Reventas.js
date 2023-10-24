@@ -75,7 +75,7 @@ export default function Reventas(props) {
         })
       })
       .catch(error => {
-
+        console.log(error)
       })
       .finally(() => setLoading(false))
   }

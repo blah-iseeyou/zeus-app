@@ -34,7 +34,6 @@ export default function (props) {
     const getTipoCambio = () => {
         axios.get('/plantas')
             .then(res => {
-                console.log("data", res.data.data)
                 setValues(values => ({
                     ...values,
                     tipo_cambio: res.data.data.tipo_cambio,
@@ -77,19 +76,13 @@ export default function (props) {
                 cantidad_revendidas, 
                 moneda, 
                 hacienda_id,
-                minimo_reventa = 0,
                 tipo_cambio = 0
             } = data?.data
-            console.log("data", hacienda_id?.precio, minimo_reventa, tipo_cambio)
             setInversion(data?.data)
             setValues(values => ({
                 ...values,
                 moneda,
-                cantidad: cantidad - cantidad_revendidas,
                 max_cantidad: cantidad - cantidad_revendidas,
-                precio: moneda === "USD" ? 
-                    Decimal(hacienda_id?.precio).mul(minimo_reventa).div(tipo_cambio).toDecimalPlaces(2).toNumber()
-                    : Decimal(hacienda_id?.precio).mul(minimo_reventa).toDecimalPlaces(2).toNumber(),
                 max_precio: moneda === "USD" ?
                     Decimal(hacienda_id?.precio).div(tipo_cambio).toDecimalPlaces(2).toNumber()
                     : Decimal(hacienda_id?.precio).toDecimalPlaces(2).toNumber()
@@ -155,8 +148,8 @@ export default function (props) {
     // Objeto de validaciones
     const vals = {
         precio: {
-            min: precio => precio >= values?.max_precio * values?.minimo_reventa,
-            max: precio => precio <= values?.max_precio * values?.maximo_reventa
+            min: precio => precio >= (values?.max_precio * values?.minimo_reventa).toFixed(2),
+            max: precio => precio <= (values?.max_precio * values?.maximo_reventa).toFixed(2)
         }
     }
 
@@ -236,10 +229,10 @@ export default function (props) {
                                     />
                                     <FormControl.ErrorMessage>
                                         {
-                                            !(vals.precio?.min(values?.precio)) && `El precio de venta no puede ser menor a $ ${(values?.max_precio * values?.minimo_reventa)} ${values.moneda}`
+                                            !(vals.precio?.min(values?.precio)) && `El precio de venta no puede ser menor a $ ${(values?.max_precio * values?.minimo_reventa).toFixed(2)} ${values.moneda}`
                                         }
                                         {
-                                            !(vals.precio?.max(values?.precio)) && `El precio de venta no puede ser mayor a $ ${(values?.max_precio * values?.maximo_reventa)} ${values.moneda}`
+                                            !(vals.precio?.max(values?.precio)) && `El precio de venta no puede ser mayor a $ ${(values?.max_precio * values?.maximo_reventa).toFixed(2)} ${values.moneda}`
                                         }
                                     </FormControl.ErrorMessage>
                                 </FormControl>
