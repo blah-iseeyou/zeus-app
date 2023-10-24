@@ -184,7 +184,7 @@ export default function SignIn({ navigation }) {
               <VStack space="3" bg={"primary.900"} px={5} py={5} shadow={2} borderRadius={16}>
                 <HStack justifyContent="space-between">
                   <Heading size="sm" color="white" fontWeight="light">Tu Actual Invertido</Heading>
-                  <Button variant="subtle" background="white" size="sm" px={2} py={1}>Invertir Ahora</Button>
+                  <Button onPress={() => navigation.navigate("Haciendas")} variant="subtle" background="white" size="sm" px={2} py={1}>Invertir Ahora</Button>
                 </HStack>
                 <Heading textAlign="center" color="white">{renderMontoVendido()}</Heading>
               </VStack>
