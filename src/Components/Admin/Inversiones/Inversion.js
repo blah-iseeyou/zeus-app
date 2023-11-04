@@ -2,10 +2,13 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { View, StyleSheet } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import axios from '../../../Axios';
-import { Box, Heading, HStack, Text, VStack } from 'native-base';
+import { Box, Heading, HStack, Text, VStack, Button } from 'native-base';
 import moment from 'moment/moment';
+import { useNavigation } from '@react-navigation/native';
 
 export default function (props) {
+
+    const navigation = useNavigation()
 
     const { inversion_id, onClose } = props
 
@@ -139,6 +142,14 @@ export default function (props) {
                             <Heading textAlign="right" color="red.500" size={"xs"}>{inversion?.monto_pendiente?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</Heading>
                         </Box>
                     </HStack>
+                    {
+                        (inversion?.estatus >= 2) ? 
+                            <HStack justifyContent={"center"} mt={5}>
+                                <Button onPress={() => navigation.navigate("Haciendas")} background="primary.900" color={'white'} size="sm" px={2} py={1}>Agregar Reventa</Button>
+                            </HStack>
+
+                        : null 
+                    }
                     {(transacciones.total > 0) ? <Heading size="sm" mt={5} mb={2}>Pagos y Transacciones Registrados</Heading> : null}
                     {transacciones.data?.map(({ concepto, hacienda_id, monto, createdAt }) => <VStack mt={3} pb={2} borderBottomColor="gray.200" borderBottomWidth={1}>
                         <HStack justifyContent={"space-between"}>

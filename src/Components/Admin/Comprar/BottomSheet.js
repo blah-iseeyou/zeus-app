@@ -372,7 +372,7 @@ export default function (props) {
                                     <InputFormatNumber
                                         keyboardType='decimal-pad'
                                         placeholder="Ingrese la cantidad de plantas"
-                                        formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                        formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                         parser={(value) => value?.replace(/\$\s?|(,*)/g, '')}
                                         onChangeText={plantas => getContratoInfo(plantas, moneda)}
                                     />

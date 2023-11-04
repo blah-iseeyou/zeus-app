@@ -240,6 +240,7 @@ export default function SignIn({ navigation }) {
 
       </SafeAreaView>
       <Inversion
+        navigation = {navigation}
         inversion_id={inversionId}
         onClose={() => setInversionId(null)}
       />
