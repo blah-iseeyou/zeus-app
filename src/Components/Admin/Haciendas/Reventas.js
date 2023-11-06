@@ -120,18 +120,18 @@ export default function Reventas(props) {
               <HStack justifyContent={"center"}>
                 <Text>{cliente_name} {estatus === 2 ? "vendió" : "vende"} {cantidad} Planta(s)</Text>
               </HStack>
-              <HStack justifyContent={"space-between"} mt={1}>
-                <VStack >
+              <HStack justifyContent={"space-between"} mt={2}>
+                <VStack justifyContent={"center"} flex={1} alignContent={"center"}>
                   
                   <HStack justifyContent={"center"}>
                     <Text fontSize="xs">{precio_reventa?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} {moneda} </Text>
                   </HStack>
 
                 </VStack>
-                <VStack>
+                <VStack justifyContent={"center"} flex={1} alignContent={"center"}>
                   
                   <HStack justifyContent={"center"}>
-                    <Text fontSize={10} top={1}>{moment(createdAt).format("YYYY-MM-DD")}</Text>
+                    <Text fontSize="xs">{moment(createdAt).format("YYYY-MM-DD")}</Text>
                   </HStack>
 
                 </VStack>
