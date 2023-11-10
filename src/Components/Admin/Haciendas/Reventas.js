@@ -41,7 +41,7 @@ export default function Reventas(props) {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if(props.hacienda_id) getReventas()
+    if (props.hacienda_id) getReventas()
   }, [props.hacienda_id])
 
 
@@ -95,32 +95,58 @@ export default function Reventas(props) {
 
   return (
     <>
-      {reventas?.data?.map(({ _id, cantidad, folio, precio_reventa, moneda, estatus, hacienda_id, createdAt }) => (<Pressable key={_id} flex={1} onPress={() => {
-        if(estatus !== 1) {
+      <HStack mx={5} mt={4} justifyContent={"center"}>
+        <Heading fontSize="lg" marginBottom={4}>Disponibles de otros clientes</Heading>
+      </HStack>
+      {reventas?.data?.map(({ _id, cantidad, folio, precio_reventa, moneda, estatus, cliente_name, hacienda_id, createdAt }) => (<Pressable key={_id} flex={1} onPress={() => {
+        if (estatus !== 1) {
           return toast.show({
-              duration: 2500,
-              render: () => {
-                  return <Box bg="blue.500" px="2" py="1" rounded="sm" mb={5}>No es posible invertir en esta reventa</Box>;
-              },
-              top: 10
+            duration: 2500,
+            render: () => {
+              return <Box bg="blue.500" px="2" py="1" rounded="sm" mb={5}>No es posible invertir en esta reventa</Box>;
+            },
+            top: 10
           })
         }
 
         setReventaId(_id)
-      }}>
+      }}
+        style={{ backgroundColor: "white", borderRadius: 12, marginBottom: 12,paddingLeft:8, paddingRight:8 }}
+      >
         {({
           isPressed
         }) => <Box flex={1} bg={isPressed ? "rgba(0,0,0,0.05)" : undefined}>
             <VStack my={4} flex={1}>
-              <HStack justifyContent={"space-between"}>
-                <Text><Text fontStyle="italic" fontSize={"xs"}>{folio}</Text>  - {cantidad} planta{(cantidad > 1) ? "s" : ""}</Text>
-                <Text >{precio_reventa?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} {moneda} </Text>
+              <HStack justifyContent={"center"}>
+                <Text>{cliente_name} {estatus === 2 ? "vendió" : "vende"} {cantidad} Planta(s)</Text>
               </HStack>
-              <HStack justifyContent={"space-between"} mt={1}>
-                <Text fontSize={12}>{hacienda_id?.nombre}</Text>
+              <HStack justifyContent={"space-between"} mt={2}>
+                <VStack justifyContent={"center"} flex={1} alignContent={"center"}>
+                  
+                  <HStack justifyContent={"center"}>
+                    <Text fontSize="xs">{precio_reventa?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} {moneda} </Text>
+                  </HStack>
+
+                </VStack>
+                <VStack justifyContent={"center"} flex={1} alignContent={"center"}>
+                  
+                  <HStack justifyContent={"center"}>
+                    <Text fontSize="xs">{moment(createdAt).format("YYYY-MM-DD")}</Text>
+                  </HStack>
+
+                </VStack>
+
                 <HStack>
-                  <Text fontSize={10} top={1}>{moment(createdAt).format("YYYY-MM-DD")}</Text>
-                  {renderEstatusReventa(estatus)}
+
+                  <Button borderWidth="2" background="white" _text={{color:"black", fontSize:"xs"}}>
+                    <HStack>
+                      <Icon as={AntDesign} name="shoppingcart"></Icon>
+                    <Text fontSize={"xs"} ml={2}>
+                      COMPRAR
+                      </Text>
+                    </HStack>
+                    
+                  </Button>
                 </HStack>
               </HStack>
             </VStack>
@@ -134,12 +160,12 @@ export default function Reventas(props) {
         <Text textAlign={"center"} mt={3}>Página {reventas.page} de {reventas.pages}</Text>
       </> : null}
       <BottomSheetReventa
-          reventa_id={reventaId}
-          hacienda_id={props.hacienda_id}
-          onClose={() => {
-              setReventaId(undefined)
-              getReventas()
-          }}
+        reventa_id={reventaId}
+        hacienda_id={props.hacienda_id}
+        onClose={() => {
+          setReventaId(undefined)
+          getReventas()
+        }}
       />
     </>
   );
