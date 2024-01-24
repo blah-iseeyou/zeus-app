@@ -98,60 +98,61 @@ export default function Reventas(props) {
       <HStack mx={5} mt={4} justifyContent={"center"}>
         <Heading fontSize="lg" marginBottom={4}>Disponibles de otros clientes</Heading>
       </HStack>
-      {reventas?.data?.map(({ _id, cantidad, folio, precio_reventa, moneda, estatus, cliente_name, hacienda_id, createdAt }) => (<Pressable key={_id} flex={1} onPress={() => {
-        if (estatus !== 1) {
-          return toast.show({
-            duration: 2500,
-            render: () => {
-              return <Box bg="blue.500" px="2" py="1" rounded="sm" mb={5}>No es posible invertir en esta reventa</Box>;
-            },
-            top: 10
-          })
-        }
-
-        setReventaId(_id)
-      }}
-        style={{ backgroundColor: "white", borderRadius: 12, marginBottom: 12,paddingLeft:8, paddingRight:8 }}
-      >
-        {({
-          isPressed
-        }) => <Box flex={1} bg={isPressed ? "rgba(0,0,0,0.05)" : undefined}>
-            <VStack my={4} flex={1}>
-              <HStack justifyContent={"center"}>
-                <Text>{cliente_name} {estatus === 2 ? "vendió" : "vende"} {cantidad} Planta(s)</Text>
-              </HStack>
-              <HStack justifyContent={"space-between"} mt={2}>
-                <VStack justifyContent={"center"} flex={1} alignContent={"center"}>
-                  
-                  <HStack justifyContent={"center"}>
-                    <Text fontSize="xs">{precio_reventa?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} {moneda} </Text>
-                  </HStack>
-
-                </VStack>
-                <VStack justifyContent={"center"} flex={1} alignContent={"center"}>
-                  
-                  <HStack justifyContent={"center"}>
-                    <Text fontSize="xs">{moment(createdAt).format("YYYY-MM-DD")}</Text>
-                  </HStack>
-
-                </VStack>
-
-                <HStack>
-
-                  <Button borderWidth="2" background="white" _text={{color:"black", fontSize:"xs"}}>
-                    <HStack>
-                      <Icon as={AntDesign} name="shoppingcart"></Icon>
-                    <Text fontSize={"xs"} ml={2}>
-                      COMPRAR
-                      </Text>
-                    </HStack>
-                    
-                  </Button>
+      {reventas?.data?.map(({ _id, cantidad, folio, precio_reventa, moneda, estatus, cliente_name, hacienda_id, createdAt, usuario_id, ...data }) => (
+        <Box flex={1} style={{ backgroundColor: "white", borderRadius: 12, marginBottom: 12, paddingLeft: 8, paddingRight: 8 }}>
+          <VStack my={4} flex={1}>
+            <HStack justifyContent={"center"}>
+              <Text>{cliente_name} {estatus === 2 ? "vendió" : "vende"} {cantidad} Planta(s)</Text>
+            </HStack>
+            <HStack justifyContent={"space-between"} mt={2}>
+              <VStack justifyContent={"center"} flex={1} alignContent={"center"}>
+                <HStack justifyContent={"center"}>
+                  <Text fontSize="xs">{precio_reventa?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} {moneda} </Text>
                 </HStack>
+              </VStack>
+              <VStack justifyContent={"center"} flex={1} alignContent={"center"}>
+                <HStack justifyContent={"center"}>
+                  <Text fontSize="xs">{moment(createdAt).format("YYYY-MM-DD")}</Text>
+                </HStack>
+              </VStack>
+              <HStack>
+                <Button
+                  isDisabled={estatus !== 1 || user?._id == usuario_id}
+                  onPress={() => {
+                    if (estatus !== 1 || user?._id == usuario_id) {
+                      return toast.show({
+                        duration: 2500,
+                        render: () => {
+                          return <Box bg="blue.500" px="2" py="1" rounded="sm" mb={5}>No es posible invertir en esta reventa</Box>;
+                        },
+                        top: 10
+                      })
+                    }
+                    setReventaId(_id)
+                  }}
+
+                  borderWidth="2" background="white" _text={{ color: "black", fontSize: "xs" }}>
+                  <HStack>
+                    <Icon as={AntDesign} name="shoppingcart"></Icon>
+                    <Text
+                      fontSize={"xs"}
+                      ml={2}>
+                      COMPRAR
+                    </Text>
+                  </HStack>
+                </Button>
               </HStack>
-            </VStack>
-          </Box>}
-      </Pressable>))}
+            </HStack>
+          </VStack>
+        </Box>
+        // <Pressable
+        //   key={_id}
+        //   flex={1}
+        // 
+        // >
+        //   {({ isPressed }) => }
+        // </Pressable>
+      ))}
       {(reventas.pages > 0) ? <>
         <Button.Group isAttached size="sm">
           <Button style={{ opacity: reventas.hasPrevPage ? undefined : 0.5 }} onPress={() => getReventas({ page: reventas.prevPage })} startIcon={<Icon as={AntDesign} name="left"></Icon>}>Anterior</Button>

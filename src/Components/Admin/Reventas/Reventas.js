@@ -12,12 +12,14 @@ import {
   Image,
   Icon,
   Pressable,
-  Spinner
+  Spinner,
+  AlertDialog
 } from "native-base";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import moment from "moment"
+import Decimal from "decimal.js"
 
 import axios from "../../../Axios"
 import User from "../../../Contexts/User"
@@ -42,16 +44,53 @@ export default function Reventas(props) {
   const [reventaId, setReventaId] = useState(null)
   const [loading, setLoading] = useState(false)
 
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  const [isOpenReventa, setIsOpenReventa] = React.useState(false);
+
+  const onClose = () => setIsOpen(false);
+  const cancelRef = React.useRef(null);
+
+  const [deleteReventaItem, setDeleteReventa] = React.useState(false);
+
   useEffect(() => {
     getReventas()
   }, [])
 
 
+  const deleteReventa = () => {
+    axios.delete('/reventa', { params: { id: deleteReventaItem._id } })
+      .then((response) => {
+        return toast.show({
+          duration: 1000,
+          render: () => {
+            return <Box bg="red.500" px="2" py="1" rounded="sm" mb={5}>Reventa Eliminada</Box>;
+          },
+          top: 10
+        })
+      })
+      .catch(error => {
+        console.log('NO SE PUDO CARGAR', error);
+        return toast.show({
+          duration: 2500,
+          render: () => {
+            return <Box bg="red.500" px="2" py="1" rounded="sm" mb={5}>No fue posible obtener las reventas</Box>;
+          },
+          top: 10
+        })
+      })
+      .finally(e => getReventas())
+  }
 
 
 
   let getReventas = ({ page, limit, } = reventas) => {
     setLoading(true)
+    console.log("PRINTING")
+    setReventas({
+      ...reventas,
+      data: []
+    })    
     axios.get('/customer/reventas', {
       params: {
         page,
@@ -59,16 +98,6 @@ export default function Reventas(props) {
       }
     })
       .then(response => {
-
-        /*
-        "hasNextPage": true,
-        "hasPrevPage": false,
-        "limit": 20, "nextPage": 2, 
-        "page": 1, "pagingCounter": 1, "prevPage": null, 
-        "total": 39, 
-        "totalPages": 2} */
-
-        console.log("response", response.data)
         setReventas({
           ...response.data,
           pages: response.data.totalPages
@@ -78,23 +107,6 @@ export default function Reventas(props) {
         console.log(error)
       })
       .finally(() => setLoading(false))
-  }
-
-  /**
- * @param {*} estatus
- * @description Renderiza el Tag con el estatus de la reventas
- */
-  const renderEstatusReventa = (estatus = 0) => {
-
-    let steps = {
-      0: <Text borderRadius={100} bg={"red.400"} color="white" px={3} right={-8}>Cancelada</Text>,
-      1: <Text borderRadius={100} bg={"yellow.400"} color="white" px={3} right={-8}>En proceso</Text>,
-      2: <Text borderRadius={100} bg={"green.500"} color="white" px={3} right={-8}>Vendida</Text>,
-      4: <Text borderRadius={100} bg={"blue.400"} color="white" px={3} right={-8}>Requiere Modificación</Text>,
-    }
-
-    return estatus != undefined ? steps[estatus] : 'N/A'
-
   }
 
   return (
@@ -108,42 +120,111 @@ export default function Reventas(props) {
             <Heading fontSize="lg">Reventas</Heading>
             <Heading fontSize="sm">Lista de Reventas Realizadas</Heading>
           </Box>
+          {(reventas.total < 1) ? <Box textAlign="center" w="100%" px={5} py={3}>
+            No hay Reventas Registradas
+          </Box> : null}
           {/* {loading ? <Spinner mt={20} size="lg" /> : null} */}
-          {reventas?.data?.map(({ _id, cantidad, folio, precio_reventa, moneda, estatus, hacienda_id, createdAt }) => (<Pressable key={_id} flex={1} onPress={() => setReventaId(_id)}>
-            {({
-              isPressed
-            }) => <Box flex={1} bg={isPressed ? "rgba(0,0,0,0.05)" : undefined}>
-                <VStack mx={5} my={4} flex={1}>
-                  <HStack justifyContent={"space-between"}>
-                    <Text><Text fontStyle="italic" fontSize={"xs"}>{folio}</Text>  - {cantidad} planta{(cantidad > 1) ? "s" : ""}</Text>
-                    <Text >{precio_reventa?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} {moneda} </Text>
-                  </HStack>
-                  <HStack justifyContent={"space-between"} mt={1}>
-                    <Text fontSize={12}>{hacienda_id?.nombre}</Text>
-                    <HStack>
-                      <Text fontSize={10} top={1}>{moment(createdAt).format("YYYY-MM-DD")}</Text>
-                      {renderEstatusReventa(estatus)}
-                    </HStack>
-                  </HStack>
-                </VStack>
-              </Box>}
-          </Pressable>))}
+          {reventas.data?.map((item) => <VStack mt={3} mb={1} px={3} py={3} borderBottomColor="gray.200" borderBottomWidth={1}>
+            <HStack justifyContent={"space-between"}>
+              <Text>{moment(item.fecha).format('DD-MM-YYYY')}</Text>
+              <Text>{item.cantidad_vendida} / {item.cantidad} planta{item.cantidad > 1 && 's'}</Text>
+            </HStack>
+            <HStack justifyContent={"space-between"} mt={1}>
+              <Text fontSize={12}>{item.cantidad ?? 0} en total</Text>
+              <Text fontSize={12}>{item.cantidad_restante ?? 0} para reventa</Text>
+              <Text fontSize={12}>{item.cantidad_vendida ?? 0} vendidas</Text>
+            </HStack>
+            <HStack justifyContent={"space-between"} mt={1}>
+              <Text fontSize={12}>
+                Costo por Planta: ${
+                  Decimal(item.precio_reventa).toFixed(2).toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                  })
+                }
+              </Text>
+              <Text fontSize={12}>
+                Total: ${
+                  Decimal(item.precio_reventa).mul(item.cantidad).toFixed(2).toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                  })
+                }
+              </Text>
+            </HStack>
+            <HStack justifyContent={"center"} size={2} space={2} mt={2}>
+              <Button size={'sm'} onPress={() => {
+                console.log("TESTING")
+                setIsOpenReventa(true)
+                setReventaId(item._id)
+              }}>Editar</Button>
+              <Button
+                size={'sm'}
+                background={'red.500'}
+                isDisabled={item.cantidad_vendida > 0}
+                onPress={() => {
+                  setIsOpen(true)
+                  setDeleteReventa(item)
+                }}
+              >Eliminar</Button>
+            </HStack>
+          </VStack>)}
           {(reventas.pages > 0) ? <>
-            <Button.Group isAttached mx={{ base: "auto" }} size="sm">
+            <Button.Group isAttached mx={{ base: "auto" }} size="sm" mt={3}>
               <Button style={{ opacity: reventas.hasPrevPage ? undefined : 0.5 }} onPress={() => getReventas({ page: reventas.prevPage })} startIcon={<Icon as={AntDesign} name="left"></Icon>}>Anterior</Button>
               <Button style={{ opacity: reventas.hasNextPage ? undefined : 0.5 }} onPress={() => getReventas({ page: reventas.nextPage })} endIcon={<Icon as={AntDesign} name="right"></Icon>}>Siguiente</Button>
             </Button.Group>
             <Text textAlign={"center"} mt={3}>Página {reventas.page} de {reventas.pages}</Text>
           </> : null}
-
         </ScrollView>
       </SafeAreaView>
-
       <Reventa
         reventa_id={reventaId}
         onClose={() => {
           setReventaId(null)
           getReventas()
+        }}
+      />
+      <AlertDialog
+        leastDestructiveRef={cancelRef}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
+        <AlertDialog.Content>
+          <AlertDialog.CloseButton />
+          <AlertDialog.Header>Elimina Reventa</AlertDialog.Header>
+          <AlertDialog.Body>
+            ¿Deseas eliminar esta reventa?
+          </AlertDialog.Body>
+          <AlertDialog.Footer>
+            <Button.Group space={2}>
+              <Button variant="unstyled" colorScheme="coolGray"
+                onPress={onClose} ref={cancelRef}
+              >
+                Cancelar
+              </Button>
+              <Button
+                colorScheme="danger" onPress={() => {
+                  setIsOpen(false)
+                  deleteReventa()
+                }}
+              >Eliminar</Button>
+            </Button.Group>
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
+
+      <Reventa
+        isOpen={isOpenReventa}
+        reventa_id={reventaId}
+        onClose={() => {
+
+          setIsOpenReventa(false)
+          setReventaId(null)
+          getReventas()
+          // if (reventasRef.current)
+          //   reventasRef.current.getReventas();
+
         }}
       />
     </Box>

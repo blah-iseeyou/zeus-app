@@ -29,6 +29,8 @@ import Inversion from "./Inversion"
 
 
 export default function SignIn(props) {
+
+  const { navigation} = props
   const user = useContext(User)
 
   const [inversiones, setInversiones] = useState({
@@ -111,7 +113,7 @@ export default function SignIn(props) {
             <Heading fontSize="sm">Lista de Inversiones Realizadas</Heading>
           </Box>
           {/* {loading ? <Spinner mt={20} size="lg" /> : null} */}
-          {inversiones.data.map(({ _id, cantidad, folio, monto_pagado, monto, estatus, hacienda_id, createdAt }) => (<Pressable key={_id} flex={1} onPress={() => setInversionId(_id)}>
+          {inversiones.data.map(({ _id, cantidad, folio, monto_pagado, monto, estatus, hacienda_id, createdAt }) => (<Pressable key={_id} flex={1} onPress={() => navigation.navigate("Inversion", { inversion_id: _id })}>
             {({
               isPressed
             }) => <Box flex={1} bg={isPressed ? "rgba(0,0,0,0.05)" : undefined}>
@@ -141,10 +143,10 @@ export default function SignIn(props) {
         </ScrollView>
       </SafeAreaView>
 
-      <Inversion
+      {/* <Inversion
         inversion_id={inversionId}
         onClose={() => setInversionId(null)}
-      />
+      /> */}
     </Box>
   );
 }

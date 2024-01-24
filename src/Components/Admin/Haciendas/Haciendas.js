@@ -26,6 +26,8 @@ import User from "../../../Contexts/User"
 
 import Header from "../../Header"
 
+import SoldOut from "../../../../assets/icons/SoldOut"
+
 
 export default function SignIn({ navigation }) {
   const user = useContext(User)
@@ -95,7 +97,19 @@ export default function SignIn({ navigation }) {
                     </VStack>
                     <Image alt={"Zeus Oro azul de los altos"} source={require("../../../../assets/img/ZeusAgave.png")} resizeMode="contain" h={"20"} opacity={0.2} right={-52} bottom={0} />
                   </Box>
-                </Box>}
+                  {
+                      (item.disponible <= 0 || item.estatus == 3) && <SoldOut
+                        style={{
+                          position: "absolute",
+                          right: 10,
+                          top: 0,
+                          maxWidth: "100%"
+                        }}
+                        width="100%"
+                      />
+                    }
+                </Box>
+                }
             </Pressable>))}
           </Box>
         </ScrollView>

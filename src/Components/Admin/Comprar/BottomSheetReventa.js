@@ -132,6 +132,7 @@ export default function (props) {
 
     let comprarPlantas = () => {
         // this.setState({ loading: true });
+        console.log("DEFENDIA")
         axios
             .post("/hacienda/compra", {
                 reventa_id,

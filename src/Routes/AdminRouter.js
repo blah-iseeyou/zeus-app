@@ -15,6 +15,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import Dashboard from "../Components/Admin/Dashboard"
 import Inversiones from "../Components/Admin/Inversiones/Inversiones"
+import Inversion from "../Components/Admin/Inversiones/Inversion"
 import Reventas from "../Components/Admin/Reventas/Reventas"
 import Haciendas from "../Components/Admin/Haciendas/Haciendas"
 import Hacienda from "../Components/Admin/Haciendas/Hacienda"
@@ -112,7 +113,13 @@ export default function () {
         }}>
         <BottomStack.Screen name={"Dashboard"} component={Dashboard} />
         <BottomStack.Screen name={"Inversiones"} component={Inversiones} />
+        
+        <BottomStack.Screen name={"Inversion"} component={Inversion} initialParams={{ inversion_id: null }}/>
+        
         <BottomStack.Screen name={"Reventas"} component={Reventas} />
+        
+        <BottomStack.Screen name={"Reventa"} component={Reventas} />
+        
         <BottomStack.Screen name={"Haciendas"} component={Haciendas} />
         <BottomStack.Screen name={"Hacienda"} component={Hacienda} initialParams={{ hacienda_id: null }} />
         <BottomStack.Screen name={"Settings"} component={Menu} />

@@ -91,9 +91,6 @@ export default function SignIn({ route }) {
                             </Box>
                         </Box>
                         <Box bg={"white"} mt={5} borderRadius={10} px={2} py={2}>
-
-
-
                             <VStack borderBottomWidth="1" borderBottomColor="gray.200" pb={2}>
                                 <Text flex={1} textAlign="center">Hacienda</Text>
                                 <Heading flex={1} size="md" textAlign="center">{hacienda.nombre}</Heading>
@@ -120,7 +117,9 @@ export default function SignIn({ route }) {
                                     </HStack>
                                 </Box>
                                 <Box mt={5}>
-                                    <Button onPress={() => setVisibleHacienda(hacienda?._id)}>INVERTIR AHORA</Button>
+                                    <Button
+                                        isDisabled={hacienda.disponible <= 0 || hacienda.estatus == 3}
+                                        onPress={() => setVisibleHacienda(hacienda?._id)}>INVERTIR AHORA</Button>
                                 </Box>
 
                             </VStack>

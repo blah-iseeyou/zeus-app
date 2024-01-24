@@ -21,6 +21,7 @@ import axios from "../../Axios"
 import moment from "moment"
 import Header from "../Header"
 import User from "../../Contexts/User"
+import SoldOut from "../../../assets/icons/SoldOut"
 import Color from "color";
 
 import Inversion from "../Admin/Inversiones/Inversion";
@@ -34,7 +35,7 @@ export default function SignIn({ navigation }) {
 
   const [montos, setMontos] = useState({ loading: false })
 
-  const [inversionId, setInversionId] = useState()
+  // const [inversionId, setInversionId] = useState()
 
   const [inversiones, setInversiones] = useState({
     data: [],
@@ -61,8 +62,6 @@ export default function SignIn({ navigation }) {
     getHaciendas()
     getInversiones()
   }, [])
-
-
 
   let getClienteDetalles = () => {
 
@@ -148,6 +147,13 @@ export default function SignIn({ navigation }) {
     return estatus != undefined ? steps[estatus] : 'N/A'
   }
 
+  const setInversionId = (inversion_id) => {
+
+
+    console.log("ROCKSTAR")
+    navigation.navigate("Inversion", { inversion_id })
+  }
+
   return (
     <Box variant={"layout"} flex="1"  >
       <SafeAreaView flex={1}>
@@ -175,7 +181,7 @@ export default function SignIn({ navigation }) {
             <VStack px="4" mt="4" mb="5" space="9">
               <VStack space="2">
                 <Text fontSize="lg" fontWeight="bold">
-                  {console.log("user", user)}
+                  {/* {console.log("user", user)} */}
                   Bienvenido, {user?.nombre} {user?.apellido_paterno}
                 </Text>
               </VStack>
@@ -198,7 +204,7 @@ export default function SignIn({ navigation }) {
               defaultIndex={0}
               renderItem={({ index, item }) => (
                 <Pressable flex="1" onPress={() => navigation.navigate("Hacienda", { hacienda_id: item?._id })} >
-                  <Box px="1" flex="1" borderRadius={16}>
+                  <Box px="1" flex="1" borderRadius={16} overflow={"hidden"}>
                     <Box bg={{
                       linearGradient: {
                         colors: [Color(item.color).darken(0.2).hex(), item.color],
@@ -210,40 +216,60 @@ export default function SignIn({ navigation }) {
                         <Heading size={"sm"} color="white">{item.nombre}</Heading>
                         <Text color="white">{item.descripcion}</Text>
                       </VStack>
-                      <Image alt={"Zeus Oro azul de los altos"} source={require("../../../assets/img/ZeusAgave.png")} resizeMode="contain" h={"20"} opacity={0.2} right={-85} bottom={0} />
+                      <Image
+                        alt={"Zeus Oro azul de los altos"}
+                        source={require("../../../assets/img/ZeusAgave.png")}
+                        resizeMode="contain"
+                        h={"20"}
+                        opacity={0.2}
+                        right={"-40%"}
+                        bottom={0} />
                     </Box>
+                    {
+                      (item.disponible <= 0 || item.estatus == 3) && <SoldOut
+                        style={{
+                          position: "absolute",
+                          right: 0,
+                          top: -10,
+                          // maxWidth: "100%"
+                          maxWidth: "100%"
+                        }}
+                      />
+                    }
                   </Box>
                 </Pressable>
               )}
             />
           </Stack>
+          {/* <SoldOut /> */}
           <Box mx={5} mt={4}>
             <Heading fontSize="lg">Ultimas Inversiones</Heading>
           </Box>
-          {inversiones.data.map(({ _id, cantidad, monto_pagado, monto, estatus, hacienda_id, createdAt }) => <Pressable key={_id} flex={1} onPress={() => setInversionId(_id)}>
-
-            <VStack key={_id} mx={5} my={4}>
-              <HStack justifyContent={"space-between"}>
-                <Text>Comprada {cantidad} planta{(cantidad > 1) ? "s" : ""}</Text>
-                <Text >{monto_pagado?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} / {monto?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} </Text>
-              </HStack>
-              <HStack justifyContent={"space-between"} mt={1}>
-                <Text fontSize={12}>{hacienda_id?.nombre}</Text>
-                <HStack>
-                  <Text fontSize={10} top={1}>{moment(createdAt).format("YYYY-MM-DD")}</Text>
-                  {renderEstatusInversion(estatus)}
+          {inversiones.data.map(({ _id, cantidad, monto_pagado, monto, estatus, hacienda_id, createdAt }) => (
+            <Pressable key={_id} flex={1} onPress={() => setInversionId(_id)}>
+              <VStack key={_id} mx={5} my={4}>
+                <HStack justifyContent={"space-between"}>
+                  <Text>Comprada {cantidad} planta{(cantidad > 1) ? "s" : ""}</Text>
+                  <Text >{monto_pagado?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} / {monto?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} </Text>
                 </HStack>
-              </HStack>
-            </VStack>
-          </Pressable>)}
+                <HStack justifyContent={"space-between"} mt={1}>
+                  <Text fontSize={12}>{hacienda_id?.nombre}</Text>
+                  <HStack>
+                    <Text fontSize={10} top={1}>{moment(createdAt).format("YYYY-MM-DD")}</Text>
+                    {renderEstatusInversion(estatus)}
+                  </HStack>
+                </HStack>
+              </VStack>
+            </Pressable>
+          ))}
         </ScrollView>
 
       </SafeAreaView>
-      <Inversion
-        navigation = {navigation}
+      {/* <Inversion
+        navigation={navigation}
         inversion_id={inversionId}
         onClose={() => setInversionId(null)}
-      />
+      /> */}
 
     </Box>
   );
