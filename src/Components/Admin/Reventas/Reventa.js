@@ -84,6 +84,7 @@ export default function (props) {
                     tipo: data.tipo
                 }))
                 setReventa(data)
+                console.log('data.inversion_original_id', data.inversion_original_id)
                 getInversion(data.inversion_original_id)
             })
             .catch(error => {
@@ -121,15 +122,18 @@ export default function (props) {
 
 
     useEffect(() => {
-        console.log('isOpen', isOpen)
+        // console.log('isOpen', isOpen)
         setModalStatus(isOpen)
         getTipoCambio()
-        console.log('reventa_id', reventa_id);
+        // console.log('reventa_id', reventa_id);
         if (reventa_id) {
             console.log('getReventa');
             getReventa()
         } else {
             console.log('getInversion');
+            console.log('inversion_id');
+            console.log('inversion_id');
+            console.log('inversion_id', inversion_id);
             getInversion(inversion_id)
         }
 
@@ -204,6 +208,8 @@ export default function (props) {
 
     const min = precio => precio >= (values?.max_precio * values?.minimo_reventa).toFixed(2)
     const max = precio => precio <= (values?.max_precio * values?.maximo_reventa).toFixed(2)
+
+    console.log('inversion?.cantidad',inversion)
 
     return (
         <BottomSheet
@@ -323,11 +329,10 @@ export default function (props) {
 
                                 setModalStatus(false)
                                 if (reventa_id) {
-                                    console.log('SI')
+                                    // console.log('SI')
                                     editReventa(values)
-                                }
-                                else {
-                                    console.log('NO')
+                                } else {
+                                    // console.log('NO')
                                     createReventa(values)
                                 }
                                 // console.log('X X X X X');

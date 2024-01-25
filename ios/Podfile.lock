@@ -1,6 +1,6 @@
 PODS:
   - boost (1.76.0)
-  - BVLinearGradient (2.6.2):
+  - BVLinearGradient (2.8.3):
     - React-Core
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -306,7 +306,7 @@ PODS:
     - glog
   - react-native-cookies (6.2.1):
     - React-Core
-  - react-native-safe-area-context (3.3.2):
+  - react-native-safe-area-context (3.4.1):
     - React-Core
   - React-perflogger (0.70.6)
   - React-RCTActionSheet (0.70.6):
@@ -374,11 +374,11 @@ PODS:
     - React-jsi (= 0.70.6)
     - React-logger (= 0.70.6)
     - React-perflogger (= 0.70.6)
-  - RNCAsyncStorage (1.17.11):
+  - RNCAsyncStorage (1.19.3):
     - React-Core
-  - RNGestureHandler (2.8.0):
+  - RNGestureHandler (2.13.4):
     - React-Core
-  - RNReanimated (2.13.0):
+  - RNReanimated (2.17.0):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -405,11 +405,11 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.18.2):
+  - RNScreens (3.27.0):
     - React-Core
     - React-RCTImage
-  - RNSVG (12.1.1):
-    - React
+  - RNSVG (12.5.1):
+    - React-Core
   - SocketRocket (0.6.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -590,7 +590,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: a7c83b31436843459a1961bfd74b96033dc77234
-  BVLinearGradient: 34a999fda29036898a09c6a6b728b0b4189e1a44
+  BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 48289402952f4f7a4e235de70a9a590aa0b79ef4
@@ -625,7 +625,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 60769e5a0a6d4b32294a2456077f59d0266f9a8b
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
   react-native-cookies: f54fcded06bb0cda05c11d86788020b43528a26c
-  react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
+  react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   React-perflogger: 8c79399b0500a30ee8152d0f9f11beae7fc36595
   React-RCTActionSheet: 7316773acabb374642b926c19aef1c115df5c466
   React-RCTAnimation: 5341e288375451297057391227f691d9b2326c3d
@@ -638,15 +638,15 @@ SPEC CHECKSUMS:
   React-RCTVibration: c75ceef7aa60a33b2d5731ebe5800ddde40cefc4
   React-runtimeexecutor: 15437b576139df27635400de0599d9844f1ab817
   ReactCommon: 349be31adeecffc7986a0de875d7fb0dcf4e251c
-  RNCAsyncStorage: 8616bd5a58af409453ea4e1b246521bb76578d60
-  RNGestureHandler: 62232ba8f562f7dea5ba1b3383494eb5bf97a4d3
-  RNReanimated: ce445c233a6ff5600223484a88ad5704945d972a
-  RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
-  RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
+  RNCAsyncStorage: c913ede1fa163a71cea118ed4670bbaaa4b511bb
+  RNGestureHandler: 360f9c7e91ec49ac76f03e73fb394d92e2a88e55
+  RNReanimated: bec7736122a268883bdede07f1bf9cf4b40158db
+  RNScreens: 2b19e2471db8a581c83f381f4ea5d43071c9a3bf
+  RNSVG: d7d7bc8229af3842c9cfc3a723c815a52cdd1105
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 6e6141dcb0306d441f7a9a28c9521adf4b4b23e4
+PODFILE CHECKSUM: c6ec107926d6eeab157e1a36c3bec9c43890ae93
 
 COCOAPODS: 1.11.3

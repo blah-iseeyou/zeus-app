@@ -184,6 +184,7 @@ export default function (props) {
                                 variant={"solid"}
                                 _text={{ fontSize: 14 }}
                                 px="2"
+                                isDisabled={!(inversion?.estatus == 2 || inversion?.estatus == 3) }
                                 onPress={() => {
                                     setIsOpenReventa(true)
                                     setReventaId(null)
@@ -201,7 +202,7 @@ export default function (props) {
             <Reventa
                 isOpen={isOpenReventa}
                 reventa_id={reventaId}
-                // inversion_id={inversion_id}
+                inversion_id={inversion_id}
                 onClose={() => {
                     setIsOpenReventa(false)
                     setReventaId(null)
