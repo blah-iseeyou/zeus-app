@@ -291,8 +291,10 @@ export default function (props) {
                                     value={values.precio}
                                     keyboardType='decimal-pad'
                                     placeholder="Ingrese el precio de venta"
-                                    formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                    parser={(value) => value?.replace(/\$\s?|(,*)/g, '')}
+                                    // formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                    // parser={(value) => value?.replace(/\$\s?|(,*)/g, '')}
+                                    formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',').replace(/\.(\d{2})\d+/, '.$1')}
+                                    parser={(value) => value?.replace(/\$\s?|,/g, '')}
                                     onChangeText={value => setValues(state => ({ ...state, precio: Number(value) }))}
                                 />
                                 <FormControl.ErrorMessage>

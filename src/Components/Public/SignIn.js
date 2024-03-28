@@ -26,7 +26,6 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import axios from '../../Axios.js'
-// // import axios from 'axios'
 import { SetUser } from "../../Contexts/User";
 
 
