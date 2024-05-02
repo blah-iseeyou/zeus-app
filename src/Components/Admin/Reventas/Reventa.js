@@ -209,7 +209,7 @@ export default function (props) {
     const min = precio => precio >= (values?.max_precio * values?.minimo_reventa).toFixed(2)
     const max = precio => precio <= (values?.max_precio * values?.maximo_reventa).toFixed(2)
 
-    console.log('inversion?.cantidad',inversion)
+    // console.log('inversion?.cantidad',inversion)
 
     return (
         <BottomSheet

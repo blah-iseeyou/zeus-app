@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState, useImperativeHandle, forwardRef } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions, Linking } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import axios from '../../../Axios';
-import { Box, Heading, HStack, Text, VStack, Button, useToast, AlertDialog } from 'native-base';
+import { Box, Heading, HStack, Text, VStack, Button, useToast, AlertDialog, Center, Icon, Spinner } from 'native-base';
 import moment from 'moment/moment';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,6 +10,18 @@ import Header from '../../Header';
 import { ScrollView } from 'react-native-gesture-handler';
 import Decimal from 'decimal.js';
 import Reventa from '../Reventas/Reventa';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AntDesign from "react-native-vector-icons/AntDesign";
+
+import IconPDF from "../../../../assets/icons/IconPDF";
+import ModalPago from "./ModalPago";
+
+
+const windowHeight = Dimensions.get('window').height;
+
+
+
+
 
 export default function (props) {
     const navigation = useNavigation()
@@ -19,13 +31,16 @@ export default function (props) {
     const { inversion_id } = route.params
 
     const [cantidades, setCantidades] = useState({})
-    const [inversion, setInversion] = useState(null)
+    const [inversion, setInversion] = useState()
 
     const [vista, setVista] = useState('transacciones')
 
     const [reventaId, setReventaId] = useState(null)
+    const [loading, setLoading] = useState(null)
+    const [loadingCantidades, setLoadingCantidades] = useState(null)
 
     const [isOpenReventa, setIsOpenReventa] = useState(null)
+    const [visibleModalPago, setVisibleModalPago] = useState(false)
 
     const reventasRef = useRef();
 
@@ -36,6 +51,8 @@ export default function (props) {
     }, [inversion_id])
 
     const getInversion = () => {
+        setLoading(true)
+        setInversion()
         axios.get('/customer/inversion', {
             params: {
                 id: inversion_id
@@ -47,16 +64,18 @@ export default function (props) {
             .catch(error => {
 
             })
+            .finally(e => setLoading(false))
     }
 
     const getCantidades = () => {
+        setLoadingCantidades(true)
         axios.get('/inversion/cantidades', {
             params: {
                 inversion_id
             }
         })
             .then(({ data }) => {
-                console.log(data)
+                // console.log(data)
                 data.data.disponibles = Number(data.data.total - data.data.revendidas)
                 // this.setState({ cantidades: data.data })
                 setCantidades(data.data)
@@ -65,6 +84,7 @@ export default function (props) {
             .catch(err => {
                 console.log('NO SE PUDO CARGAR', err);
             })
+            .finally(e => setLoadingCantidades(false))
     }
 
     /**
@@ -83,7 +103,8 @@ export default function (props) {
     }
 
     const renderView = () => {
-        console.log("vista", vista)
+        // console.log("vista", vista)
+        // console.log("inversion?.estatus", inversion?.estatus)
         switch (vista) {
             case 'transacciones':
                 return <Transacciones
@@ -117,12 +138,84 @@ export default function (props) {
                 />
         }
     }
+
+    let descargaPdf = async () => {
+        let urlPDF = new URL(axios.defaults.baseURL + '/crm/ficha-pago');
+        urlPDF.searchParams.append('Authorization', await AsyncStorage.getItem('@token'))
+        urlPDF.searchParams.append('inversion_id', inversion?._id)
+        await Linking.openURL(urlPDF.href)
+    }
+
+    const renderContent = () => {
+
+        if (loading) {
+            return <Spinner
+                mt={100}
+                size={'lg'}
+            />
+        }
+
+        if (inversion?.estatus == 0 || inversion?.estatus == 1) {
+            return <Box flex={1} mt={windowHeight * 0.15}>
+                <Box >
+                    <Text textAlign={"center"} mb={2}>¿Todavía no has pagado tu inversión? </Text>
+                    <Text fontWeight={"bold"} textAlign={"center"} mb={3}>¡Hazlo ahora!</Text>
+                    {(inversion?.moneda == "USD") && <Button mb={3} startIcon={<Icon as={AntDesign} name="shoppingcart" size={"md"} />}
+                        onPress={() => {
+                            setVisibleModalPago(true)
+                        }}
+                    >Pagar Ahora</Button>}
+                    <Button mb={3} background={"red.600"} startIcon={<IconPDF />} onPress={descargaPdf}>Descargar Ficha de Pago</Button>
+                </Box>
+            </Box>
+        }
+        return <>
+            <HStack justifyContent={"space-between"} mt={'4'}>
+                <Button.Group
+                    isAttached
+                    size="sm">
+                    <Button
+                        onPress={() => setVista('transacciones')}
+                        variant={(vista != 'transacciones') ? 'outline' : null}//{'outline'}
+                        bg={(vista != 'transacciones') ? 'transparent' : null}
+                        _text={{ fontSize: 14 }}>Transacciones</Button>
+                    <Button
+                        onPress={() => setVista('reventas')}
+                        variant={(vista != 'reventas') ? 'outline' : null}//{'outline'}
+                        bg={(vista != 'reventas') ? 'transparent' : null}
+                        _text={{ fontSize: 14 }}>Reventas</Button>
+                </Button.Group>
+                <Button
+                    size="sm"
+                    variant={"solid"}
+                    _text={{ fontSize: 14 }}
+                    px="2"
+                    isDisabled={!(inversion?.estatus == 2 || inversion?.estatus == 3)}
+                    onPress={() => {
+                        setIsOpenReventa(true)
+                        setReventaId(null)
+                    }}
+                >
+                    Vender Plantas
+                </Button>
+            </HStack>
+            {renderView()}
+
+        </>
+    }
     return (
         <Box variant={"layout"} flex="1"  >
             <SafeAreaView flex={1}>
                 <ScrollView>
                     <Header />
-                    <Box mx={5}>
+
+                    {loadingCantidades ? <Box >
+                        <Spinner
+                            mt={100}
+                            size={'lg'}
+                        // flex={1}
+                        />
+                    </Box> : <Box mx={5}>
                         <HStack justifyContent={"space-between"}>
                             <Box>
                                 <Heading size={"sm"}>Folio de Inversión:</Heading>
@@ -153,50 +246,22 @@ export default function (props) {
                         <HStack mt={4} justifyContent="space-between">
                             <Box flex={1}>
                                 <Text >Total</Text>
-                                <Heading size={"xs"}>{inversion?.monto?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</Heading>
+                                <Heading size={"xs"}>{inversion?.monto?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}<Text fontSize={'xs'}> {inversion?.moneda}</Text></Heading>
                             </Box>
                             <Box flex={1}>
                                 <Text textAlign="center">Pagado</Text>
-                                <Heading textAlign="center" color="green.500" size={"xs"}>{inversion?.monto_pagado?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</Heading>
+                                <Heading textAlign="center" color="green.500" size={"xs"}>{inversion?.monto_pagado?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}<Text fontSize={'xs'}> {inversion?.moneda}</Text></Heading>
                             </Box>
                             <Box flex={1}>
                                 <Text textAlign="right">Pendiente</Text>
-                                <Heading textAlign="right" color="red.500" size={"xs"}>{inversion?.monto_pendiente?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</Heading>
+                                <Heading textAlign="right" color="red.500" size={"xs"}>{inversion?.monto_pendiente?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}<Text fontSize={'xs'}> {inversion?.moneda}</Text></Heading>
                             </Box>
                         </HStack>
-                        <HStack justifyContent={"space-between"} mt={'4'}>
-                            <Button.Group
-                                isAttached
-                                size="sm">
-                                <Button
-                                    onPress={() => setVista('transacciones')}
-                                    variant={(vista != 'transacciones') ? 'outline' : null}//{'outline'}
-                                    bg={(vista != 'transacciones') ? 'transparent' : null}
-                                    _text={{ fontSize: 14 }}>Transacciones</Button>
-                                <Button
-                                    onPress={() => setVista('reventas')}
-                                    variant={(vista != 'reventas') ? 'outline' : null}//{'outline'}
-                                    bg={(vista != 'reventas') ? 'transparent' : null}
-                                    _text={{ fontSize: 14 }}>Reventas</Button>
-                            </Button.Group>
-                            <Button
-                                size="sm"
-                                variant={"solid"}
-                                _text={{ fontSize: 14 }}
-                                px="2"
-                                isDisabled={!(inversion?.estatus == 2 || inversion?.estatus == 3) }
-                                onPress={() => {
-                                    setIsOpenReventa(true)
-                                    setReventaId(null)
-                                }}
-                            >
-                                Vender Plantas
-                            </Button>
-                        </HStack>
-                        {renderView()}
-                        {/* <Box flex={1}>
-                    </Box> */}
-                    </Box>
+                        {/* {} */}
+                        {renderContent()}
+                    </Box>}
+
+
                 </ScrollView>
             </SafeAreaView>
             <Reventa
@@ -206,9 +271,18 @@ export default function (props) {
                 onClose={() => {
                     setIsOpenReventa(false)
                     setReventaId(null)
-                    if (reventasRef.current) 
+                    if (reventasRef.current)
                         reventasRef.current.getReventas();
 
+                }}
+            />
+            <ModalPago
+                isOpen={visibleModalPago}
+                reventa_id={reventaId}
+                inversion_id={inversion_id}
+                onClose={() => {
+                    setVisibleModalPago(false)
+                    getInversion()
                 }}
             />
         </Box>
@@ -238,7 +312,7 @@ function Transacciones({ inversion_id, update }) {
             }
         })
             .then(response => {
-                console.log("response.data.data", response.data)
+                // console.log("response.data.data", response.data)
                 setTransacciones(response.data.data)
             })
             .catch(error => {
@@ -250,8 +324,8 @@ function Transacciones({ inversion_id, update }) {
     useState(() => {
 
         getTransacciones()
-        console.log('inversion_id', inversion_id);
-        console.log('update', update);
+        // console.log('inversion_id', inversion_id);
+        // console.log('update', update);
     }, [inversion_id, update])
 
     return <>

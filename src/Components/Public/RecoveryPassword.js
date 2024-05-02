@@ -100,7 +100,7 @@ export default function SignInForm({ navigation }) {
                 >
                     <Hidden from="md">
                         <VStack px="4" mt="4" mb="5" space="9">
-                            <Image alt={"Zeus Oro Azul de los Altos"} source={require("../../../assets/img/LogoZeuesOADLAH.png")} resizeMode="contain" h={"20"} />
+                            <Image alt={"Zeus Oro Azul de los Altos"} source={require("../../../assets/img/logo_zeues_oadlah.png")} resizeMode="contain" h={"20"} />
                             <VStack space="2">
                                 <Text fontSize="3xl" fontWeight="bold" >
                                     Recuperación

@@ -218,7 +218,7 @@ export default function SignIn({ navigation }) {
                       </VStack>
                       <Image
                         alt={"Zeus Oro azul de los altos"}
-                        source={require("../../../assets/img/ZeusAgave.png")}
+                        source={require("../../../assets/img/zeus_agave.png")}
                         resizeMode="contain"
                         h={"20"}
                         opacity={0.2}

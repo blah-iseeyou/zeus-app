@@ -21,7 +21,7 @@ import moment from "moment"
 
 import axios from "../../../Axios"
 import User from "../../../Contexts/User"
-import BottomSheetReventa from "../Comprar/BottomSheetReventa";
+import ModalInversion from "../Comprar/ModalInversion";
 
 
 export default function Reventas(props) {
@@ -39,6 +39,9 @@ export default function Reventas(props) {
   const toast = useToast()
   const [reventaId, setReventaId] = useState(null)
   const [loading, setLoading] = useState(false)
+
+  const [visibleInversion, setVisibleInversion] = useState(false)
+
 
   useEffect(() => {
     if (props.hacienda_id) getReventas()
@@ -129,6 +132,7 @@ export default function Reventas(props) {
                       })
                     }
                     setReventaId(_id)
+                    setVisibleInversion(true)
                   }}
 
                   borderWidth="2" background="white" _text={{ color: "black", fontSize: "xs" }}>
@@ -160,12 +164,15 @@ export default function Reventas(props) {
         </Button.Group>
         <Text textAlign={"center"} mt={3}>Página {reventas.page} de {reventas.pages}</Text>
       </> : null}
-      <BottomSheetReventa
+      <ModalInversion
+        isOpen={visibleInversion}
         reventa_id={reventaId}
         hacienda_id={props.hacienda_id}
+        
         onClose={() => {
           setReventaId(undefined)
           getReventas()
+          setVisibleInversion(false)
         }}
       />
     </>

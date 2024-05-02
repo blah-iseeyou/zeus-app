@@ -36,7 +36,7 @@ export default function SignInForm({ navigation }) {
       title: '¡Invierte en Agave!',
       subtitle: 'Desde cualquier parte del mundo como nunca antes',
       description: "Somos la nueva generación de AgroTech",
-      image: require("../../../assets/img/LogoZeusOADLA.png"),
+      image: require("../../../assets/img/logo_zeus_oadla.png"),
       content: <>
         <Button borderRadius={100} width={200} mt={5} onPress={(e) => {
           onDone()
@@ -52,25 +52,25 @@ export default function SignInForm({ navigation }) {
       key: 's2',
       title: 'Selección de Haciendas',
       subtitle: 'Buscamos los mejores predios para plantar y cultivar agave.',
-      image: require("../../../assets/img/card1-farm.png"),
+      image: require("../../../assets/img/card1_farm.png"),
     },
     {
       key: 's3',
       title: 'Selección de Plantas',
       subtitle: 'Elegimos plantas de primera calidad para ofrecerte el mejor rendimiento posible',
-      image: require("../../../assets/img/card2-plant.png"),
+      image: require("../../../assets/img/card2_plant.png"),
     },
     {
       key: 's4',
       title: 'Venta de plantas',
       subtitle: 'Despues de plantar el agave en las haciendas elegidas, ponemos en venta las plantas en nuestra plataforma y app móvil.',
-      image: require("../../../assets/img/card3-sell.png"),
+      image: require("../../../assets/img/card3_sell.png"),
     },
     {
       key: 's5',
       title: 'Retorno de Capital',
       subtitle: 'Una vez el agave llega a su maduración en alguna de nuestras haciendas, lo vendemos a las tequileras y hacemos retornos de capital.',
-      image: require("../../../assets/img/card4-return.png"),
+      image: require("../../../assets/img/card4_return.png"),
     },
   ]
 
@@ -241,7 +241,7 @@ export default function SignInForm({ navigation }) {
         >
           <Hidden from="md">
             <VStack px="4" mt="4" mb="5" space="9">
-              <Image alt={"Zeus Oro Azul de los Altos"} source={require("../../../assets/img/LogoZeuesOADLAH.png")} resizeMode="contain" h={"20"} />
+              <Image alt={"Zeus Oro Azul de los Altos"} source={require("../../../assets/img/logo_zeues_oadlah.png")} resizeMode="contain" h={"20"} />
               <VStack space="2">
                 <Text fontSize="3xl" fontWeight="bold" >
                   Bienvenido

@@ -24,29 +24,24 @@ import axios from "../../../Axios"
 import User from "../../../Contexts/User"
 
 import Header from "../../Header"
-import BottomSheet from "../Comprar/BottomSheet"
+import ModalInversion from "../Comprar/ModalInversion"
 import Decimal from "decimal.js";
 import Reventas from "./Reventas";
-// import moment from "moment"
 
 const momentPreciseRangePlugin = require('moment-precise-range')(moment);
 
 export default function SignIn({ route }) {
 
-    // // console.log("route", route.params)
-
     const user = useContext(User)
 
     const [haciendaId, setHaciendaId] = useState(route.params.hacienda_id)
-    const [visibleHacienda, setVisibleHacienda] = useState()
+    const [visibleHacienda, setVisibleHacienda] = useState(false)
     const [hacienda, setHacienda] = useState(null)
+
 
     useEffect(() => {
         getHacienda()
     }, [])
-
-
-
 
     let getHacienda = () => {
         axios.get('/hacienda', {
@@ -87,7 +82,7 @@ export default function SignIn({ route }) {
                                     <Heading size={"sm"} color="white">{hacienda?.nombre}</Heading>
                                     <Text color="white">{hacienda?.descripcion}</Text>
                                 </VStack>
-                                <Image alt={"Zeus Oro azul de los altos"} source={require("../../../../assets/img/ZeusAgave.png")} resizeMode="contain" h={"20"} opacity={0.2} right={-135} bottom={10} />
+                                <Image alt={"Zeus Oro azul de los altos"} source={require("../../../../assets/img/zeus_agave.png")} resizeMode="contain" h={"20"} opacity={0.2} right={-135} bottom={10} />
                             </Box>
                         </Box>
                         <Box bg={"white"} mt={5} borderRadius={10} px={2} py={2}>
@@ -119,7 +114,9 @@ export default function SignIn({ route }) {
                                 <Box mt={5}>
                                     <Button
                                         isDisabled={hacienda.disponible <= 0 || hacienda.estatus == 3}
-                                        onPress={() => setVisibleHacienda(hacienda?._id)}>INVERTIR AHORA</Button>
+                                        onPress={() => {
+                                            setVisibleHacienda(true)
+                                        }}>INVERTIR AHORA</Button>
                                 </Box>
 
                             </VStack>
@@ -130,10 +127,11 @@ export default function SignIn({ route }) {
                     </>
                         : null}
                 </ScrollView>
-                <BottomSheet
-                    hacienda_id={visibleHacienda}
+                <ModalInversion
+                    hacienda_id={hacienda?._id}
+                    isOpen={visibleHacienda}
                     onClose={() => {
-                        setVisibleHacienda()
+                        setVisibleHacienda(false)
                     }}
                 />
             </SafeAreaView>

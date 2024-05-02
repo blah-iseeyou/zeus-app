@@ -95,7 +95,7 @@ export default function SignIn({ navigation }) {
                       <Heading size={"sm"} color="white">{item.nombre}</Heading>
                       <Text color="white">{item.descripcion}</Text>
                     </VStack>
-                    <Image alt={"Zeus Oro azul de los altos"} source={require("../../../../assets/img/ZeusAgave.png")} resizeMode="contain" h={"20"} opacity={0.2} right={-52} bottom={0} />
+                    <Image alt={"Zeus Oro azul de los altos"} source={require("../../../../assets/img/zeus_agave.png")} resizeMode="contain" h={"20"} opacity={0.2} right={-52} bottom={0} />
                   </Box>
                   {
                       (item.disponible <= 0 || item.estatus == 3) && <SoldOut
