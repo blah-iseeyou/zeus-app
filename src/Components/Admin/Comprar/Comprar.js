@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { Modal, Keyboard, Dimensions, ScrollView, ActivityIndicator, Linking } from 'react-native';
+import { Modal, Keyboard, Dimensions, ScrollView, ActivityIndicator, Linking, SafeAreaView, Platform } from 'react-native';
 // import BottomSheet, { useBottomSheet } from '@gorhom/bottom-sheet';
 import {
     Box,
@@ -14,7 +14,8 @@ import {
     FormControl,
     Pressable,
     Modal as ModalNB,
-    useToast
+    useToast,
+    KeyboardAvoidingView
 } from 'native-base';
 import moment from 'moment/moment';
 import Color from 'color';
@@ -28,6 +29,10 @@ import IconPDF from '../../../../assets/icons/IconPDF'
 
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+// import {  } from 'react-native-safe-area-context';
 
 
 const windowHeight = Dimensions.get('window').height;
@@ -52,8 +57,8 @@ function Comprar(props) {
         setCompra,
 
         reventa_id,
-        reventa
-
+        reventa,
+        navigator
     } = props
 
     const [contratoAceptado, setAceptarContrato] = useState(false)
@@ -142,6 +147,17 @@ function Comprar(props) {
 
     let renderContrato = () => {
 
+
+        console.log('contrato')
+        console.log('contrato')
+        console.log('contrato')
+        console.log('contrato')
+        console.log('contrato')
+        console.log('contrato')
+        console.log('contrato')
+        console.log('contrato')
+        console.log('contrato')
+        console.log(contrato)
         if (!contrato) return null;
         const {
             ano,
@@ -291,6 +307,8 @@ function Comprar(props) {
             </ModalNB.Content>
         </ModalNB>
     }
+    // return <SafeAreaView style={{ flex: 1 }}></SafeAreaView>
+    const insets = useSafeAreaInsets();
 
     return <>
         <ScrollView
@@ -389,7 +407,6 @@ function Comprar(props) {
             <Box my={2}>
                 <HStack justifyContent={"space-between"}>
                     <Pressable onPress={() => {
-
                         if (isNaN(parseInt(plantas)) || (parseInt(plantas) < 1))
                             return Toast.show({
                                 position: "bottom",
@@ -398,8 +415,6 @@ function Comprar(props) {
                                 text1: 'Cantidad Incorrecta',
                                 text2: 'Debe ingresar una cantidad de plantas correcta'
                             });
-
-
                         if (!moneda)
                             return Toast.show({
                                 position: "bottom",
@@ -419,7 +434,10 @@ function Comprar(props) {
                                     text2: 'La cantidad es mayor a la permitida'
                                 });
                         }
+
+                        console.log("PRINTING PRINTING")
                         if (!contratoAceptado) {
+                            console.log('contratoAceptado', contratoAceptado)
                             setViewContract(true)
                         }
                     }}>
@@ -446,8 +464,6 @@ function Comprar(props) {
                             text2: 'Debe ingresar una cantidad de plantas correcta'
                         });
 
-                    console.log('moneda')
-                    console.log(moneda)
                     if (!moneda)
                         return Toast.show({
                             position: "bottom",
@@ -457,11 +473,6 @@ function Comprar(props) {
                             text2: 'Para continuar, debe de haber seleccionado la moneda'
                         });
 
-
-                    console.log("reventa_id", reventa_id)
-                    console.log("reventa_id", reventa_id)
-                    console.log("reventa_id", reventa_id)
-                    console.log("reventa_id", reventa_id)
                     if (!!reventa_id) {
                         console.log("REVENTA ID")
                         if (parseInt(plantas) > reventa?.cantidad_restante)
@@ -477,6 +488,8 @@ function Comprar(props) {
                     if (contratoAceptado) {
                         comprarPlantas()
                     } else {
+
+                        console.log("setViewContract")
                         setViewContract(true)
                     }
 
@@ -503,14 +516,10 @@ function Pagar(props) {
         moneda, setMoneda,
         plantas, setPlantas,
 
-        contrato, // setContrato,
-        // hacienda_id,
-        // hacienda,
+        contrato,
         setCompra, compra,
 
-        onClose
-        // setCompra, comprasetCompra
-
+        navigation
     } = props
 
     const [metodoPago, setMetodoPago] = useState(false)
@@ -525,30 +534,16 @@ function Pagar(props) {
 
     const [error, setError] = useState()
 
-
     const toast = useToast()
-
-    let restart = () => {
-        set_first_name('')
-        set_last_name('')
-        set_card_number('')
-        set_expiration_date_month('')
-        set_expiration_date_year('')
-        set_card_code('')
-        setPlantas(0)
-        setMoneda((user.cliente?.pais_id?.nombre == "Mexico") ? "MXN" : "USD")
-        setCompra()
-        setMetodoPago(false)
-        setError()
-
-    }
 
     let pagoTarjeta = () => {
         Keyboard.dismiss()
         console.log("PAGAR PAGAR")
         setLoading(true)
 
-        console.log(compra)
+
+        // console.log(compra)
+        // navigator.navigate
         axios.post('/authorizenet/pago', {
             first_name,
             last_name,
@@ -560,11 +555,6 @@ function Pagar(props) {
 
         })
             .then(({ data }) => {
-                console.log("DATA")
-                console.log("DATA")
-                console.log(data)
-                onClose()
-
                 toast.show({
                     duration: 5000,
                     placement: "bottom",
@@ -575,7 +565,7 @@ function Pagar(props) {
                     },
                     top: 10
                 })
-
+                navigation.navigate('Dashboard')
             })
             .catch(error => {
                 console.log("error", error?.response?.data)
@@ -601,10 +591,15 @@ function Pagar(props) {
     }
 
 
-    console.log('metodoPago')
-    console.log(metodoPago)
-    return <>
+    console.log("moneda", moneda)
+    console.log("moneda", moneda)
+    console.log("moneda", moneda)
+    console.log("metodoPago", metodoPago)
+    // !metodoPago && (moneda == "USD")
+    console.log("!metodoPago", !metodoPago)
+    console.log('moneda == "USD"', moneda == "USD")
 
+    const view = <>
         {(moneda == "USD") && <Box pr={3}>
             <FormControl isInvalid mt={5}>
                 <Button.Group isAttached mx={{ base: "auto", md: 0 }} w="100%">
@@ -622,12 +617,12 @@ function Pagar(props) {
                 </Button.Group>
             </FormControl>
         </Box>}
-
         <ScrollView style={{
-            height: '100%',
+            // height: '100%',
             flex: 1,
+            minHeight: 500
         }}>
-            {(!metodoPago && (moneda == "USD")) ? <Box pr={3}>
+            {(!metodoPago && (moneda == "USD")) ? <Box flex={1} pr={3}>
                 <Heading size={'md'} my={5} >Pago con Tarjeta de Débito o Crédito</Heading>
                 <HStack >
                     <Box w={"50%"} pr={1}>
@@ -694,20 +689,38 @@ function Pagar(props) {
             </Box>
             <Button
                 background={(moneda == "MXN" || metodoPago) ? "red.600" : null}
-                isLoading={loading} startIcon={(moneda == "MXN" ||  metodoPago) ? <IconPDF /> : <Icon as={AntDesign} name="shoppingcart" size={"md"} />} 
-                onPress={(moneda == "MXN" ||  metodoPago) ? descargaPdf : pagoTarjeta}>
+                isLoading={loading} startIcon={(moneda == "MXN" || metodoPago) ? <IconPDF /> : <Icon as={AntDesign} name="shoppingcart" size={"md"} />}
+                onPress={(moneda == "MXN" || metodoPago) ? descargaPdf : pagoTarjeta}>
                 {(moneda == "MXN" || metodoPago) ? "Descargar PDF" : "Pagar"}
             </Button>
         </Box>
-
     </>
+
+    // console.log('Platform.OS', Platform.OS)
+
+    if (Platform.OS == "ios")
+        return <KeyboardAvoidingView
+            behavior="padding"
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
+            style={{ flex: 1 }}
+        >
+            {view}
+        </KeyboardAvoidingView>
+
+    return <SafeAreaView style={{ flex: 1 }}>
+        {view}
+    </SafeAreaView>
+
 }
 
 
 
 function Invertir(props) {
-    const { hacienda_id, reventa_id, onClose } = props
+    const { hacienda_id, reventa_id, onClose, route, navigation } = props
 
+    console.log({
+        hacienda_id, reventa_id
+    })
 
     const user = useContext(User)
 
@@ -770,17 +783,19 @@ function Invertir(props) {
 
 
     useEffect(() => {
+        setCompra()
         getHacienda()
 
         if (reventa_id)
             getReventa()
-    }, []);
+    }, [hacienda_id, reventa_id]);
 
     // console.log('compra')
     // console.log(compra)
+    const insets = useSafeAreaInsets();
 
-    return <Box flex={1}
-        // px={3}
+    const view = <Box flex={1}
+        safeArea
         pl={3}
         py={3}
         variant={"layout"} >
@@ -799,12 +814,14 @@ function Invertir(props) {
             w={7}
             position="absolute"
             zIndex={100}
-            right={2}
-            top={2}
+            // right={2}
+            right={(Platform.OS == 'ios') ? (insets.right + 2) : 2}
+            top={(Platform.OS == 'ios') ? (insets.top + 2) : 2}
             bg="red.500"
             startIcon={<Icon as={AntDesign} name="close" />}
             onPress={() => {
-                onClose()
+                // onClose()
+                navigation.goBack()
             }}
         />
         {compra ?
@@ -853,43 +870,6 @@ function Invertir(props) {
             />}
         <Toast
             config={{
-                // /*
-                //   Overwrite 'success' type,
-                //   by modifying the existing `BaseToast` component
-                // */
-                // success: (props) => (
-                //   <BaseToast
-                //     {...props}
-                //     style={{ borderLeftColor: 'pink' }}
-                //     contentContainerStyle={{ paddingHorizontal: 15 }}
-                //     text1Style={{
-                //       fontSize: 15,
-                //       fontWeight: '400'
-                //     }}
-                //   />
-                // ),
-                // /*
-                //   Overwrite 'error' type,
-                //   by modifying the existing `ErrorToast` component
-                // */
-                // error: (props) => (
-                //   <ErrorToast
-                //     {...props}
-                //     text1Style={{
-                //       fontSize: 17
-                //     }}
-                //     text2Style={{
-                //       fontSize: 15
-                //     }}
-                //   />
-                // ),
-                /*
-                  Or create a completely new type - `tomatoToast`,
-                  building the layout from scratch.
-              
-                  I can consume any custom `props` I want.
-                  They will be passed when calling the `show` method (see below)
-                */
                 fullError: ({ text1, text2, props }) => (
                     <Box px={5}>
                         <Box backgroundColor="red.600" p={"1.5"} borderRadius={5}>
@@ -902,27 +882,53 @@ function Invertir(props) {
         />
     </Box>
 
+    console.log('Platform.OS', Platform.OS)
+    if (Platform.OS == "ios")
+        return <KeyboardAvoidingView
+            behavior="padding"
+            // keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
+            style={{ flex: 1 }}
+        >
+            {view}
+        </KeyboardAvoidingView>
+
+    return <SafeAreaView style={{ flex: 1 }}>
+        {view}
+    </SafeAreaView>
 }
 
 const InvertirModal = (props) => {
 
-    const { hacienda_id, isOpen, onClose } = props
+    props.hacienda_id = props.route.params.hacienda_id
+    props.reventa_id = props.route.params.reventa_id
+
+
+    console.log('props')
+    console.log('props')
+    console.log('props')
+    console.log('props', props)
 
     return (
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={isOpen}
+        <Invertir {
+            ...props
+        }
+            hacienda_id={props.route.params.hacienda_id}
+            reventa_id={props.route.params.reventa_id}
+        />
+        // <Modal
+        //     animationType="slide"
+        //     transparent={true}
+        //     visible={isOpen}
 
-            style={{
-                backgroundColor: "#FFF",
-                height: "100%"
-            }}
-            onRequestClose={() => {
-                onClose();
-            }}>
-            {isOpen && <Invertir {...props} />}
-        </Modal>
+        //     style={{
+        //         backgroundColor: "#FFF",
+        //         height: "100%"
+        //     }}
+        //     onRequestClose={() => {
+        //         onClose();
+        //     }}>
+        //     {isOpen && }
+        // </Modal>
     );
 };
 

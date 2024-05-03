@@ -24,13 +24,13 @@ import axios from "../../../Axios"
 import User from "../../../Contexts/User"
 
 import Header from "../../Header"
-import ModalInversion from "../Comprar/ModalInversion"
+// import ModalInversion from "../Comprar/ModalInversion"
 import Decimal from "decimal.js";
 import Reventas from "./Reventas";
 
 const momentPreciseRangePlugin = require('moment-precise-range')(moment);
 
-export default function SignIn({ route }) {
+export default function SignIn({ route, navigation }) {
 
     const user = useContext(User)
 
@@ -115,7 +115,11 @@ export default function SignIn({ route }) {
                                     <Button
                                         isDisabled={hacienda.disponible <= 0 || hacienda.estatus == 3}
                                         onPress={() => {
-                                            setVisibleHacienda(true)
+                                            // setVisibleHacienda(true)
+                                            navigation.navigate("Comprar", { 
+                                                hacienda_id: hacienda?._id
+                                            })
+
                                         }}>INVERTIR AHORA</Button>
                                 </Box>
 
@@ -124,18 +128,9 @@ export default function SignIn({ route }) {
                         <Box mt={5} px={2}>
                             <Reventas hacienda_id={hacienda?._id}/>
                         </Box>
-                    </>
-                        : null}
+                    </> : null}
                 </ScrollView>
-                <ModalInversion
-                    hacienda_id={hacienda?._id}
-                    isOpen={visibleHacienda}
-                    onClose={() => {
-                        setVisibleHacienda(false)
-                    }}
-                />
             </SafeAreaView>
-
         </Box>
     );
 }

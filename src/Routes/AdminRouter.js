@@ -20,6 +20,8 @@ import Reventas from "../Components/Admin/Reventas/Reventas"
 import Haciendas from "../Components/Admin/Haciendas/Haciendas"
 import Hacienda from "../Components/Admin/Haciendas/Hacienda"
 
+import Comprar from "../Components/Admin/Comprar/Comprar"
+
 
 import Cuenta from "../Components/Admin/Configuración/Cuenta"
 import Cuentas from "../Components/Admin/Configuración/Cuentas/ListaCuentas"
@@ -115,6 +117,12 @@ export default function () {
         <BottomStack.Screen name={"Inversiones"} component={Inversiones} />
         
         <BottomStack.Screen name={"Inversion"} component={Inversion} initialParams={{ inversion_id: null }}/>
+        <BottomStack.Screen name={"Comprar"} component={Comprar}
+        options={{ unmountOnBlur: true}}
+        initialParams={{
+            reventa_id: null,
+            hacienda_id: null
+        }}/>
         
         <BottomStack.Screen name={"Reventas"} component={Reventas} />
         

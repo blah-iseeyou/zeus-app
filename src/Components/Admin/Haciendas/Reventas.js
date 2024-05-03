@@ -21,7 +21,7 @@ import moment from "moment"
 
 import axios from "../../../Axios"
 import User from "../../../Contexts/User"
-import ModalInversion from "../Comprar/ModalInversion";
+// import ModalInversion from "../Comprar/ModalInversion";
 
 
 export default function Reventas(props) {
@@ -40,7 +40,7 @@ export default function Reventas(props) {
   const [reventaId, setReventaId] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const [visibleInversion, setVisibleInversion] = useState(false)
+  // const [visibleInversion, setVisibleInversion] = useState(false)
 
 
   useEffect(() => {
@@ -131,8 +131,9 @@ export default function Reventas(props) {
                         top: 10
                       })
                     }
-                    setReventaId(_id)
-                    setVisibleInversion(true)
+                    navigation.navigate("Inversion", { inversion_id })
+                    // setReventaId(_id)
+                    // setVisibleInversion(true)
                   }}
 
                   borderWidth="2" background="white" _text={{ color: "black", fontSize: "xs" }}>
@@ -164,7 +165,7 @@ export default function Reventas(props) {
         </Button.Group>
         <Text textAlign={"center"} mt={3}>Página {reventas.page} de {reventas.pages}</Text>
       </> : null}
-      <ModalInversion
+      {/* <ModalInversion
         isOpen={visibleInversion}
         reventa_id={reventaId}
         hacienda_id={props.hacienda_id}
@@ -174,7 +175,7 @@ export default function Reventas(props) {
           getReventas()
           setVisibleInversion(false)
         }}
-      />
+      /> */}
     </>
   );
 }
