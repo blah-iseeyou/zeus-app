@@ -815,8 +815,10 @@ function Invertir(props) {
             position="absolute"
             zIndex={100}
             // right={2}
-            right={(Platform.OS == 'ios') ? (insets.right + 2) : 2}
-            top={(Platform.OS == 'ios') ? (insets.top + 2) : 2}
+            right={ (insets.right + 2) }
+            top={(insets.top + 2)}
+            // right={(Platform.OS == 'ios') ? (insets.right + 2) : 2}
+            // top={(Platform.OS == 'ios') ? (insets.top + 2) : 2}
             bg="red.500"
             startIcon={<Icon as={AntDesign} name="close" />}
             onPress={() => {
