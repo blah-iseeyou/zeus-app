@@ -131,7 +131,7 @@ export default function SignInForm({ navigation }) {
       .catch((error) => {
 
         console.log("error", error)
-        // navigationRef.navigate("SignIn")
+        navigation.navigate("SignIn")
       })
       .finally(() => setLoading(false))
   }
