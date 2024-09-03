@@ -28,6 +28,7 @@ import Cuentas from "../Components/Admin/Configuración/Cuentas/ListaCuentas"
 import ListaBeneficiarios from "../Components/Admin/Configuración/Beneficiarios/ListaBeneficiarios"
 
 import Menu from "../Components/Admin/Configuración/Menu"
+import Chat from "../Components/Admin/Soporte/Chat";
 
 
 const BottomStack = createBottomTabNavigator()
@@ -133,6 +134,7 @@ export default function () {
         <BottomStack.Screen name={"Settings"} component={Menu} />
         <BottomStack.Screen name={"Cuentas"} component={Cuentas} />
         <BottomStack.Screen name={"Cuenta"} component={Cuenta} />
+        <BottomStack.Screen name={"Soporte"} component={Chat} />
 
 
         <BottomStack.Screen name={"Beneficiarios"} component={ListaBeneficiarios} />

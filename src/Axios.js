@@ -1,16 +1,15 @@
+import React, { useEffect, useState } from 'react';
 
-import React, { useEffect, useState } from "react";
-
-import axios from 'axios'
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { navigationRef } from './Contexts/RootNavigation';
 
-let setCookie = require('set-cookie-parser')
+let setCookie = require('set-cookie-parser');
 
-// axios.defaults.baseURL = "http://10.0.2.2:4025"
+axios.defaults.baseURL = 'http://10.0.2.2:4025';
 
-axios.defaults.baseURL = "https://zeusagave.com:4002"
+// axios.defaults.baseURL = "https://zeusagave.com:4002"
 // axios.defaults.baseURL = "https://zeus.blah.software:4008"
 // axios.defaults.baseURL = "http://192.168.100.65:4025"
 axios.defaults.withCredentials = true
@@ -33,7 +32,7 @@ axios.interceptors.response.use(async function (response) {
     }
     return response;
 }, function (error) {
-    if (error?.response?.status == 401) 
+    if (error?.response?.status == 401)
         navigationRef.navigate("SignIn")
     return Promise.reject(error)
 })
