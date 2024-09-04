@@ -1,7 +1,7 @@
 
 import React from "react";
 
-import { Dimensions, Platform, SafeAreaView } from "react-native";
+import { Dimensions, Platform, SafeAreaView, Keyboard } from "react-native";
 
 import { Box, Icon, IconButton, HStack, VStack, Pressable, Text, } from "native-base";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -58,14 +58,37 @@ const LinkButtom = ({
 export default function () {
 
     const insets = useSafeAreaInsets();
+    const [keyboardShown, setKeyboardShown] = React.useState(false)
+
+    React.useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            "keyboardDidShow",
+            () => {
+                setKeyboardShown(true)
+            }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            "keyboardDidHide",
+            () => {
+                setKeyboardShown(false)
+            }
+        );
+
+        return () => {
+            keyboardDidHideListener.remove();
+            keyboardDidShowListener.remove();
+        };
+    }, []);
+
+
 
     const width = Dimensions.get("window").width
 
     return <BottomStack.Navigator
-        screenOptions={{ headerShown: false }}
+        screenOptions={{ headerShown: false}}
         initialRouteName="Dashboard"
         tabBar={({ navigation, state }) => {
-            return <Box w="100%" m={0} px={0} py={2} h={insets.bottom + 60} shadow={1} background="white">
+            return <Box w="100%" m={keyboardShown ? -100 : 0} px={0} py={2} h={insets.bottom + 60} shadow={1} background="white">
                 <HStack flex="1" w="100%">
                     <LinkButtom 
                         active={state.index === 0}

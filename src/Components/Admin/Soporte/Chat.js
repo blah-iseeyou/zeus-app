@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, View, Keyboard } from "react-native";
 import {
   HStack,
   VStack,
@@ -12,8 +12,10 @@ import {
   Pressable,
   Input,
   Button,
+  KeyboardAvoidingView,
 } from "native-base";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import moment from "moment";
 import axios from "../../../Axios";
 import Header from "../../Header";
@@ -30,20 +32,40 @@ export default function Chat({ route, navigation }) {
     limit: 20,
     data: []
   },);
+  const [message, setMessage] = useState("");
 
   let flatListRef = React.createRef();
 
-  useEffect(() => {
+  const [keyboardShown, setKeyboardShown] = React.useState(false)
 
+  React.useEffect(() => {
+      const keyboardDidShowListener = Keyboard.addListener(
+          "keyboardDidShow",
+          () => {
+              setKeyboardShown(true)
+          }
+      );
+      const keyboardDidHideListener = Keyboard.addListener(
+          "keyboardDidHide",
+          () => {
+              setKeyboardShown(false)
+          }
+      );
+
+      return () => {
+          keyboardDidHideListener.remove();
+          keyboardDidShowListener.remove();
+      };
   }, []);
 
   useEffect(() => {
     console.log("socket", socket)
-
+    console.log('user', user)
     IO_connect(user?.cliente?._id);
     socket.on('connect', IO_connect)
     socket.on('sucessful', IO_loadMessages)
-
+    socket.on('error', IO_error)
+    socket.on('new_message', IO_newMessage)
 
 
   }, [socket]);
@@ -66,10 +88,6 @@ export default function Chat({ route, navigation }) {
 
   const IO_loadMessages = (res => {
 
-    console.log("res", res)
-
-
-
     let old = chat
     let data = (res.page == 1) ? res.data : [...res.data, ...old.data]
 
@@ -83,69 +101,135 @@ export default function Chat({ route, navigation }) {
     setChat(new_conversacion)
   })
 
+  const handleChange = (e) => {
+    setMessage(e);
+  };
+
+  const submit = () => {
+    if (!user?.cliente?._id) {
+      console.log("NO HAY CLIENTE_ID")
+    }
+
+    console.log("SUBMIT", message)
+
+
+
+    if (!message) {
+      console.log("NO HAY CONTENIDO")
+      return
+    }
+
+    if (message && message.length > 0) {
+      socket.emit('/admin/cliente/message/add', {
+        id: user?.cliente?._id,
+        entrada: message,
+        usuario: user._id,
+        cliente_id: user?.cliente?._id,
+      })
+
+      setMessage("")
+    }
+  }
+  const IO_newMessage = (data) => {
+    console.log("new message", data)
+    let mensajes = chat.data
+    mensajes.push(data)
+    setChat({
+      ...chat,
+      data: mensajes
+    }
+    )
+  }
+
   return (
 
     <Box variant={"layout"} flex="1">
-      <SafeAreaView flex={1}>
-        <Header />
-        <Box style={{height:"50%"}}>
-          <Heading fontSize="xl" p="4" pb="3">
-            Chat de Soporte
-          </Heading>
-          <FlatList
-            ref={flatListRef}
-            data={chat.data}
-            onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })}
-            _contentContainerStyle={{
-              marginX: 5,
-            }}
-            renderItem={({ item }) => (
+      <KeyboardAvoidingView flex={1} behavior='position'>
+        
+          <Header />
+          <Box style={{ height: `${keyboardShown ? "78%" : "83%"}` }}>
+            <Heading fontSize="xl" p="4" pb="3">
+              Chat de Soporte
+            </Heading>
+            <View style={{ height: "100%" }}>
+              <FlatList
+                ref={flatListRef}
+                data={chat.data}
+                onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })}
+                _contentContainerStyle={{
+                  marginX: 5,
+                }}
+                renderItem={({ item }) => (
 
-              <Box
-                borderBottomWidth="1"
-                _dark={{ borderColor: "coolGray.500" }}
-                borderColor="coolGray.300"
-                pl={["0", "4"]}
-                pr={["0", "5"]}
-                mt="3"
-              >
-
-
-                <VStack>
-                  <Text
-                    _dark={{ color: "warmGray.50" }}
-                    color="coolGray.800"
-                    bold
+                  <Box
+                    borderBottomWidth="1"
+                    _dark={{ borderColor: "coolGray.500" }}
+                    borderColor="coolGray.300"
+                    pl={["0", "4"]}
+                    pr={["0", "5"]}
+                    mt="3"
                   >
-                    {item.usuario ? `${item.usuario?.nombre ?? item.usuario?.nombres} escribió`: null}
-                  </Text>
-                  <Text
-                    color="coolGray.600"
-                    _dark={{ color: "warmGray.200" }}
-                  >
-                    {item.entrada}
-                  </Text>
-                  <Text
-                  color="coolGray.400"
-                  _dark={{ color: "warmGray.200" }}
-                    textAlign={"right"}
-                  >
-                    {moment(item.created_at).format("LLL")}
-                  </Text>
-                </VStack>
-               
 
-              </Box>
 
-            )}
-            keyExtractor={(item) => item.id}
-          />
-          
-        </Box>
-        <View>
-          <Text>asdasd</Text>
-        </View>
-      </SafeAreaView>
+                    <VStack>
+                      {item.usuario ? <HStack>
+                        <Text
+                          _dark={{ color: "warmGray.50" }}
+                          color="coolGray.800"
+                          bold
+                        >
+                          {item.usuario ? `${item.usuario?.nombre ?? item.usuario?.nombres} escribió` : null}
+                        </Text>
+                        <Spacer />
+                        <Text
+                          color="coolGray.400"
+                          _dark={{ color: "warmGray.200" }}
+                          textAlign={"right"}
+                        >
+                          {moment(item.createdAt).format("MM-DD-YYYY HH:mm")}
+                        </Text>
+                      </HStack> : null}
+
+
+                      <Text
+                        color={item.usuario ? "coolGray.600" : "coolGray.400"}
+                        _dark={{ color: "warmGray.200" }}
+                      >
+                        {item.entrada}
+                      </Text>
+
+                    </VStack>
+
+
+                  </Box>
+
+                )}
+                keyExtractor={(item) => item.id}
+              />
+            </View>
+            <View style={{ marginTop: 15, marginLeft: 10, marginRight: 10 }}>
+              <HStack>
+                <Input
+                  placeholder="Escribir..."
+                  w="87%"
+                  py="3"
+                  px="4"
+                  fontSize="md"
+                  onChangeText={handleChange}
+                  value={message}
+                >
+
+                </Input>
+                <Spacer />
+                <Button w={"13%"} onPress={submit}>
+                  <Ionicons name="send" size={24} />
+                </Button>
+              </HStack>
+            </View>
+
+          </Box>
+        
+      </KeyboardAvoidingView>
     </Box>
   );
 }
