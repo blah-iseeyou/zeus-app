@@ -58,17 +58,7 @@ export default function Chat({ route, navigation }) {
       };
   }, []);
 
-  useEffect(() => {
-    console.log("socket", socket)
-    console.log('user', user)
-    IO_connect(user?.cliente?._id);
-    socket.on('connect', IO_connect)
-    socket.on('sucessful', IO_loadMessages)
-    socket.on('error', IO_error)
-    socket.on('new_message', IO_newMessage)
 
-
-  }, [socket]);
 
   useEffect(() => {
     return () => {
@@ -131,23 +121,39 @@ export default function Chat({ route, navigation }) {
     }
   }
   const IO_newMessage = (data) => {
-    console.log("new message", data)
-    let mensajes = chat.data
-    mensajes.push(data)
-    setChat({
-      ...chat,
-      data: mensajes
+    console.log("new message")
+    setChat((prev) => {
+
+      let newMessages = [...prev.data, data]
+
+      return {
+        ...prev,
+        data: newMessages
+      }
+
     }
     )
   }
+
+  useEffect(() => {
+    console.log("socket", socket)
+    console.log('user', user)
+    IO_connect(user?.cliente?._id);
+    socket.on('connect', IO_connect)
+    socket.on('sucessful', IO_loadMessages)
+    socket.on('error', IO_error)
+    socket.on('new_message', IO_newMessage)
+
+
+  }, [socket]);
 
   return (
 
     <Box variant={"layout"} flex="1">
       <KeyboardAvoidingView flex={1} behavior='position'>
-        
+
           <Header />
-          <Box style={{ height: `${keyboardShown ? "78%" : "83%"}` }}>
+          <Box style={{ height: `${keyboardShown ? "80%" : "83%"}` }}>
             <Heading fontSize="xl" p="4" pb="3">
               Chat de Soporte
             </Heading>
@@ -169,7 +175,6 @@ export default function Chat({ route, navigation }) {
                     pr={["0", "5"]}
                     mt="3"
                   >
-
 
                     <VStack>
                       {item.usuario ? <HStack>
@@ -204,7 +209,7 @@ export default function Chat({ route, navigation }) {
                   </Box>
 
                 )}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item._id}
               />
             </View>
             <View style={{ marginTop: 15, marginLeft: 10, marginRight: 10 }}>
@@ -228,7 +233,7 @@ export default function Chat({ route, navigation }) {
             </View>
 
           </Box>
-        
+
       </KeyboardAvoidingView>
     </Box>
   );

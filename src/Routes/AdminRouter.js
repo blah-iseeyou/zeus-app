@@ -90,13 +90,13 @@ export default function () {
         tabBar={({ navigation, state }) => {
             return <Box w="100%" m={keyboardShown ? -100 : 0} px={0} py={2} h={insets.bottom + 60} shadow={1} background="white">
                 <HStack flex="1" w="100%">
-                    <LinkButtom 
+                    <LinkButtom
                         active={state.index === 0}
                         label={"Inicio"}
                         onPress={() => navigation.navigate("Dashboard")}
                         icon={(color) => <Icon as={FontAwesome} name="home" size="xl" color={color} />}
                     />
-                    <LinkButtom 
+                    <LinkButtom
                         active={state.index === 1}
                         label={"Inversiones"}
                         onPress={() => navigation.navigate("Inversiones")}
@@ -107,7 +107,7 @@ export default function () {
                             </Icon>
                         }
                     />
-                    <LinkButtom 
+                    <LinkButtom
                         active={state.index === 2}
                         label={"Reventas"}
                         onPress={() => navigation.navigate("Reventas")}
@@ -118,7 +118,7 @@ export default function () {
                             </Icon>
                         }
                     />
-                    <LinkButtom 
+                    <LinkButtom
                         active={state.index === 3 || state.index === 4}
                         label={"Haciendas"}
                         onPress={() => navigation.navigate("Haciendas")}
@@ -128,7 +128,7 @@ export default function () {
                             </Icon>
                         }
                     />
-                    <LinkButtom 
+                    <LinkButtom
                         active={state.index === 5}
                         label={"Ajustes"}
                         onPress={() => navigation.navigate("Settings")}
@@ -139,7 +139,7 @@ export default function () {
         }}>
         <BottomStack.Screen name={"Dashboard"} component={Dashboard} />
         <BottomStack.Screen name={"Inversiones"} component={Inversiones} />
-        
+
         <BottomStack.Screen name={"Inversion"} component={Inversion} initialParams={{ inversion_id: null }}/>
         <BottomStack.Screen name={"Comprar"} component={Comprar}
         options={{ unmountOnBlur: true}}
@@ -147,11 +147,11 @@ export default function () {
             reventa_id: null,
             hacienda_id: null
         }}/>
-        
+
         <BottomStack.Screen name={"Reventas"} component={Reventas} />
-        
+
         <BottomStack.Screen name={"Reventa"} component={Reventas} />
-        
+
         <BottomStack.Screen name={"Haciendas"} component={Haciendas} />
         <BottomStack.Screen name={"Hacienda"} component={Hacienda} initialParams={{ hacienda_id: null }} />
         <BottomStack.Screen name={"Settings"} component={Menu} />
