@@ -1,7 +1,7 @@
 
 import React from "react";
 
-import { Dimensions, Platform, SafeAreaView, Keyboard } from "react-native";
+import { Dimensions, Platform, SafeAreaView, Keyboard, PlatformOSType } from "react-native";
 
 import { Box, Icon, IconButton, HStack, VStack, Pressable, Text, } from "native-base";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -88,7 +88,7 @@ export default function () {
         screenOptions={{ headerShown: false}}
         initialRouteName="Dashboard"
         tabBar={({ navigation, state }) => {
-            return <Box w="100%" m={keyboardShown ? -100 : 0} px={0} py={2} h={insets.bottom + 60} shadow={1} background="white">
+            return <Box w="100%" m={(keyboardShown && Platform.OS === "android") ? -100 : 0} px={0} py={2} h={insets.bottom + 60} shadow={1} background="white">
                 <HStack flex="1" w="100%">
                     <LinkButtom
                         active={state.index === 0}

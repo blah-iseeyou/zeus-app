@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Dimensions, View, Keyboard } from "react-native";
+import { Dimensions, View, Keyboard, PlatformOSType } from "react-native";
 import {
   HStack,
   VStack,
@@ -153,7 +153,7 @@ export default function Chat({ route, navigation }) {
       <KeyboardAvoidingView flex={1} behavior='position'>
 
           <Header />
-          <Box style={{ height: `${keyboardShown ? "80%" : "83%"}` }}>
+          <Box style={{ height: `${(keyboardShown && Platform.OS === "android") ? "80%" : "83%"}` }}>
             <Heading fontSize="xl" p="4" pb="3">
               Chat de Soporte
             </Heading>
