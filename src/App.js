@@ -26,6 +26,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { navigationRef } from "./Contexts/RootNavigation";
 import io from "socket.io-client";
 
+import { Alert } from 'react-native';
+import messaging from '@react-native-firebase/messaging';
+
+
 const NativeStack = createStackNavigator();
 
 export default function App() {
@@ -44,7 +48,7 @@ export default function App() {
 			const token = await AsyncStorage.getItem('@token');
 			console.log("TOKEN", token);
 	
-			socket = io("http://10.0.2.2:4025", {
+			socket = io("http://192.168.1.177:4025", {
 				extraHeaders: {
 					Authorization: token
 				},
@@ -68,6 +72,12 @@ export default function App() {
 	useEffect(async () => {
 		let socketTemp = await createSocket(socket);
 		setSocket(socketTemp);
+		const unsubscribe = messaging().onMessage(async remoteMessage => {
+			console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+			//Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+		  });
+
+		return unsubscribe;
 	},[])
 
 	return (

@@ -2,12 +2,12 @@
 import React from "react";
 
 import { Dimensions, Platform, SafeAreaView, Keyboard, PlatformOSType } from "react-native";
-
 import { Box, Icon, IconButton, HStack, VStack, Pressable, Text, } from "native-base";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Path } from "react-native-svg";
+import { PermissionsAndroid } from 'react-native';
+
 
 import Octicons from "react-native-vector-icons/Octicons";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -30,12 +30,16 @@ import ListaBeneficiarios from "../Components/Admin/Configuración/Beneficiarios
 import Menu from "../Components/Admin/Configuración/Menu"
 import Chat from "../Components/Admin/Soporte/Chat";
 
+import getToken from "../FCMToken";
+import messaging from '@react-native-firebase/messaging';
+import User from "../Contexts/User";
+
 
 const BottomStack = createBottomTabNavigator()
 
 const LinkButtom = ({
     onPress,
-    icon = () => {},
+    icon = () => { },
     label,
     active = false
 }) => {
@@ -59,6 +63,9 @@ export default function () {
 
     const insets = useSafeAreaInsets();
     const [keyboardShown, setKeyboardShown] = React.useState(false)
+    const user = React.useContext(User);
+
+
 
     React.useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
@@ -74,9 +81,20 @@ export default function () {
             }
         );
 
+        PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+
+
+        getToken();
+
+        messaging()
+            .subscribeToTopic(user?.cliente?._id)
+            .then((e) => console.log('Subscribed to topic!', user?.cliente?._id));
+
+
         return () => {
             keyboardDidHideListener.remove();
             keyboardDidShowListener.remove();
+
         };
     }, []);
 
@@ -85,7 +103,7 @@ export default function () {
     const width = Dimensions.get("window").width
 
     return <BottomStack.Navigator
-        screenOptions={{ headerShown: false}}
+        screenOptions={{ headerShown: false }}
         initialRouteName="Dashboard"
         tabBar={({ navigation, state }) => {
             return <Box w="100%" m={(keyboardShown && Platform.OS === "android") ? -100 : 0} px={0} py={2} h={insets.bottom + 60} shadow={1} background="white">
@@ -140,13 +158,13 @@ export default function () {
         <BottomStack.Screen name={"Dashboard"} component={Dashboard} />
         <BottomStack.Screen name={"Inversiones"} component={Inversiones} />
 
-        <BottomStack.Screen name={"Inversion"} component={Inversion} initialParams={{ inversion_id: null }}/>
+        <BottomStack.Screen name={"Inversion"} component={Inversion} initialParams={{ inversion_id: null }} />
         <BottomStack.Screen name={"Comprar"} component={Comprar}
-        options={{ unmountOnBlur: true}}
-        initialParams={{
-            reventa_id: null,
-            hacienda_id: null
-        }}/>
+            options={{ unmountOnBlur: true }}
+            initialParams={{
+                reventa_id: null,
+                hacienda_id: null
+            }} />
 
         <BottomStack.Screen name={"Reventas"} component={Reventas} />
 
@@ -162,7 +180,7 @@ export default function () {
 
         <BottomStack.Screen name={"Beneficiarios"} component={ListaBeneficiarios} />
     </BottomStack.Navigator>
-            {/* import Cuenta from "../Components/Admin/Configuración/Cuenta"
+    {/* import Cuenta from "../Components/Admin/Configuración/Cuenta"
 import Beneficiarios from "../Components/Admin/Configuración/Beneficiarios" */}
-        {/* <BottomStack.Screen name={"Inversiones"} component={Inversiones} /> */}
+    {/* <BottomStack.Screen name={"Inversiones"} component={Inversiones} /> */ }
 }

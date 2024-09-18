@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "65276691768",
+    "project_id": "zeus-dev-notif",
+    "storage_bucket": "zeus-dev-notif.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65276691768:android:dbb9e2f7be46b153db2dcd",
+        "android_client_info": {
+          "package_name": "com.isy.zeus.customer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX4dlvOUxvia7SzxLNec_J70me31P_Pfc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65276691768:android:fcd926798773ba81db2dcd",
+        "android_client_info": {
+          "package_name": "com.zeus.agave"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX4dlvOUxvia7SzxLNec_J70me31P_Pfc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
