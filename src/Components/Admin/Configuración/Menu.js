@@ -79,7 +79,7 @@ export default function SignIn({ route, navigation }) {
                                     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
                                     nombre: "Soporte",
                                     description: "Iniciar un chat con el equipo de soporte",
-                                    icon: "support",
+                                    icon: "questioncircle",
                                     event: () => navigation.navigate("Soporte")
                                 },
                                 {

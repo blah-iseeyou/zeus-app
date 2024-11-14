@@ -41,25 +41,25 @@ export default function App() {
 			oldSocket.disconnect();
 			oldSocket.close();
 		}
-	
+
 		let socket = null;
-		
+
 		try {
 			const token = await AsyncStorage.getItem('@token');
 			console.log("TOKEN", token);
-	
+
 			socket = io("https://zeusagave.com:4002", {
 				extraHeaders: {
 					Authorization: token
 				},
 			});
-	
+
 			console.log("Socket created");
-	
+
 		} catch (error) {
 			console.error("Error creating socket:", error);
 		}
-	
+
 		return socket;
 	};
 
@@ -70,15 +70,19 @@ export default function App() {
 	}
 
 	useEffect(async () => {
+
 		let socketTemp = await createSocket(socket);
 		setSocket(socketTemp);
+
+
+		console.log('before unsubscribe')
 		const unsubscribe = messaging().onMessage(async remoteMessage => {
 			console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
 			//Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-		  });
-
-		return unsubscribe;
-	},[])
+		});
+		console.log('after unsubscribe')
+		return () => { unsubscribe() };
+	}, [])
 
 	return (
 		<User.Provider value={user}>

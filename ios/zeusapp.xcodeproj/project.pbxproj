@@ -53,7 +53,7 @@
 		808EE67CDA84482695F2BB6A /* Poppins-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 43AE071B29504F7BAA5AC15F /* Poppins-SemiBoldItalic.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		943567F9491543929EE6D2EC /* card4_return.png in Resources */ = {isa = PBXBuildFile; fileRef = AABC923BE9024D1688159ADD /* card4_return.png */; };
-		9B071DD12C93A052007A97CD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9B071DD02C93A052007A97CD /* GoogleService-Info.plist */; };
+		9BF228122CE62A870007C199 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9BF228112CE62A870007C199 /* GoogleService-Info.plist */; };
 		9E28CF3171964691B4ED2DE4 /* Poppins-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0423B372404B44CD8DF4A720 /* Poppins-ExtraBold.ttf */; };
 		9F8C2362083146D1AE599FCF /* Poppins-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6A3A81E214C847E08E3A335B /* Poppins-MediumItalic.ttf */; };
 		A5F088606E61424381ED358D /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7D2E615314DF4715AB0CAEE1 /* Poppins-Medium.ttf */; };
@@ -134,8 +134,8 @@
 		890CC6B1CB3A44BFAADAD3ED /* agave_cut.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = agave_cut.svg; path = ../assets/img/agave_cut.svg; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-zeusapp-zeusappTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-zeusapp-zeusappTests.release.xcconfig"; path = "Target Support Files/Pods-zeusapp-zeusappTests/Pods-zeusapp-zeusappTests.release.xcconfig"; sourceTree = "<group>"; };
 		8C066E5C08F2440B9887F4C1 /* Poppins-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraBoldItalic.ttf"; path = "../assets/fonts/Poppins-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
-		9B071DD02C93A052007A97CD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9B1E82472C9A333600E59160 /* zeusapp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = zeusapp.entitlements; path = zeusapp/zeusapp.entitlements; sourceTree = "<group>"; };
+		9BF228112CE62A870007C199 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A731D4DDF436EA18BE12840D /* Pods_zeusapp_zeusappTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_zeusapp_zeusappTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AABC923BE9024D1688159ADD /* card4_return.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = card4_return.png; path = ../assets/img/card4_return.png; sourceTree = "<group>"; };
 		B32DE04F8EAA49F0BFA0904F /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
@@ -228,7 +228,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				9B071DD02C93A052007A97CD /* GoogleService-Info.plist */,
+				9BF228112CE62A870007C199 /* GoogleService-Info.plist */,
 				46693BD92BE459E300BB8DCE /* AntDesign.ttf */,
 				46693BDE2BE459E500BB8DCE /* Entypo.ttf */,
 				46693BD32BE459E000BB8DCE /* EvilIcons.ttf */,
@@ -455,7 +455,7 @@
 				808EE67CDA84482695F2BB6A /* Poppins-SemiBoldItalic.ttf in Resources */,
 				12BEA4BC1D8F47B9ABC1D106 /* Poppins-Thin.ttf in Resources */,
 				74085E77BED84462B17CCFDF /* Poppins-ThinItalic.ttf in Resources */,
-				9B071DD12C93A052007A97CD /* GoogleService-Info.plist in Resources */,
+				9BF228122CE62A870007C199 /* GoogleService-Info.plist in Resources */,
 				778FABDEA1D54C4B994667B6 /* OFL.txt in Resources */,
 				2D2C6FA41BBC4BD3A4E599C5 /* logo_header.png in Resources */,
 				3C92E13CDFA74C0DBBB53ED0 /* agave_cut.svg in Resources */,
@@ -707,7 +707,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = zeusapp/zeusapp.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.28;
 				DEVELOPMENT_TEAM = RHHVGBS63B;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = zeusapp/Info.plist;
@@ -717,7 +717,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 27;
+				MARKETING_VERSION = 28;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -744,7 +744,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = zeusapp/zeusapp.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.28;
 				DEVELOPMENT_TEAM = RHHVGBS63B;
 				INFOPLIST_FILE = zeusapp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Zeus Agave";
@@ -753,7 +753,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 27;
+				MARKETING_VERSION = 28;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

@@ -86,7 +86,7 @@ export default function () {
 
         getToken();
 
-        messaging()
+        if (user?.cliente?._id) messaging()
             .subscribeToTopic(user?.cliente?._id)
             .then((e) => console.log('Subscribed to topic!', user?.cliente?._id));
 
