@@ -48,7 +48,7 @@ export default function App() {
 			const token = await AsyncStorage.getItem('@token');
 			console.log("TOKEN", token);
 	
-			socket = io("http://192.168.1.177:4025", {
+			socket = io("https://zeusagave.com:4002", {
 				extraHeaders: {
 					Authorization: token
 				},

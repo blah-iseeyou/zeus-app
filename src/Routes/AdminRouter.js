@@ -126,7 +126,7 @@ export default function () {
                         }
                     />
                     <LinkButtom
-                        active={state.index === 2}
+                        active={state.index === 3}
                         label={"Reventas"}
                         onPress={() => navigation.navigate("Reventas")}
                         icon={

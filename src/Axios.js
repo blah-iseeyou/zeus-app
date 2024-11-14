@@ -7,9 +7,9 @@ import { navigationRef } from './Contexts/RootNavigation';
 
 let setCookie = require('set-cookie-parser');
 
-axios.defaults.baseURL = 'http://192.168.1.177:4025';
+//axios.defaults.baseURL = 'http://10.0.2.2:4025';
 
-// axios.defaults.baseURL = "https://zeusagave.com:4002"
+axios.defaults.baseURL = "https://zeusagave.com:4002"
 // axios.defaults.baseURL = "https://zeus.blah.software:4008"
 // axios.defaults.baseURL = "http://192.168.100.65:4025"
 axios.defaults.withCredentials = true
