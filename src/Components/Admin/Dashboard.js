@@ -12,7 +12,7 @@ import {
   Image,
   Pressable,
   Spinner
-} from "native-base";
+} from 'native-base';
 import Carousel from 'react-native-reanimated-carousel/src/index'
 import { SafeAreaView } from "react-native-safe-area-context";
 

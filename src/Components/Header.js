@@ -1,5 +1,5 @@
 import React from "react";
-import { VStack, HStack, Button, IconButton, Icon, Text, NativeBaseProvider, Center, Box, StatusBar } from "native-base";
+import { VStack, HStack, Button, IconButton, Icon, Text, NativeBaseProvider, Center, Box, StatusBar } from 'native-base';
 
 
 import Octicons from "react-native-vector-icons/Octicons";

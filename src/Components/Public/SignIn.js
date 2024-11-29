@@ -11,13 +11,15 @@ import {
   Hidden,
   StatusBar,
   Stack,
-  Input,
+  // Input,
   Heading,
   Spinner,
   useToast,
   Box,
   ScrollView
-} from "native-base";
+} from 'native-base';
+
+import { Input } from '../Widgets/Input'
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";

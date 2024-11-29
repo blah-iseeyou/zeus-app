@@ -43,6 +43,7 @@
 		46693BF62BE459EA00BB8DCE /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 46693BE32BE459E800BB8DCE /* MaterialIcons.ttf */; };
 		46693BF72BE459EA00BB8DCE /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 46693BE42BE459E900BB8DCE /* Fontisto.ttf */; };
 		46693BF82BE459EA00BB8DCE /* FontAwesome6_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 46693BE52BE459E900BB8DCE /* FontAwesome6_Solid.ttf */; };
+		552FEE9C96F5F989817D547F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F904B5C052161EC946BFA2CD /* PrivacyInfo.xcprivacy */; };
 		55C3E03931C04CE1A559E1E0 /* Poppins-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78AC5B17A5BC4F38A6A0193A /* Poppins-ExtraLight.ttf */; };
 		640C06C9BAD047D6B8484CF5 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B32DE04F8EAA49F0BFA0904F /* Poppins-SemiBold.ttf */; };
 		6CD9A7C8E6314D29B6B0BCCF /* Poppins-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 39EF2BD7ED62475BA85880FA /* Poppins-BlackItalic.ttf */; };
@@ -153,6 +154,7 @@
 		F292D721A7674B598DF8D68F /* logo_zeus_oadla.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = logo_zeus_oadla.png; path = ../assets/img/logo_zeus_oadla.png; sourceTree = "<group>"; };
 		F404255988184A91B7632D5B /* Poppins-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Thin.ttf"; path = "../assets/fonts/Poppins-Thin.ttf"; sourceTree = "<group>"; };
 		F6ED49AB2A3E481DBD09DABC /* logo_zeus_oadla.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = logo_zeus_oadla.svg; path = ../assets/img/logo_zeus_oadla.svg; sourceTree = "<group>"; };
+		F904B5C052161EC946BFA2CD /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = zeusapp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -204,6 +206,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				F904B5C052161EC946BFA2CD /* PrivacyInfo.xcprivacy */,
 			);
 			name = zeusapp;
 			sourceTree = "<group>";
@@ -470,6 +473,7 @@
 				A6A51C4C9A5447FAA7CCD32B /* logo_zeus_oadla.svg in Resources */,
 				15116BA378F34DFE9E9CB8A3 /* union.svg in Resources */,
 				0A2CCA3FCD844553AC4376E8 /* zeus_agave.png in Resources */,
+				552FEE9C96F5F989817D547F /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -713,6 +717,7 @@
 				INFOPLIST_FILE = zeusapp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Zeus Agave";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -749,6 +754,7 @@
 				INFOPLIST_FILE = zeusapp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Zeus Agave";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -851,9 +857,13 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				USE_HERMES = true;
 			};
 			name = Debug;
@@ -930,7 +940,10 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

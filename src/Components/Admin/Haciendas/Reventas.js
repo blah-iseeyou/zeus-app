@@ -14,13 +14,14 @@ import {
   Pressable,
   Spinner,
   useToast
-} from "native-base";
+} from 'native-base';
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import moment from "moment"
 
 import axios from "../../../Axios"
 import User from "../../../Contexts/User"
+import { useNavigation } from "@react-navigation/native";
 // import ModalInversion from "../Comprar/ModalInversion";
 
 
@@ -39,6 +40,7 @@ export default function Reventas(props) {
   const toast = useToast()
   const [reventaId, setReventaId] = useState(null)
   const [loading, setLoading] = useState(false)
+  const navigation = useNavigation()
 
   // const [visibleInversion, setVisibleInversion] = useState(false)
 
@@ -101,7 +103,7 @@ export default function Reventas(props) {
       <HStack mx={5} mt={4} justifyContent={"center"}>
         <Heading fontSize="lg" marginBottom={4}>Disponibles de otros clientes</Heading>
       </HStack>
-      {reventas?.data?.map(({ _id, cantidad, folio, precio_reventa, moneda, estatus, cliente_name, hacienda_id, createdAt, usuario_id, ...data }) => (
+      {reventas?.data?.map(({ _id, cantidad, folio, precio_reventa, moneda, estatus, cliente_name, hacienda_id, createdAt, inversion_original_id,usuario_id, ...data }) => (
         <Box flex={1} style={{ backgroundColor: "white", borderRadius: 12, marginBottom: 12, paddingLeft: 8, paddingRight: 8 }}>
           <VStack my={4} flex={1}>
             <HStack justifyContent={"center"}>
@@ -131,7 +133,7 @@ export default function Reventas(props) {
                         top: 10
                       })
                     }
-                    navigation.navigate("Inversion", { inversion_id })
+                    navigation.navigate("Inversion", { inversion_original_id })
                     // setReventaId(_id)
                     // setVisibleInversion(true)
                   }}

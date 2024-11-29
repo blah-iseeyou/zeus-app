@@ -10,10 +10,11 @@ import {
   FlatList,
   Spacer,
   Pressable,
-  Input,
+  
   Button,
   KeyboardAvoidingView,
-} from "native-base";
+} from 'native-base';
+import { Input } from "../../Widgets/Input";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import moment from "moment";

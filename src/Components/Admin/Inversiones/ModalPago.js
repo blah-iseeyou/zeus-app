@@ -10,13 +10,15 @@ import {
     Image,
     Text,
     VStack,
-    Input,
+    
     FormControl,
     Pressable,
     Modal,
     useToast,
     
 } from 'native-base';
+
+import { Input } from '../../Widgets/Input'
 import moment from 'moment/moment';
 import Color from 'color';
 import { Path } from 'react-native-svg';

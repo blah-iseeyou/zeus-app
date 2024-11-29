@@ -14,7 +14,7 @@ import {
   Pressable,
   Spinner,
   AlertDialog
-} from "native-base";
+} from 'native-base';
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import AntDesign from "react-native-vector-icons/AntDesign";

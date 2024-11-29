@@ -12,10 +12,12 @@ import {
     Pressable,
     ScrollView,
     FormControl,
-    Input,
+    
     Button,
     Select
-} from "native-base";
+} from 'native-base';
+import { Input } from '../../Widgets/Input'
+
 import AntDesign from "react-native-vector-icons/AntDesign";
 import moment from "moment"
 

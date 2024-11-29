@@ -4,7 +4,9 @@ import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 
 
 
-import { Box, FormControl, Heading, HStack, Input, Text, VStack, Button, useToast } from 'native-base';
+import { Box, FormControl, Heading, HStack, Text, VStack, Button, useToast } from 'native-base';
+import { Input } from '../../../Widgets/Input'
+
 import moment from 'moment/moment';
 
 import axios from '../../../../Axios';

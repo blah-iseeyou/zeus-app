@@ -19,7 +19,7 @@ import {
     Pressable,
     Button,
     Modal
-} from "native-base";
+} from 'native-base';
 import AntDesign from "react-native-vector-icons/AntDesign";
 import moment from "moment"
 

@@ -1,4 +1,4 @@
-import { extendTheme, theme as nbTheme } from "native-base";
+import { extendTheme, theme as nbTheme } from 'native-base';
 import Color from 'color'
 
 //Marine

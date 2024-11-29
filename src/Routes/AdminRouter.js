@@ -2,7 +2,7 @@
 import React from "react";
 
 import { Dimensions, Platform, SafeAreaView, Keyboard, PlatformOSType } from "react-native";
-import { Box, Icon, IconButton, HStack, VStack, Pressable, Text, } from "native-base";
+import { Box, Icon, IconButton, HStack, VStack, Pressable, Text, } from 'native-base';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Path } from "react-native-svg";

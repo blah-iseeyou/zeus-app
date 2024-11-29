@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input } from 'native-base';
+import { Input } from './Input';
 
 
 

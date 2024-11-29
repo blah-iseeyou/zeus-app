@@ -4,9 +4,10 @@ import BottomSheet, { useBottomSheet } from '@gorhom/bottom-sheet';
 import {
     Box,
     KeyboardAvoidingView,
-    Heading, HStack, Icon, Button, Image, Text, VStack, Input, FormControl,
+    Heading, HStack, Icon, Button, Image, Text, VStack, FormControl,
     Pressable, useToast
 } from 'native-base';
+import { Input } from '../../Widgets/Input'
 import moment from 'moment/moment';
 import Color from 'color';
 import { Path } from 'react-native-svg';
