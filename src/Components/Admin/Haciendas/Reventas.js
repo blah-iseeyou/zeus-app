@@ -69,7 +69,7 @@ export default function Reventas(props) {
         "total": 39, 
         "totalPages": 2} */
 
-        console.log("response", response.data)
+        // console.log("response", response.data)
         setReventas({
           ...response.data,
           pages: response.data.totalPages

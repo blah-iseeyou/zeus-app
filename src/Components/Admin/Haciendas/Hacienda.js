@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { Dimensions, } from "react-native"
 import {
     HStack,
@@ -28,19 +28,29 @@ import Header from "../../Header"
 import Decimal from "decimal.js";
 import Reventas from "./Reventas";
 
+import * as echarts from 'echarts/core';
+import { LineChart } from 'echarts/charts';
+import { GridComponent, TooltipComponent } from 'echarts/components';
+import { SkiaRenderer, SkiaChart } from '@wuba/react-native-echarts';
+
+echarts.use([SkiaRenderer, LineChart, GridComponent, TooltipComponent]);
+
 const momentPreciseRangePlugin = require('moment-precise-range')(moment);
 
 export default function SignIn({ route, navigation }) {
+    const skiaRef = useRef(null);
 
     const user = useContext(User)
 
     const [haciendaId, setHaciendaId] = useState(route.params.hacienda_id)
     const [visibleHacienda, setVisibleHacienda] = useState(false)
     const [hacienda, setHacienda] = useState(null)
+    const [data_historica, setDataHistorica] = useState([])
 
 
     useEffect(() => {
         getHacienda()
+        getHaciendaHistorica()
     }, [])
 
     let getHacienda = () => {
@@ -57,11 +67,124 @@ export default function SignIn({ route, navigation }) {
             })
     }
 
+    let getHaciendaHistorica = () => {
+        axios.get('/hacienda/historico', {
+            params: {
+                hacienda_id: route.params.hacienda_id
+            }
+        })
+            .then(response => {
+                setDataHistorica(response.data)
+            })
+            .catch(error => {
+
+            })
+    }
+
 
     if (route.params.hacienda_id && route.params.hacienda_id !== haciendaId) {
         setHaciendaId(route.params.hacienda_id)
         getHacienda()
+
     }
+
+    useEffect(() => {
+
+        console.log('data_historica real')
+        console.log('data_historica')
+        console.log('data_historica')
+        console.log('data_historica', data_historica)
+
+        const option = {
+            
+            xAxis: {
+              type: 'category',
+              show: true,
+            },
+            yAxis: {
+              type: 'value',
+            },
+            series: [
+              {
+                data: data_historica?.map((f) => [moment(f.k).format('DD-MM-YYYY'), f.v]),
+                type: 'line',
+              },
+            ],
+            tooltip: {
+                trigger: 'axis',
+                
+
+            }
+          };
+        let opciones = {
+            dataset: {
+                dimensions: ['date', 'value'],
+                source: data_historica?.map((f) => { return { 'date': f.k, 'value': f.v } })
+            },
+            grid: {
+                show: false,
+            },
+            xAxis: {
+                type: 'time',
+                show: true,
+            },
+            yAxis: {
+                type: 'value',
+                show: true,
+                axisLabel: {
+                    formatter: '$ {value} MXN'
+                }
+
+            },
+            series: [
+                {
+
+                    type: 'line',
+                    smooth: true,
+                    color: '#31A078',
+                    encode: {
+                        x: 'date',
+                        y: 'value'
+                    }
+
+                }
+            ],
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (params) {
+                    return `<div class="tooltip"><strong>${moment(params[0].data.date).format('LL')}</strong>: $ ${params[0].data.value} MXN</div>`;
+                }
+
+            }
+        }
+        let chart = null
+        if (skiaRef.current) {
+            chart = echarts.init(skiaRef.current, 'light', {
+                renderer: 'skia',
+                width: Dimensions.get('window').width,
+                height: 300
+            });
+            chart.setOption(option);
+        } else {
+            
+        }
+
+
+       
+
+       
+        return () => {
+            chart?.dispose()
+        }
+
+
+
+    }, [data_historica])
+
+    
+
+
+
 
     return (
         <Box variant={"layout"} flex="1"  >
@@ -116,7 +239,7 @@ export default function SignIn({ route, navigation }) {
                                         isDisabled={hacienda.disponible <= 0 || hacienda.estatus == 3}
                                         onPress={() => {
                                             // setVisibleHacienda(true)
-                                            navigation.navigate("Comprar", { 
+                                            navigation.navigate("Comprar", {
                                                 hacienda_id: hacienda?._id
                                             })
 
@@ -125,8 +248,16 @@ export default function SignIn({ route, navigation }) {
 
                             </VStack>
                         </Box>
+                        {data_historica.length > 0 ? <>
+                            <Box mt={5} px={2}>
+                            <Text textAlign={"center"}>Historial de precios</Text>
+                           
+                                <SkiaChart ref={skiaRef} />
+                            
+                        </Box>
+                        </> : null}
                         <Box mt={5} px={2}>
-                            <Reventas hacienda_id={hacienda?._id}/>
+                            <Reventas hacienda_id={hacienda?._id} />
                         </Box>
                     </> : null}
                 </ScrollView>
