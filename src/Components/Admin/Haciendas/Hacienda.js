@@ -19,6 +19,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Color from "color";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import moment from "moment"
+import 'moment/locale/es'
 
 import axios from "../../../Axios"
 import User from "../../../Contexts/User"
@@ -85,6 +86,7 @@ export default function SignIn({ route, navigation }) {
     if (route.params.hacienda_id && route.params.hacienda_id !== haciendaId) {
         setHaciendaId(route.params.hacienda_id)
         getHacienda()
+        getHaciendaHistorica()
 
     }
 
@@ -93,33 +95,49 @@ export default function SignIn({ route, navigation }) {
         console.log('data_historica real')
         console.log('data_historica')
         console.log('data_historica')
-        console.log('data_historica', data_historica)
+        console.log('data_historica', data_historica?.map((f) => { return [f.k, f.v] }))
 
         const option = {
-            
+
             xAxis: {
-              type: 'category',
-              show: true,
+                type: 'category',
+                show: true,
+                axisPointer: {
+                    label: {
+                        formatter: (d) => {
+                            print(d)
+                            let date = moment(d.value, 'DD-MM-YYYY')
+                            date.locale('es')
+                            return date.format('LL')
+                        }
+                    }
+                }
             },
             yAxis: {
-              type: 'value',
+                type: 'value',
+
             },
             series: [
-              {
-                data: data_historica?.map((f) => [moment(f.k).format('DD-MM-YYYY'), f.v]),
-                type: 'line',
-              },
+                {
+                    data: data_historica?.map((f) => [moment(f.k).format('DD-MM-YYYY'), f.v]),
+                    type: 'line',
+
+                    smooth: true,
+                    color: '#31A078',
+                },
             ],
             tooltip: {
                 trigger: 'axis',
-                
+                valueFormatter: (value) => {
+                    return `$ ${value} MXN`
+                }
 
             }
-          };
+        };
         let opciones = {
             dataset: {
                 dimensions: ['date', 'value'],
-                source: data_historica?.map((f) => { return { 'date': f.k, 'value': f.v } })
+                source: data_historica?.map((f) => { return [f.k, f.v] })
             },
             grid: {
                 show: false,
@@ -143,7 +161,7 @@ export default function SignIn({ route, navigation }) {
                     smooth: true,
                     color: '#31A078',
                     encode: {
-                        x: 'date',
+
                         y: 'value'
                     }
 
@@ -151,8 +169,8 @@ export default function SignIn({ route, navigation }) {
             ],
             tooltip: {
                 trigger: 'axis',
-                formatter: function (params) {
-                    return `<div class="tooltip"><strong>${moment(params[0].data.date).format('LL')}</strong>: $ ${params[0].data.value} MXN</div>`;
+                valueFormatter: (value) => {
+                    return `$ ${value} MXN`
                 }
 
             }
@@ -166,13 +184,13 @@ export default function SignIn({ route, navigation }) {
             });
             chart.setOption(option);
         } else {
-            
+
         }
 
 
-       
 
-       
+
+
         return () => {
             chart?.dispose()
         }
@@ -181,7 +199,7 @@ export default function SignIn({ route, navigation }) {
 
     }, [data_historica])
 
-    
+
 
 
 
@@ -249,12 +267,14 @@ export default function SignIn({ route, navigation }) {
                             </VStack>
                         </Box>
                         {data_historica.length > 0 ? <>
-                            <Box mt={5} px={2}>
-                            <Text textAlign={"center"}>Historial de precios</Text>
-                           
+                            <Box mt={5} px={0}>
+                                <HStack mx={5} mt={4} justifyContent={"center"}>
+                                    <Heading fontSize="lg" marginBottom={4}>Historial de precios</Heading>
+                                </HStack>
+
                                 <SkiaChart ref={skiaRef} />
-                            
-                        </Box>
+
+                            </Box>
                         </> : null}
                         <Box mt={5} px={2}>
                             <Reventas hacienda_id={hacienda?._id} />
