@@ -86,10 +86,9 @@ export default function () {
 
         getToken();
 
-        if (user?.cliente?._id) messaging()
-            .subscribeToTopic(user?.cliente?._id)
-            .then((e) => console.log('Subscribed to topic!', user?.cliente?._id));
+        messaging.subscribeToTopic("general").then((e) => console.log('Subscribed to topic! general'));
 
+        
 
         return () => {
             keyboardDidHideListener.remove();

@@ -30,6 +30,10 @@ import { Alert } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 
 
+
+
+
+
 const NativeStack = createStackNavigator();
 
 export default function App() {

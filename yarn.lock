@@ -7281,6 +7281,11 @@ react-native-css-interop@0.1.22:
     lightningcss "^1.27.0"
     semver "^7.6.3"
 
+react-native-device-info@^14.0.1:
+  version "14.0.1"
+  resolved "https://registry.npmjs.org/react-native-device-info/-/react-native-device-info-14.0.1.tgz"
+  integrity sha512-/ygggNdYgddjEnWxaNOwrL8bT9u8iJXCdz/CKpQi61SptIMmlCXmn125ey4rr0CTK/YIVpL6kZhVFInnNo+Q3w==
+
 react-native-gesture-handler@*, react-native-gesture-handler@^2.21.2, "react-native-gesture-handler@>= 1.0.0", react-native-gesture-handler@>=1.10.1, react-native-gesture-handler@>=2.0.0:
   version "2.21.2"
   dependencies:
