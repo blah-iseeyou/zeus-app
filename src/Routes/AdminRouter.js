@@ -86,7 +86,9 @@ export default function () {
 
         getToken();
 
-        messaging.subscribeToTopic("general").then((e) => console.log('Subscribed to topic! general'));
+     
+
+        messaging().subscribeToTopic("general").then((e) => console.log('Subscribed to topic! general'));
 
         
 
