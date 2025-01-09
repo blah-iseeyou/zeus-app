@@ -1,241 +1,154 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Dimensions, View, Keyboard, PlatformOSType } from "react-native";
-import {
-  HStack,
-  VStack,
-  Text,
-  Box,
-  Heading,
-  Icon,
-  FlatList,
-  Spacer,
-  Pressable,
-  
-  Button,
-  KeyboardAvoidingView,
-} from 'native-base';
-import { Input } from "../../Widgets/Input";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import React, { useContext, useEffect, useState, useRef } from "react";
+import { Dimensions, View, Keyboard, Platform, ActivityIndicator } from "react-native";
+import { HStack, VStack, Text, Box, Heading, FlatList, Spacer, Button, KeyboardAvoidingView } from "native-base";
 import moment from "moment";
-import axios from "../../../Axios";
+import Ionicons from "react-native-vector-icons/Ionicons";
+
+//componentes
 import Header from "../../Header";
-import { SetUser, User } from "../../../Contexts/User";
-import SocketContext, { SetSocketContext } from "../../../Contexts/Socket";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Input } from "../../Widgets/Input";
+import { User } from "../../../Contexts/User";
+import SocketContext from "../../../Contexts/Socket";
 
 export default function Chat({ route, navigation }) {
-  const user = useContext(User);
-  const socket = useContext(SocketContext);
-  let [chat, setChat] = useState({
-    page: 1,
-    limit: 20,
-    data: []
-  },);
-  const [message, setMessage] = useState("");
 
-  let flatListRef = React.createRef();
+	const user = useContext(User);
+	const socket = useContext(SocketContext);
 
-  const [keyboardShown, setKeyboardShown] = React.useState(false)
+	const [message, setMessage] = useState("");
+	const [loading, setLoading] = useState(false)
+	const [keyboardShown, setKeyboardShown] = useState(false);
+	const [chat, setChat] = useState({
+		page: 1,
+		limit: 20,
+		data: [],
+	});
 
-  React.useEffect(() => {
-      const keyboardDidShowListener = Keyboard.addListener(
-          "keyboardDidShow",
-          () => {
-              setKeyboardShown(true)
-          }
-      );
-      const keyboardDidHideListener = Keyboard.addListener(
-          "keyboardDidHide",
-          () => {
-              setKeyboardShown(false)
-          }
-      );
+	const flatListRef = useRef();
 
-      return () => {
-          keyboardDidHideListener.remove();
-          keyboardDidShowListener.remove();
-      };
-  }, []);
+	// Manejar eventos del teclado
+	useEffect(() => {
+		const keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", () =>
+			setKeyboardShown(true)
+		);
+		const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () =>
+			setKeyboardShown(false)
+		);
 
+		return () => {
+			keyboardDidHideListener.remove();
+			keyboardDidShowListener.remove();
+		};
+	}, []);
 
+	// Manejo del socket
+	useEffect(() => {
+		if (!socket || !user?.cliente?._id) return;
 
-  useEffect(() => {
-    return () => {
-      console.log("desconectando socket")
-      socket.emit('/admin/cliente/leave', user?.cliente?._id);
-    }
-  }, []);
+		setLoading(true);
+		socket.emit("/admin/cliente/join", user.cliente._id);
 
-  const IO_connect = async (id) => {
-    console.log('conectando a socket ora si', id)
-    socket.emit("/admin/cliente/join", id);
-  };
+		const handleLoadMessages = (res) => {
+			const newMessages = res.page === 1 ? res.data : [...res.data, ...chat.data];
+			setChat({ ...chat, data: newMessages, page: res.page, total: res.total });
+			setLoading(false);
+		};
 
-  const IO_error = (err) => {
-    console.log("error", err);
-  };
+		const handleNewMessage = (data) => {
+			setChat((prev) => ({
+				...prev,
+				data: [...prev.data, data],
+			}));
+		};
 
-  const IO_loadMessages = (res => {
+		socket.on("sucessful", handleLoadMessages);
+		socket.on("new_message", handleNewMessage);
+		socket.on("connect_error", (err) => {
+            console.error("Error de conexión:", err);
+            setLoading(false);
+        });
 
-    let old = chat
-    let data = (res.page == 1) ? res.data : [...res.data, ...old.data]
+		return () => {
+			console.log("Desconectando del socket...");
+			socket.emit("/admin/cliente/leave", user?.cliente?._id);
+			socket.off("sucessful", handleLoadMessages);
+			socket.off("new_message", handleNewMessage);
+		};
+	}, [socket, user?.cliente?._id]);
 
-    let new_conversacion = {
-      data: data,
-      page: res.page,
-      limit: res.limit,
-      total: res.total
-    }
+	// Manejar el cambio en el campo de entrada
+	const handleChange = (text) => {
+		setMessage(text)
+	};
 
-    setChat(new_conversacion)
-  })
+	// Enviar un mensaje
+	const submit = () => {
+		if (!message || !user?.cliente?._id) {
+			console.log("No se puede enviar un mensaje vacío o sin cliente asociado");
+			return;
+		}
 
-  const handleChange = (e) => {
-    setMessage(e);
-  };
+		const newMessage = {
+			id: user.cliente._id,
+			entrada: message,
+			usuario: user._id,
+			cliente_id: user.cliente._id,
+		};
 
-  const submit = () => {
-    if (!user?.cliente?._id) {
-      console.log("NO HAY CLIENTE_ID")
-    }
+		socket.emit("/admin/cliente/message/add", newMessage);
+		setMessage("");
+	};
 
-    console.log("SUBMIT", message)
-
-
-
-    if (!message) {
-      console.log("NO HAY CONTENIDO")
-      return
-    }
-
-    if (message && message.length > 0) {
-      socket.emit('/admin/cliente/message/add', {
-        id: user?.cliente?._id,
-        entrada: message,
-        usuario: user._id,
-        cliente_id: user?.cliente?._id,
-      })
-
-      setMessage("")
-    }
-  }
-  const IO_newMessage = (data) => {
-    console.log("new message")
-    setChat((prev) => {
-
-      let newMessages = [...prev.data, data]
-
-      return {
-        ...prev,
-        data: newMessages
-      }
-
-    }
-    )
-  }
-
-  useEffect(() => {
-    console.log("socket", socket)
-    console.log('user', user)
-    IO_connect(user?.cliente?._id);
-    socket.on('connect', IO_connect)
-    socket.on('sucessful', IO_loadMessages)
-    socket.on('error', IO_error)
-    socket.on('new_message', IO_newMessage)
-
-
-  }, [socket]);
-
-  return (
-
-    <Box variant={"layout"} flex="1">
-      <KeyboardAvoidingView flex={1} behavior='position'>
-
-          <Header />
-          <Box style={{ height: `${(keyboardShown && Platform.OS === "android") ? "80%" : "83%"}` }}>
-            <Heading fontSize="xl" p="4" pb="3">
-              Chat de Soporte
-            </Heading>
-            <View style={{ height: "100%" }}>
-              <FlatList
-                ref={flatListRef}
-                data={chat.data}
-                onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })}
-                _contentContainerStyle={{
-                  marginX: 5,
-                }}
-                renderItem={({ item }) => (
-
-                  <Box
-                    borderBottomWidth="1"
-                    _dark={{ borderColor: "coolGray.500" }}
-                    borderColor="coolGray.300"
-                    pl={["0", "4"]}
-                    pr={["0", "5"]}
-                    mt="3"
-                  >
-
-                    <VStack>
-                      {item.usuario ? <HStack>
-                        <Text
-                          _dark={{ color: "warmGray.50" }}
-                          color="coolGray.800"
-                          bold
-                        >
-                          {item.usuario ? `${item.usuario?.nombre ?? item.usuario?.nombres} escribió` : null}
-                        </Text>
-                        <Spacer />
-                        <Text
-                          color="coolGray.400"
-                          _dark={{ color: "warmGray.200" }}
-                          textAlign={"right"}
-                        >
-                          {moment(item.createdAt).format("MM-DD-YYYY HH:mm")}
-                        </Text>
-                      </HStack> : null}
-
-
-                      <Text
-                        color={item.usuario ? "coolGray.600" : "coolGray.400"}
-                        _dark={{ color: "warmGray.200" }}
-                      >
-                        {item.entrada}
-                      </Text>
-
-                    </VStack>
-
-
-                  </Box>
-
-                )}
-                keyExtractor={(item) => item._id}
-              />
-            </View>
-            <View style={{ marginTop: 15, marginLeft: 10, marginRight: 10 }}>
-              <HStack>
-                <Input
-                  placeholder="Escribir..."
-                  w="87%"
-                  py="3"
-                  px="4"
-                  fontSize="md"
-                  onChangeText={handleChange}
-                  value={message}
-                >
-
-                </Input>
-                <Spacer />
-                <Button w={"13%"} onPress={submit}>
-                  <Ionicons name="send" size={24} />
-                </Button>
-              </HStack>
-            </View>
-
-          </Box>
-
-      </KeyboardAvoidingView>
-    </Box>
-  );
+	return (
+		<Box flex="1" variant="layout">
+			<KeyboardAvoidingView flex={1} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+                <Header />
+                <Box style={{ height: keyboardShown && Platform.OS === "android" ? "80%" : "89%" }}>
+                    <Heading fontSize="xl" p="4" pb="3">
+                        Chat de Soporte
+                    </Heading>
+                    {loading ? ( // Mostrar el indicador de carga
+                        <ActivityIndicator size="large" color="#6200EE" style={{ marginTop: 20 }} />
+                    ) : ( null )}
+                    <FlatList
+                        ref={flatListRef}
+                        data={chat.data}
+                        onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+                        renderItem={({ item }) => (
+                            <Box borderBottomWidth="1" borderColor="coolGray.300" mt="3" p="2">
+                                <VStack>
+                                    {item.usuario && (
+                                        <HStack>
+                                            <Text bold color={`${item.usuario._id === user._id ? "coolGray.800" : "#2dda93"}`}>
+                                                {`${ item.usuario._id === user._id ? item.usuario?.nombre : "SOPORTE"}:`}
+                                            </Text>
+                                            <Spacer />
+                                            <Text color="coolGray.400">{moment(item.createdAt).format("MM-DD-YYYY HH:mm")}</Text>
+                                        </HStack>
+                                    )}
+                                    <Text color={item.usuario ? "coolGray.600" : "coolGray.400"}>{item.entrada}</Text>
+                                </VStack>
+                            </Box>
+                        )}
+                        keyExtractor={(item) => item._id}
+                        contentContainerStyle={{ padding: 5 }}
+                    />
+                    <HStack mt="3" mx="3">
+                        <Input
+                            placeholder="Escribir..."
+                            flex={1}
+                            py="3"
+                            px="4"
+                            fontSize="md"
+                            onChangeText={handleChange}
+                            value={message}
+                        />
+                        <Button ml="2" onPress={submit}>
+                            <Ionicons name="send" size={24} color="white" />
+                        </Button>
+                    </HStack>
+                </Box>
+            </KeyboardAvoidingView>
+		</Box>
+	);
 }

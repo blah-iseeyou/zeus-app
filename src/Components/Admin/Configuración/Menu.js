@@ -70,14 +70,14 @@ export default function SignIn({ route, navigation }) {
                                     event: () => navigation.navigate("Cuentas")
                                 },
                                 {
-                                    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
+                                    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f64",
                                     nombre: "Beneficiarios",
                                     description: "Agregar las cuentas de retorno de inversión",
                                     icon: "team",
                                     event: () => navigation.navigate("Beneficiarios")
                                 },
                                 {
-                                    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
+                                    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f65",
                                     nombre: "Soporte",
                                     description: "Iniciar un chat con el equipo de soporte",
                                     icon: "questioncircle",

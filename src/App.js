@@ -32,63 +32,47 @@ import messaging from '@react-native-firebase/messaging';
 
 const NativeStack = createStackNavigator();
 
-export default function App() {
-	let [user, setUser] = useState(null);
-
-
-	const createSocket = async (oldSocket) => {
-		if (oldSocket) {
-			oldSocket.disconnect();
-			oldSocket.close();
-		}
-
-		let socket = null;
-
-		try {
-			const token = await AsyncStorage.getItem('@token');
-			console.log("TOKEN", token);
-
-			socket = io("https://zeusagave.com:4002", {
-				extraHeaders: {
-					Authorization: token
-				},
-			});
-
-			console.log("Socket created");
-
-		} catch (error) {
-			console.error("Error creating socket:", error);
-		}
-
-		return socket;
-	};
-
-	let [socket, setSocket] = useState(null);
-
-	const setSocketC = (socket) => {
-		setSocket(createSocket(socket));
+// Crear socket con manejo de errores
+const createSocket = async (oldSocket) => {
+	if (oldSocket) {
+		oldSocket.disconnect();
+		oldSocket.close();
 	}
 
-	useEffect(async () => {
+	const token = await AsyncStorage.getItem('@token');
 
-		let socketTemp = await createSocket(socket);
-		setSocket(socketTemp);
+	return io("https://87da-201-142-184-176.ngrok-free.app", {
+		extraHeaders: { Authorization: token },
+		withCredentials: true
+	});
+	
+};
+
+export default function App() {
+
+	let [user, setUser] = useState(null);
+	let [socket, setSocket] = useState(null);
+
+	useEffect(() => {
+	    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+	        console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+	    });
+
+	    return () => {
+	        unsubscribe();
+	    };
+	}, []);
 
 
-		console.log('before unsubscribe')
-		const unsubscribe = messaging().onMessage(async remoteMessage => {
-			console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
-			//Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-		});
-		console.log('after unsubscribe')
-		return () => { unsubscribe() };
-	}, [])
+	const updateSocket = async (newSocket) => {
+        setSocket(newSocket);
+    };
 
 	return (
 		<User.Provider value={user}>
 			<SetUser.Provider value={setUser}>
 				<Socket.Provider value={socket}>
-					<SetSocketContext.Provider value={setSocket}>
+					<SetSocketContext.Provider value={updateSocket}>
 						<NativeBaseProvider theme={Theme()} config={Config}>
 							<NavigationContainer ref={navigationRef}>
 								<NativeStack.Navigator
@@ -96,22 +80,11 @@ export default function App() {
 									initialRouteName="SignIn"
 								>
 									<NativeStack.Screen name={"SignIn"} component={SignIn} />
-									<NativeStack.Screen
-										name={"RecoveryPassword"}
-										component={RecoveryPassword}
-									/>
-									<NativeStack.Screen
-										name={"Credentials"}
-										component={Credentials}
-									/>
-									<NativeStack.Screen
-										name={"UserInformation"}
-										component={UserInformation}
-									/>
+									<NativeStack.Screen name={"RecoveryPassword"} component={RecoveryPassword}/>
+									<NativeStack.Screen name={"Credentials"} component={Credentials}/>
+									<NativeStack.Screen name={"UserInformation"} component={UserInformation}/>
 									<NativeStack.Screen name={"Address"} component={Address} />
-
 									<NativeStack.Screen name={"Admin"} component={AdminRouter} />
-
 								</NativeStack.Navigator>
 							</NavigationContainer>
 						</NativeBaseProvider>
