@@ -14,12 +14,12 @@ import { Input } from '../Widgets/Input'
 import { SetUser } from "../../Contexts/User";
 import Socket, { SetSocketContext } from "../../Contexts/Socket";
 
-
+import { API_URL } from "../../ENVIROMENT"
 
 // Función para crear un socket
 const createSocket = async () => {
 	const token = await AsyncStorage.getItem('@token');
-	return io("https://87da-201-142-184-176.ngrok-free.app", {
+	return io(API_URL, {
 		extraHeaders: {
 			Authorization: token,
 		},

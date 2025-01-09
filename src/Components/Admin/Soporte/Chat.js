@@ -10,6 +10,24 @@ import { Input } from "../../Widgets/Input";
 import { User } from "../../../Contexts/User";
 import SocketContext from "../../../Contexts/Socket";
 
+
+const RenderMessage = React.memo(({ item, user }) => (
+    <Box borderBottomWidth="1" borderColor="coolGray.300" mt="3" p="2">
+        <VStack>
+            {item.usuario && (
+                <HStack>
+                    <Text bold color={`${item.usuario._id === user._id ? "coolGray.800" : "#2dda93"}`}>
+                        {`${item.usuario._id === user._id ? item.usuario?.nombre : "SOPORTE"}:`}
+                    </Text>
+                    <Spacer />
+                    <Text color="coolGray.400">{moment(item.createdAt).format("MM-DD-YYYY HH:mm")}</Text>
+                </HStack>
+            )}
+            <Text color={item.usuario ? "coolGray.600" : "coolGray.400"}>{item.entrada}</Text>
+        </VStack>
+    </Box>
+));
+
 export default function Chat({ route, navigation }) {
 
 	const user = useContext(User);
@@ -49,17 +67,25 @@ export default function Chat({ route, navigation }) {
 		socket.emit("/admin/cliente/join", user.cliente._id);
 
 		const handleLoadMessages = (res) => {
-			const newMessages = res.page === 1 ? res.data : [...res.data, ...chat.data];
-			setChat({ ...chat, data: newMessages, page: res.page, total: res.total });
-			setLoading(false);
-		};
+            setChat((prevChat) => ({
+                ...prevChat,
+                data: res.page === 1 ? res.data : [...res.data, ...prevChat.data],
+                page: res.page,
+                total: res.total,
+            }));
+            // Hacer scroll hacia abajo al cargar mensajes
+            setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 200);
+            setLoading(false);
+        };
 
 		const handleNewMessage = (data) => {
-			setChat((prev) => ({
-				...prev,
-				data: [...prev.data, data],
-			}));
-		};
+            setChat((prev) => ({
+                ...prev,
+                data: [...prev.data, data],
+            }));
+            // Hacer scroll hacia abajo al cargar mensajes
+            setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 200);
+        };
 
 		socket.on("sucessful", handleLoadMessages);
 		socket.on("new_message", handleNewMessage);
@@ -78,6 +104,7 @@ export default function Chat({ route, navigation }) {
 
 	// Manejar el cambio en el campo de entrada
 	const handleChange = (text) => {
+		console.log("text", text);
 		setMessage(text)
 	};
 
@@ -111,28 +138,17 @@ export default function Chat({ route, navigation }) {
                         <ActivityIndicator size="large" color="#6200EE" style={{ marginTop: 20 }} />
                     ) : ( null )}
                     <FlatList
-                        ref={flatListRef}
-                        data={chat.data}
-                        onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
-                        renderItem={({ item }) => (
-                            <Box borderBottomWidth="1" borderColor="coolGray.300" mt="3" p="2">
-                                <VStack>
-                                    {item.usuario && (
-                                        <HStack>
-                                            <Text bold color={`${item.usuario._id === user._id ? "coolGray.800" : "#2dda93"}`}>
-                                                {`${ item.usuario._id === user._id ? item.usuario?.nombre : "SOPORTE"}:`}
-                                            </Text>
-                                            <Spacer />
-                                            <Text color="coolGray.400">{moment(item.createdAt).format("MM-DD-YYYY HH:mm")}</Text>
-                                        </HStack>
-                                    )}
-                                    <Text color={item.usuario ? "coolGray.600" : "coolGray.400"}>{item.entrada}</Text>
-                                </VStack>
-                            </Box>
-                        )}
-                        keyExtractor={(item) => item._id}
-                        contentContainerStyle={{ padding: 5 }}
-                    />
+					    ref={flatListRef}
+					    data={chat.data}
+					    onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+					    renderItem={({ item }) => <RenderMessage item={item} user={user} />}
+					    keyExtractor={(item) => item._id}
+					    contentContainerStyle={{ padding: 5 }}
+					    initialNumToRender={10}
+					    maxToRenderPerBatch={10}
+					    windowSize={5}
+					    removeClippedSubviews={true} // Optimiza el uso de memoria
+					/>
                     <HStack mt="3" mx="3">
                         <Input
                             placeholder="Escribir..."

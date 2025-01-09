@@ -5,6 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { navigationRef } from './Contexts/RootNavigation';
 
+import { API_URL } from "./ENVIROMENT"
+
 let setCookie = require('set-cookie-parser');
 
 //axios.defaults.baseURL = 'http://10.0.2.2:4025';
@@ -13,7 +15,7 @@ let setCookie = require('set-cookie-parser');
 // axios.defaults.baseURL = "https://zeus.blah.software:4008"
 // axios.defaults.baseURL = "http://192.168.100.65:4025"
 
-axios.defaults.baseURL = "https://87da-201-142-184-176.ngrok-free.app"
+axios.defaults.baseURL = API_URL
 
 axios.defaults.withCredentials = true
 axios.defaults.headers.common["Content-Type"] = "application/json";

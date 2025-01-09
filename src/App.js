@@ -29,6 +29,7 @@ import io from "socket.io-client";
 import { Alert } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 
+import { API_URL } from "./ENVIROMENT"
 
 const NativeStack = createStackNavigator();
 
@@ -41,7 +42,7 @@ const createSocket = async (oldSocket) => {
 
 	const token = await AsyncStorage.getItem('@token');
 
-	return io("https://87da-201-142-184-176.ngrok-free.app", {
+	return io(API_URL, {
 		extraHeaders: { Authorization: token },
 		withCredentials: true
 	});
