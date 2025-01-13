@@ -9,24 +9,7 @@ import Header from "../../Header";
 import { Input } from "../../Widgets/Input";
 import { User } from "../../../Contexts/User";
 import SocketContext from "../../../Contexts/Socket";
-
-
-const RenderMessage = React.memo(({ item, user }) => (
-    <Box borderBottomWidth="1" borderColor="coolGray.300" mt="3" p="2">
-        <VStack>
-            {item.usuario && (
-                <HStack>
-                    <Text bold color={`${item.usuario._id === user._id ? "coolGray.800" : "#2dda93"}`}>
-                        {`${item.usuario._id === user._id ? item.usuario?.nombre : "SOPORTE"}:`}
-                    </Text>
-                    <Spacer />
-                    <Text color="coolGray.400">{moment(item.createdAt).format("MM-DD-YYYY HH:mm")}</Text>
-                </HStack>
-            )}
-            <Text color={item.usuario ? "coolGray.600" : "coolGray.400"}>{item.entrada}</Text>
-        </VStack>
-    </Box>
-));
+import MessageList from "./MessageList";
 
 export default function Chat({ route, navigation }) {
 
@@ -36,6 +19,8 @@ export default function Chat({ route, navigation }) {
 	const [message, setMessage] = useState("");
 	const [loading, setLoading] = useState(false)
 	const [keyboardShown, setKeyboardShown] = useState(false);
+	const [isLoadingMore, setIsLoadingMore] = useState(false);
+
 	const [chat, setChat] = useState({
 		page: 1,
 		limit: 20,
@@ -67,14 +52,13 @@ export default function Chat({ route, navigation }) {
 		socket.emit("/admin/cliente/join", user.cliente._id);
 
 		const handleLoadMessages = (res) => {
+			console.log("res", res.data);
             setChat((prevChat) => ({
                 ...prevChat,
                 data: res.page === 1 ? res.data : [...res.data, ...prevChat.data],
                 page: res.page,
                 total: res.total,
             }));
-            // Hacer scroll hacia abajo al cargar mensajes
-            setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 200);
             setLoading(false);
         };
 
@@ -83,8 +67,6 @@ export default function Chat({ route, navigation }) {
                 ...prev,
                 data: [...prev.data, data],
             }));
-            // Hacer scroll hacia abajo al cargar mensajes
-            setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 200);
         };
 
 		socket.on("sucessful", handleLoadMessages);
@@ -101,6 +83,8 @@ export default function Chat({ route, navigation }) {
 			socket.off("new_message", handleNewMessage);
 		};
 	}, [socket, user?.cliente?._id]);
+
+
 
 	// Manejar el cambio en el campo de entrada
 	const handleChange = (text) => {
@@ -128,7 +112,7 @@ export default function Chat({ route, navigation }) {
 
 	return (
 		<Box flex="1" variant="layout">
-			<KeyboardAvoidingView flex={1} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+			<KeyboardAvoidingView flex={1} behavior={Platform.OS === "ios" ? "padding" : "height"} pt="5">
                 <Header />
                 <Box style={{ height: keyboardShown && Platform.OS === "android" ? "80%" : "89%" }}>
                     <Heading fontSize="xl" p="4" pb="3">
@@ -137,18 +121,7 @@ export default function Chat({ route, navigation }) {
                     {loading ? ( // Mostrar el indicador de carga
                         <ActivityIndicator size="large" color="#6200EE" style={{ marginTop: 20 }} />
                     ) : ( null )}
-                    <FlatList
-					    ref={flatListRef}
-					    data={chat.data}
-					    onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
-					    renderItem={({ item }) => <RenderMessage item={item} user={user} />}
-					    keyExtractor={(item) => item._id}
-					    contentContainerStyle={{ padding: 5 }}
-					    initialNumToRender={10}
-					    maxToRenderPerBatch={10}
-					    windowSize={5}
-					    removeClippedSubviews={true} // Optimiza el uso de memoria
-					/>
+                    <MessageList data={chat.data}/>
                     <HStack mt="3" mx="3">
                         <Input
                             placeholder="Escribir..."
