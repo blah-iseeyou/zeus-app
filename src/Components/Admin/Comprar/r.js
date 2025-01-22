@@ -727,6 +727,8 @@ function Invertir(props) {
     //Solo aplica cuando hay reventa
     const [reventa, setReventa] = useState()
 
+    //Indica el minimo de plantas a comprar
+
     let getHacienda = () => {
         setLoading(true)
         axios.get('/hacienda', {

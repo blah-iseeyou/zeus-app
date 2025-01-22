@@ -58,6 +58,9 @@ function Comprar(props) {
 
         reventa_id,
         reventa,
+        inversiones,
+        limite,
+        beneficiarios,
         navigator
     } = props
 
@@ -275,7 +278,7 @@ function Comprar(props) {
                                     = = OCTAVA.- Convienen las partes que en el presente contrato están de acuerdo con los derechos y obligaciones en él adquiridos. Así mismo convienen en que cualquier modificación, anexo, o adición al presente contrato solamente surtirá plenos efectos cuando se establezcan por escrito y de mutuo acuerdo, y para el cumplimiento del presente instrumento las partes se sujetan a las leyes mexicanas en la materia, y para la interpretación, ejecución y cumplimiento del presente contrato, las partes se sujetan y se someten expresamente a las Leyes y Tribunales del Partido Judicial de la ciudad de Jalostotitlán, Jalisco, que por razón de fuero y competencia le corresponde, renunciando expresamente al fuero que tengan o que llegaren a tener por razón de su domicilio presente o futuro o por cualquier otra causa.
                                 </Text>
                                 <Text>
-                                    = = NOVENA.- Así mismo también estipula el “INVERSIONISTA” que si fuere el caso de que durante el tiempo y vigencia del presente contrato de compra llegase a fallecer, todas y cada una de las obligaciones y derechos adquiridos en el presente contrato pasarán en favor de su beneficiario señor {user?.nombres} {user?.apellido_paterno} {user?.apellido_materno}, quien adquirirá en su persona todos los derechos y obligaciones que en este contrato adquiere el “INVERSIONISTA”.
+                                    = = NOVENA.- Así mismo también estipula el “INVERSIONISTA” que si fuere el caso de que durante el tiempo y vigencia del presente contrato de compra llegase a fallecer, todas y cada una de las obligaciones y derechos adquiridos en el presente contrato pasarán en favor de su beneficiario señor {beneficiarios[0].nombre}, quien adquirirá en su persona todos los derechos y obligaciones que en este contrato adquiere el “INVERSIONISTA”.
                                 </Text>
                                 <Text>
                                     = = LEIDO que fue por las partes el presente contrato, y enteradas debidamente de su contenido y alcance, considerando que no existe error, dolo o violencia, y por encontrarse satisfechos sus elementos de consentimiento, objeto, y forma, reconociendo su validez en todo tiempo y lugar, lo firman ante la presencia de los testigos que firman también el presente contrato, el día de su fecha.
@@ -463,6 +466,21 @@ function Comprar(props) {
                             text1: 'Cantidad Incorrecta',
                             text2: 'Debe ingresar una cantidad de plantas correcta'
                         });
+
+
+                    if (inversiones < 1 && parseInt(plantas) < props.limite) {
+
+                        return Toast.show({
+                            position: "bottom",
+                            bottomOffset: windowHeight * 0.2,
+                            type: 'error',
+                            text1: 'Cantidad Incorrecta',
+                            text2: 'Debe ingresar una cantidad de plantas correcta'
+                        });
+
+                    }
+
+
 
                     if (!moneda)
                         return Toast.show({
@@ -741,6 +759,14 @@ function Invertir(props) {
     //Solo aplica cuando hay reventa
     const [reventa, setReventa] = useState()
 
+    //Cantidad de inversiones del cliente
+    const [inversiones, setInversiones] = useState(0)
+
+    //Limite de inversiones del cliente
+    const [limite, setLimite] = useState(0)
+
+    const [beneficiarios, setBeneficiarios] = useState([])
+
     let getHacienda = () => {
         setLoading(true)
         axios.get('/hacienda', {
@@ -761,6 +787,25 @@ function Invertir(props) {
                 })
             })
             .finally(() => setLoading(false))
+    }
+
+    let getLimite = () => {
+        setLoading(true)
+        axios.get('/limite').then(({ data }) => {
+            console.log('limite',data)
+            setLimite(data.limite)
+            setInversiones(data.inversiones)
+            setBeneficiarios(data.beneficiarios)
+        }).catch(error => {
+            return toast.show({
+                duration: 2500,
+                render: () => {
+                    return <Box bg="red.500" px="2" py="1" rounded="sm" mb={5}>No fue posible obtener el limite</Box>;
+                }
+            })
+
+        }).finally(() => setLoading(false))
+
     }
 
     let getReventa = (reventaId = reventa_id) => {
@@ -785,6 +830,7 @@ function Invertir(props) {
     useEffect(() => {
         setCompra()
         getHacienda()
+        getLimite()
 
         if (reventa_id)
             getReventa()
@@ -815,7 +861,7 @@ function Invertir(props) {
             position="absolute"
             zIndex={100}
             // right={2}
-            right={ (insets.right + 2) }
+            right={(insets.right + 2)}
             top={(insets.top + 2)}
             // right={(Platform.OS == 'ios') ? (insets.right + 2) : 2}
             // top={(Platform.OS == 'ios') ? (insets.top + 2) : 2}
@@ -848,6 +894,9 @@ function Invertir(props) {
                 compra={compra}
 
                 reventa={reventa}
+                beneficiarios={beneficiarios}
+                inversiones={inversiones}
+                limite={limite}
             />
             :
             <Comprar
@@ -868,6 +917,9 @@ function Invertir(props) {
 
                 setCompra={setCompra}
                 compra={compra}
+                inversiones={inversiones}
+                beneficiarios={beneficiarios}
+                limite={limite}
                 reventa={reventa}
             />}
         <Toast
@@ -901,8 +953,8 @@ function Invertir(props) {
 
 const InvertirModal = (props) => {
 
-    props.hacienda_id = props.route.params.hacienda_id
-    props.reventa_id = props.route.params.reventa_id
+    // props.hacienda_id = props.route.params.hacienda_id
+    // props.reventa_id = props.route.params.reventa_id
 
 
     console.log('props')

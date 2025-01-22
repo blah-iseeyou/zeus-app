@@ -108,6 +108,7 @@ export default function () {
         initialRouteName="Dashboard"
         tabBar={({ navigation, state }) => {
             return <Box w="100%" m={(keyboardShown && Platform.OS === "android") ? -100 : 0} px={0} py={2} h={insets.bottom + 60} shadow={1} background="white">
+                {console.log(state)}
                 <HStack flex="1" w="100%">
                     <LinkButtom
                         active={state.index === 0}
@@ -127,7 +128,7 @@ export default function () {
                         }
                     />
                     <LinkButtom
-                        active={state.index === 3}
+                        active={state.index === 4}
                         label={"Reventas"}
                         onPress={() => navigation.navigate("Reventas")}
                         icon={
@@ -138,7 +139,7 @@ export default function () {
                         }
                     />
                     <LinkButtom
-                        active={state.index === 3 || state.index === 4}
+                        active={state.index === 6}
                         label={"Haciendas"}
                         onPress={() => navigation.navigate("Haciendas")}
                         icon={
@@ -148,7 +149,7 @@ export default function () {
                         }
                     />
                     <LinkButtom
-                        active={state.index === 5}
+                        active={state.index === 8}
                         label={"Ajustes"}
                         onPress={() => navigation.navigate("Settings")}
                         icon={(color) => <Icon as={Octicons} name="gear" size="xl" color={color} />}
