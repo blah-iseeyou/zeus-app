@@ -30,6 +30,7 @@ import validate from 'validate.js';
 import axios from '../../../Axios'
 import { SetUser } from "../../../Contexts/User";
 import { SafeAreaView } from "react-native-safe-area-context";
+import DatePicker from 'react-native-date-picker'
 
 export default function SignInForm({ navigation }) {
 
@@ -37,7 +38,9 @@ export default function SignInForm({ navigation }) {
     const setUser = useContext(SetUser)
 
 
-    const [formData, setFormData] = React.useState({});
+    const [formData, setFormData] = React.useState({
+        fecha_nacimiento: new Date(),
+    });
     const [errors, setErrors] = React.useState({});
 
     const [loading, setLoading] = useState(false);
@@ -164,6 +167,17 @@ export default function SignInForm({ navigation }) {
                                                 <FormControl.Label _text={{ bold: true }}>Apellido Materno</FormControl.Label>
                                                 <Input fontSize={"lg"} placeholder="Gomez" value={formData.apellido_materno} onChangeText={value => setData({ ...formData, apellido_materno: value })} />
                                                 {renderErrors('apellido_materno')}
+                                            </FormControl>
+
+                                            <FormControl isRequired isInvalid={isError('fecha_nacimiento')}>
+                                                <FormControl.Label _text={{ bold: true }}>Fecha de Nacimiento</FormControl.Label>
+                                                <DatePicker
+                                                    mode="date"
+                                                    date={formData.fecha_nacimiento}
+                                                    onDateChange={value => setData({ ...formData, fecha_nacimiento: value })}
+                                                />
+                                                {/* <Input fontSize={"lg"} placeholder="Gomez" value={formData.apellido_materno} onChangeText={value => setData({ ...formData, apellido_materno: value })} /> */}
+                                                {renderErrors('fecha_nacimiento')}
                                             </FormControl>
 
 
