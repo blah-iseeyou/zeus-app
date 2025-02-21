@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { Modal, Keyboard, Dimensions, ScrollView, ActivityIndicator, Linking, SafeAreaView, Platform } from 'react-native';
+import { Modal, Keyboard, Dimensions, ScrollView, ActivityIndicator, Linking, SafeAreaView, Platform, Alert } from 'react-native';
 // import BottomSheet, { useBottomSheet } from '@gorhom/bottom-sheet';
 import {
     Box,
@@ -458,7 +458,7 @@ function Comprar(props) {
                 onPress={() => {
 
 
-                    if (isNaN(parseInt(plantas)) || (parseInt(plantas) < 1))
+                    if (isNaN(parseInt(plantas)) || (parseInt(plantas) < 1)){
                         return Toast.show({
                             position: "bottom",
                             bottomOffset: windowHeight * 0.2,
@@ -466,23 +466,25 @@ function Comprar(props) {
                             text1: 'Cantidad Incorrecta',
                             text2: 'Debe ingresar una cantidad de plantas correcta'
                         });
+                    }
 
+                    if (inversiones < 1) {
+                        return Alert.alert(
+                            "Cantidad Incorrecta",
+                            `Debe ingresar mínimo 25 plantas en la primera compra`
+                        )
+                    }
 
-                    if (inversiones < 1 && parseInt(plantas) < props.limite) {
-
-                        return Toast.show({
-                            position: "bottom",
-                            bottomOffset: windowHeight * 0.2,
-                            type: 'error',
-                            text1: 'Cantidad Incorrecta',
-                            text2: 'Debe ingresar una cantidad de plantas correcta'
-                        });
-
+                    if (parseInt(plantas) < props.limite) {
+                        return Alert.alert(
+                            "Cantidad Incorrecta",
+                            `Debe ingresar mínimo ${props.limite} plantas`
+                        )
                     }
 
 
 
-                    if (!moneda)
+                    if (!moneda){
                         return Toast.show({
                             position: "bottom",
                             bottomOffset: windowHeight * 0.2,
@@ -490,6 +492,7 @@ function Comprar(props) {
                             text1: 'Debe seleccionar la Moneda',
                             text2: 'Para continuar, debe de haber seleccionado la moneda'
                         });
+                    }
 
                     if (!!reventa_id) {
                         console.log("REVENTA ID")
@@ -506,8 +509,6 @@ function Comprar(props) {
                     if (contratoAceptado) {
                         comprarPlantas()
                     } else {
-
-                        console.log("setViewContract")
                         setViewContract(true)
                     }
 

@@ -68,12 +68,12 @@ export default function SignInForm({ navigation }) {
             },
             pais_id: {
                 presence: {
-                    message: "Ingrese el país de origen"
+                    message: "Seleccione el país"
                 }
             },
             estado_id: {
                 presence: {
-                    message: "Ingrese el país de origen"
+                    message: "Seleccione el estado"
                 }
             },
             ciudad: {
@@ -277,7 +277,7 @@ export default function SignInForm({ navigation }) {
 
                                             <FormControl isRequired isInvalid={isError('calles')}>
                                                 <FormControl.Label _text={{ bold: true }}>Ciudad</FormControl.Label>
-                                                <Input placeholder="John" value={formData.ciudad} onChangeText={value => setData({ ...formData, ciudad: value })} />
+                                                <Input placeholder="Ciudad" value={formData.ciudad} onChangeText={value => setData({ ...formData, ciudad: value })} />
                                                 {renderErrors('ciudad')}
                                             </FormControl>
                                             <HStack justifyContent={"space-between"} flex={1}>
