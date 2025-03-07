@@ -468,7 +468,7 @@ function Comprar(props) {
                         });
                     }
 
-                    if (inversiones < 1) {
+                    if (inversiones < 1 && parseInt(plantas) < 25) {
                         return Alert.alert(
                             "Cantidad Incorrecta",
                             `Debe ingresar mínimo 25 plantas en la primera compra`
