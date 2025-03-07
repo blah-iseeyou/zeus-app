@@ -475,7 +475,7 @@ function Comprar(props) {
                         )
                     }
 
-                    if (parseInt(plantas) < props.limite) {
+                    if (inversiones >= 1 && parseInt(plantas) < props.limite) {
                         return Alert.alert(
                             "Cantidad Incorrecta",
                             `Debe ingresar mínimo ${props.limite} plantas`
