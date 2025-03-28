@@ -251,8 +251,8 @@ function Comprar(props) {
                                 </Text>
                                 <Text>
                                     = = SEGUNDA.- Así mismo convienen los contratantes tanto la persona moral ZEUS ORO AZUL DE LOS ALTOS, S de PR de RL de CV,
-                                    en su calidad de “EL PRODUCTOR Y PROPIETARIO”, como el señor LUIS MIGUEL ALDANA SOTO a quien por razón del mismo se le denominará
-                                    como “EL INVERSIONISTA”, que en este instante adquiere la cantidad de {plantas} MIL PLANTAS DE AGAVE AZUL TEQUILANA WEBER, de primera calidad,
+                                    en su calidad de “EL PRODUCTOR Y PROPIETARIO”, como el señor {user?.nombres} {user?.apellido_paterno} {user?.apellido_materno} a quien por razón del mismo se le denominará
+                                    como “EL INVERSIONISTA”, que en este instante adquiere la cantidad de {plantas} PLANTAS DE AGAVE AZUL TEQUILANA WEBER, de primera calidad,
                                     las que ya han sido plantadas en el <Text>“{hacienda?.nombre}”</Text>, ubicado en <Text>“{hacienda?.localizacion?.place_name}”</Text>, el cual se encuentra
                                     perfectamente identificado, delimitado y en posesión legal de "EL PRODUCTOR Y PROPIETARIO”, sin conflicto ante terceras personas, dichas plantas
                                     se registran ante el Consejo Regulador del Tequila, expresando que todos los gastos que se generen por la plantación, fertilización, fumigación,
