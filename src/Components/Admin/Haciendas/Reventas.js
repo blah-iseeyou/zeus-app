@@ -133,7 +133,7 @@ export default function Reventas(props) {
                         top: 10
                       })
                     }
-                    navigation.navigate("Inversion", { inversion_original_id })
+                    navigation.navigate("Comprar", { reventa_id: _id, hacienda_id })
                     // setReventaId(_id)
                     // setVisibleInversion(true)
                   }}
